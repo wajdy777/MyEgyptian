@@ -1,1 +1,1055 @@
 
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-key="pageTitle">تشات CodeNova AI 🇪🇬</title>
+  <!-- Google Fonts: Roboto for Latin and Cairo for Arabic -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Cairo:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Include Highlight.js for code formatting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <style>
+    /* Base & Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      /* Use Roboto by default; for Arabic we override in html[lang="ar"] */
+      font-family: 'Roboto', sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-primary);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+    html[lang="ar"] body {
+      font-family: 'Cairo', sans-serif;
+    }
+    :root {
+      /* LIGHT THEME */
+      --primary-bg: #ffffff;
+      --secondary-bg: #f2f2f8;
+      --text-primary: #000000;
+      --header-bg: #ffffff;
+      --control-bg: #ffffff;
+      --accent-blue: #007aff;
+      --accent-red: #ff3b30;
+      --modal-bg: #f6f6f6;
+      --modal-text: #000;
+    }
+    body[data-theme="dark"] {
+      /* DARK THEME with black and golden yellow */
+      --primary-bg: #000000;
+      --secondary-bg: #111111;
+      --text-primary: #FFD700;
+      --header-bg: #000000;
+      --control-bg: #000000;
+      --accent-blue: #FFD700;
+      --accent-red: #FFD700;
+      --modal-bg: #000000;
+      --modal-text: #FFD700;
+    }
+    /* Remove animations for a static page */
+    .layout { background: var(--secondary-bg); }
+    .layout__main { margin: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    
+    /* Retro Old Style Button with hover effects */
+    button,
+    .btn-enhanced,
+    .control-btn,
+    .new-chat-btn,
+    .sidebar-close-btn,
+    .theme-option,
+    .modal-close,
+    .language-option,
+    .stop-tts-btn {
+      background-color: #d4d0c8;
+      border: 2px outset;
+      font-family: "Courier New", monospace;
+      border-radius: 0;
+      padding: 6px 10px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover,
+    .btn-enhanced:hover,
+    .control-btn:hover,
+    .new-chat-btn:hover,
+    .sidebar-close-btn:hover,
+    .theme-option:hover,
+    .modal-close:hover,
+    .language-option:hover,
+    .stop-tts-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    button:active,
+    .btn-enhanced:active,
+    .control-btn:active,
+    .new-chat-btn:active,
+    .sidebar-close-btn:active,
+    .theme-option:active,
+    .modal-close:active,
+    .language-option:active,
+    .stop-tts-btn:active {
+      border: 2px inset;
+      transform: translateY(0);
+      box-shadow: none;
+    }
+    /* In dark theme, buttons become golden yellow */
+    body[data-theme="dark"] button,
+    body[data-theme="dark"] .btn-enhanced,
+    body[data-theme="dark"] .control-btn,
+    body[data-theme="dark"] .new-chat-btn,
+    body[data-theme="dark"] .sidebar-close-btn,
+    body[data-theme="dark"] .theme-option,
+    body[data-theme="dark"] .modal-close,
+    body[data-theme="dark"] .language-option,
+    body[data-theme="dark"] .stop-tts-btn {
+      background-color: #FFD700;
+      color: #000;
+    }
+    
+    /* Icon styling: increased size */
+    .icon {
+      width: 20px;
+      height: 20px;
+      padding: 3px;
+      display: inline-block;
+      vertical-align: middle;
+      transition: transform 0.2s;
+    }
+    .icon:hover { transform: scale(1.1); }
+    
+    /* Remove rounded styles from input buttons */
+    .input-area button#send-btn,
+    .input-area button.mic-btn { border-radius: 0; }
+    
+    /* Layout styles */
+    .layout {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .layout__sidebar--left {
+      max-width: 250px;
+      background: #f2f2f2;
+      color: #000;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: max-width 0.5s, padding 0.5s, opacity 0.5s;
+    }
+    .layout__sidebar--left.collapsed {
+      max-width: 0;
+      padding: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    @media (max-width: 768px) {
+      .layout__sidebar--left {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        max-width: 0;
+        padding: 0;
+        opacity: 0;
+      }
+      .layout__sidebar--left.active {
+        max-width: 250px;
+        padding: 20px;
+        opacity: 1;
+        z-index: 150;
+      }
+      .layout__sidebar--right {
+        width: 90%;
+        right: 5%;
+        top: 10%;
+        border-radius: 16px;
+      }
+      #reading-speed { width: 100%; }
+      .input-area {
+         position: fixed;
+         bottom: 10px;
+         left: 10px;
+         right: 10px;
+         margin: 0;
+      }
+      .chat-container { padding-bottom: 80px; }
+    }
+    @media (min-width: 769px) {
+      .sidebar-overlay { display: none !important; }
+    }
+    
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sidebar-header h2 { font-size: 1.2rem; }
+    
+    .chat-search { margin: 10px 0; }
+    .chat-search input {
+      width: 100%;
+      padding: 6px 8px;
+      border: none;
+      border-radius: 4px;
+    }
+    .chat-list {
+      list-style: none;
+      margin-top: 10px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .chat-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      margin-bottom: 8px;
+      background: rgba(0,0,0,0.05);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .chat-list-item:hover { background: rgba(0,0,0,0.1); }
+    .chat-list-item.active { background: var(--accent-blue); color: #fff; }
+    .chat-list-item .chat-title { flex: 1; font-size: 0.9rem; }
+    
+    .layout__main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--primary-bg);
+      color: var(--text-primary);
+      position: relative;
+      overflow: hidden;
+      transition: width 0.5s;
+    }
+    .layout__main header {
+      background: var(--header-bg);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .header-title-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-title-container h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    .header__controls { display: flex; gap: 10px; }
+    
+    #home-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    #home-btn:hover { transform: scale(1.1); }
+    
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: transparent;
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    
+    .message-row {
+      display: flex;
+      align-items: flex-start;
+      margin: 10px 0;
+    }
+    .message-row.message-user { justify-content: flex-end; }
+    .message-row.message-bot { justify-content: flex-start; }
+    .message-content {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .message-row.message-user .message-content {
+      background: #e0e0e0;
+      color: #000;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .message-row.message-bot .message-content {
+      background: transparent;
+      color: var(--text-primary);
+    }
+    
+    .input-area {
+      position: relative;
+      margin: 20px;
+      padding: 0;
+    }
+    .input-area textarea {
+      width: 100%;
+      resize: none;
+      padding: 12px 90px 12px 12px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      outline: none;
+      font-family: 'Roboto', sans-serif;
+      border-radius: 20px;
+      transition: border 0.3s;
+    }
+    .input-area textarea:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 8px var(--accent-blue);
+    }
+    .input-buttons {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 10px;
+    }
+    
+    .controls {
+      display: flex;
+      justify-content: center;
+      padding: 10px 20px;
+      gap: 20px;
+      background: var(--control-bg);
+      border-top: 1px solid #ccc;
+    }
+    
+    /* Settings Panel styled as a floating window */
+    .layout__sidebar--right {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      width: 300px;
+      max-width: 90%;
+      background: var(--modal-bg);
+      color: var(--modal-text);
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      padding: 20px;
+      z-index: 300;
+      display: none;
+    }
+    .layout__sidebar--right.active {
+      display: block;
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--modal-bg);
+      color: var(--modal-text);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      z-index: 300;
+      display: none;
+      flex-direction: column;
+    }
+    .modal.active { display: flex; }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 { margin: 0; }
+    
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+    .sidebar-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+    
+    button:focus-visible, .control-btn:focus-visible {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: 2px;
+    }
+    
+    /* Reading Options Style */
+    .reading-options {
+      list-style: none;
+      margin-top: 10px;
+      padding: 0;
+    }
+    .reading-options li { margin-bottom: 10px; }
+    .reading-options label { font-size: 0.9rem; margin-right: 6px; }
+    
+    .language-selector {
+      list-style: none;
+      margin-top: 10px;
+      padding: 0;
+    }
+    .language-selector li { margin-bottom: 8px; }
+  </style>
+</head>
+<body data-theme="light">
+  <!-- SVG Sprite Definitions -->
+  <svg style="display: none;">
+    <symbol id="icon-send" viewBox="0 0 24 24">
+      <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" fill="currentColor"></path>
+    </symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"></path>
+    </symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5" fill="currentColor"></circle>
+      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.5"></path>
+    </symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24">
+      <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"></path>
+    </symbol>
+    <symbol id="icon-clear" viewBox="0 0 24 24">
+      <path d="M3 6h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M8 6V4h8v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-export" viewBox="0 0 24 24">
+      <path d="M16 17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M4 5h4v14H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-stop" viewBox="0 0 24 24">
+      <rect x="6" y="6" width="12" height="12" fill="currentColor"></rect>
+    </symbol>
+    <symbol id="icon-regenerate" viewBox="0 0 24 24">
+      <path d="M4 4v6h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M20 20v-6h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M9 15a5 5 0 1 1 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-listen" viewBox="0 0 24 24">
+      <path d="M12 22a10 10 0 0 0 10-10V6a10 10 0 0 0-20 0v6a10 10 0 0 0 10 10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-mic" viewBox="0 0 24 24">
+      <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="8" y1="23" x2="16" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24">
+      <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-gear" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1 1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24">
+      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z" fill="currentColor"></path>
+    </symbol>
+    <symbol id="icon-copy" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <symbol id="icon-play" viewBox="0 0 24 24">
+      <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+    </symbol>
+  </svg>
+  
+  <!-- Layout Structure -->
+  <div class="layout">
+    <!-- Left Sidebar (Chats Box) -->
+    <nav class="layout__sidebar--left" id="left-sidebar">
+      <button class="sidebar-close-btn" id="sidebar-close" title="إغلاق القائمة">
+        <svg class="icon"><use xlink:href="#icon-close"></use></svg>
+      </button>
+      <div class="sidebar-header">
+        <h2 data-key="chatsTitle">الدردشات</h2>
+        <button class="new-chat-btn" id="new-chat" title="دردشة جديدة">
+          <svg class="icon"><use xlink:href="#icon-plus"></use></svg>
+        </button>
+      </div>
+      <div class="chat-search">
+        <input type="text" id="chat-search-input" placeholder="ابحث في الدردشات..." data-key="searchPlaceholder">
+      </div>
+      <ul class="chat-list" id="chat-list">
+        <!-- Chat items injected dynamically -->
+      </ul>
+    </nav>
+  
+    <!-- Main Chat Area -->
+    <div class="layout__main">
+      <header>
+        <div class="header-title-container">
+          <button class="btn-enhanced" id="sidebar-toggle" title="تبديل القائمة" aria-label="تبديل القائمة">
+            <svg class="icon"><use xlink:href="#icon-menu"></use></svg>
+          </button>
+          <button class="btn-enhanced" id="home-btn" title="الرئيسية" aria-label="الرئيسية">
+            <svg class="icon"><use xlink:href="#icon-home"></use></svg>
+          </button>
+          <h1 data-key="headerTitle">الذكاء الاصطناعي</h1>
+        </div>
+        <div class="header__controls">
+          <button class="btn-enhanced" id="settings-toggle" title="الإعدادات" aria-label="الإعدادات">
+            <svg class="icon" id="settings-icon"><use xlink:href="#icon-gear"></use></svg>
+          </button>
+          <button class="btn-enhanced" id="toggle-theme" title="تبديل المظهر" aria-label="تبديل المظهر">
+            <!-- Initially in light mode, show moon icon -->
+            <svg class="icon" id="theme-icon"><use xlink:href="#icon-moon"></use></svg>
+          </button>
+        </div>
+      </header>
+      
+      <!-- Controls Bar Above Chat Container -->
+      <div class="controls">
+        <button class="control-btn" id="clear-chat" title="مسح الدردشة" aria-label="مسح الدردشة">
+          <svg class="icon"><use xlink:href="#icon-clear"></use></svg>
+        </button>
+        <button class="control-btn" id="export-chat" title="تصدير الدردشة" aria-label="تصدير الدردشة">
+          <svg class="icon"><use xlink:href="#icon-export"></use></svg>
+        </button>
+        <button class="control-btn" id="stop-gen" title="إيقاف التوليد" aria-label="إيقاف التوليد">
+          <svg class="icon"><use xlink:href="#icon-stop"></use></svg>
+        </button>
+        <button class="control-btn" id="regenerate" title="إعادة التوليد" aria-label="إعادة التوليد">
+          <svg class="icon"><use xlink:href="#icon-regenerate"></use></svg>
+        </button>
+        <button class="control-btn" id="listen-result" title="استماع النتيجة" aria-label="استماع النتيجة">
+          <svg class="icon"><use xlink:href="#icon-listen"></use></svg>
+        </button>
+      </div>
+      
+      <div class="chat-container" id="chat-container"></div>
+      
+      <!-- Input Area with Buttons Embedded in the Text Box -->
+      <div class="input-area">
+        <textarea id="user-input" rows="2" placeholder="أكتب رسالتك..."></textarea>
+        <div class="input-buttons">
+          <button id="send-btn" aria-label="إرسال الرسالة">
+            <svg class="icon"><use xlink:href="#icon-send"></use></svg>
+          </button>
+          <button class="mic-btn" id="mic-btn" title="تحدث" aria-label="تحدث">
+            <svg class="icon"><use xlink:href="#icon-mic"></use></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Right Sidebar: Settings Panel (Floating Window Style) -->
+    <aside class="layout__sidebar--right" id="right-sidebar">
+      <button class="sidebar-close-btn" id="settings-close" title="إغلاق الإعدادات">
+        <svg class="icon"><use xlink:href="#icon-close"></use></svg>
+      </button>
+      <h2 data-key="appearanceSettings">إعدادات المظهر</h2>
+      <ul class="theme-selector">
+        <li>
+          <button class="theme-option" data-theme="light">
+            <svg class="icon"><use xlink:href="#icon-moon"></use></svg>
+            <span data-key="light">فاتح</span>
+          </button>
+        </li>
+        <li>
+          <button class="theme-option" data-theme="dark">
+            <svg class="icon"><use xlink:href="#icon-sun"></use></svg>
+            <span data-key="dark">غامق</span>
+          </button>
+        </li>
+      </ul>
+      <!-- Reading Options -->
+      <h2 style="margin-top:20px;" data-key="readingOptions">خيارات القراءة</h2>
+      <ul class="reading-options">
+        <li>
+          <label for="reading-speed" data-key="readingSpeed">سرعة القراءة:</label>
+          <input type="range" id="reading-speed" min="0.5" max="2" step="0.1" value="1">
+        </li>
+        <li>
+          <button class="stop-tts-btn" id="stop-reading-btn" title="إيقاف القراءة">
+            <svg class="icon"><use xlink:href="#icon-close"></use></svg>
+          </button>
+        </li>
+      </ul>
+      <!-- Language Selector -->
+      <h2 style="margin-top:20px;" data-key="languageSelect">اختيار اللغة</h2>
+      <ul class="language-selector">
+        <li>
+          <button class="language-option" data-lang="ar">العربية</button>
+        </li>
+        <li>
+          <button class="language-option" data-lang="en">English</button>
+        </li>
+      </ul>
+    </aside>
+  </div>
+  
+  <!-- Mobile Sidebar Overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+  
+  <!-- Modal for Code Output -->
+  <div class="modal" id="code-modal">
+    <div class="modal-header">
+      <h3 data-key="codeResult">نتيجة الكود</h3>
+      <button class="modal-close" id="modal-close" title="إغلاق">
+        <svg class="icon"><use xlink:href="#icon-close"></use></svg>
+      </button>
+    </div>
+    <div class="modal-controls">
+      <button class="control-btn" id="copy-code" title="نسخ الكود">
+        <svg class="icon"><use xlink:href="#icon-copy"></use></svg> <span data-key="copy">نسخ</span>
+      </button>
+      <button class="control-btn" id="run-code" title="تشغيل الكود">
+        <svg class="icon"><use xlink:href="#icon-play"></use></svg> <span data-key="run">تشغيل</span>
+      </button>
+      <button class="control-btn" id="open-tab" title="فتح في تبويب جديد">
+        <svg class="icon"><use xlink:href="#icon-export"></use></svg> <span data-key="open">فتح</span>
+      </button>
+    </div>
+    <pre id="code-content" class="code-block"></pre>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>
+    /********************* TRANSLATIONS *********************/
+    const translations = {
+      ar: {
+        pageTitle: "الموسوعة المصرية - الدردشة ",
+        chatsTitle: "الدردشات",
+        searchPlaceholder: "ابحث في الدردشات...",
+        headerTitle: "الذكاء الاصطناعي ",
+        inputPlaceholder: "أكتب رسالتك...",
+        appearanceSettings: "إعدادات المظهر",
+        light: "فاتح",
+        dark: "غامق",
+        readingOptions: "خيارات القراءة",
+        readingSpeed: "سرعة القراءة:",
+        languageSelect: "اختيار اللغة",
+        codeResult: "نتيجة الكود",
+        copy: "نسخ",
+        run: "تشغيل",
+        open: "فتح"
+      },
+      en: {
+        pageTitle: "Egyptian Encyclopedia - AI",
+        chatsTitle: "Chats",
+        searchPlaceholder: "Search chats...",
+        headerTitle: "Artificial Intelligence",
+        inputPlaceholder: "",
+        appearanceSettings: "Appearance Settings",
+        light: "Light",
+        dark: "Dark",
+        readingOptions: "Reading Options",
+        readingSpeed: "Reading Speed:",
+        languageSelect: "Language Select",
+        codeResult: "Code Result",
+        copy: "Copy",
+        run: "Run",
+        open: "Open"
+      },
+      // Add more languages as needed...
+    };
+    
+    function setLanguage(lang) {
+      document.documentElement.setAttribute('lang', lang);
+      const trans = translations[lang] || translations.ar;
+      document.querySelectorAll("[data-key]").forEach(el => {
+        const key = el.getAttribute("data-key");
+        if(trans[key]) {
+          if(el.tagName.toLowerCase() === "input") {
+            el.placeholder = trans[key];
+          } else {
+            el.textContent = trans[key];
+          }
+        }
+      });
+      localStorage.setItem('preferredLanguage', lang);
+    }
+    
+    /********************* THEME SWITCHER *********************/
+    function updateThemeIcon(theme) {
+      const themeIcon = document.getElementById("theme-icon");
+      if(theme === "light") {
+        themeIcon.innerHTML = '<use xlink:href="#icon-moon"></use>';
+      } else {
+        themeIcon.innerHTML = '<use xlink:href="#icon-sun"></use>';
+      }
+    }
+    
+    function toggleTheme() {
+      const currentTheme = document.body.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('preferredTheme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+    
+    /********************* GLOBAL VARIABLES *********************/
+    const API_KEY = 'AIzaSyC-REQ0WAsmc0288A9jyEeorMNxVJSuY7I';
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+    const chatContainer = document.getElementById('chat-container');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const clearChatBtn = document.getElementById('clear-chat');
+    const exportChatBtn = document.getElementById('export-chat');
+    const stopGenBtn = document.getElementById('stop-gen');
+    const regenerateBtn = document.getElementById('regenerate');
+    const toggleThemeBtn = document.getElementById('toggle-theme');
+    const settingsToggle = document.getElementById('settings-toggle');
+    const leftSidebar = document.getElementById('left-sidebar');
+    const sidebarClose = document.getElementById('sidebar-close');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const newChatBtn = document.getElementById('new-chat');
+    const chatListEl = document.getElementById('chat-list');
+    const chatSearchInput = document.getElementById('chat-search-input');
+    const codeModal = document.getElementById('code-modal');
+    const modalClose = document.getElementById('modal-close');
+    const codeContent = document.getElementById('code-content');
+    const copyCodeBtn = document.getElementById('copy-code');
+    const runCodeBtn = document.getElementById('run-code');
+    const openTabBtn = document.getElementById('open-tab');
+    const micBtn = document.getElementById('mic-btn');
+    const stopReadingBtn = document.getElementById('stop-reading-btn');
+    const listenResultBtn = document.getElementById('listen-result');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const homeBtn = document.getElementById('home-btn');
+    
+    let currentAbortController = null;
+    let lastUserMessage = '';
+    let chats = [];
+    let currentChatId = null;
+    let recognition;
+    
+    /********************* CHAT STORAGE FUNCTIONS *********************/
+    function saveChats() { localStorage.setItem('chats', JSON.stringify(chats)); }
+    function loadChats() {
+      const stored = localStorage.getItem('chats');
+      chats = stored ? JSON.parse(stored) : [];
+    }
+    function updateChatList() {
+      chatListEl.innerHTML = '';
+      chats.forEach(chat => {
+        const li = document.createElement('li');
+        li.className = 'chat-list-item';
+        if(chat.id === currentChatId) li.classList.add('active');
+        li.innerHTML = `<span class="chat-title">${chat.title}</span>
+                        <button class="rename-chat" title="إعادة التسمية">
+                          <svg class="icon"><use xlink:href="#icon-gear"></use></svg>
+                        </button>
+                        <button class="close-chat" title="إغلاق الدردشة">
+                          <svg class="icon"><use xlink:href="#icon-close"></use></svg>
+                        </button>`;
+        li.addEventListener('click', (e) => {
+          if(e.target.closest('.close-chat') || e.target.closest('.rename-chat')) return;
+          switchChat(chat.id);
+        });
+        li.querySelector('.close-chat').addEventListener('click', (e) => { e.stopPropagation(); deleteChat(chat.id); });
+        li.querySelector('.rename-chat').addEventListener('click', (e) => {
+          e.stopPropagation();
+          let newName = prompt("أدخل الاسم الجديد:", chat.title);
+          if(newName) { chat.title = newName; saveChats(); updateChatList(); }
+        });
+        chatListEl.appendChild(li);
+      });
+    }
+    function switchChat(chatId) {
+      currentChatId = chatId;
+      const chat = chats.find(c => c.id === chatId);
+      chatContainer.innerHTML = '';
+      if(chat && chat.conversation) {
+        chat.conversation.forEach(entry => { appendMessage(entry.role, entry.message, false, false); });
+      }
+      updateChatList();
+    }
+    function deleteChat(chatId) {
+      chats = chats.filter(c => c.id !== chatId);
+      if(currentChatId === chatId) {
+        if(chats.length) { currentChatId = chats[0].id; switchChat(currentChatId); }
+        else { currentChatId = null; chatContainer.innerHTML = ''; }
+      }
+      saveChats(); updateChatList();
+    }
+    function newChat() {
+      let chatName = prompt("أدخل اسم الدردشة:", `دردشة ${chats.length + 1}`);
+      if(!chatName) chatName = `دردشة ${chats.length + 1}`;
+      const chatId = 'chat-' + Date.now();
+      const chat = { id: chatId, title: chatName, conversation: [] };
+      chats.push(chat);
+      currentChatId = chatId;
+      saveChats(); updateChatList();
+      chatContainer.innerHTML = '';
+    }
+    loadChats();
+    if(chats.length === 0) { newChat(); } else { currentChatId = chats[0].id; switchChat(currentChatId); }
+    
+    /********************* UTILITY FUNCTIONS *********************/
+    function appendMessage(role, message, isLoading = false, save = true) {
+      const rowDiv = document.createElement('div');
+      rowDiv.classList.add('message-row', `message-${role}`);
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.classList.add('message-content');
+      if(isLoading) {
+        contentDiv.innerHTML = `<div class="typing-indicator">
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                  </div>`;
+      } else {
+        if(role === 'user') {
+          contentDiv.innerText = message;
+        } else {
+          const rendered = marked.parse(message);
+          contentDiv.innerHTML = rendered;
+          contentDiv.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+          });
+        }
+      }
+      rowDiv.appendChild(contentDiv);
+      chatContainer.appendChild(rowDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      if(save) {
+        const chat = chats.find(c => c.id === currentChatId);
+        if(chat) { chat.conversation.push({ role, message }); saveChats(); }
+      }
+    }
+    function clearChat() {
+      const chat = chats.find(c => c.id === currentChatId);
+      if(chat) { chat.conversation = []; saveChats(); }
+      chatContainer.innerHTML = '';
+    }
+    function exportChat() {
+      const chat = chats.find(c => c.id === currentChatId);
+      if(chat) {
+        const text = chat.conversation.map(entry => `${entry.role.toUpperCase()}: ${entry.message}`).join('\n\n');
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${chat.title.replace(/\s/g, '_')}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }
+    function listenText(text) {
+      if(speechSynthesis.speaking) { speechSynthesis.cancel(); return; }
+      const utterance = new SpeechSynthesisUtterance(text);
+      const speed = document.getElementById('reading-speed').value;
+      utterance.rate = speed;
+      speechSynthesis.speak(utterance);
+    }
+    function runCode(code) {
+      if(code.toLowerCase().includes("<html")) {
+         codeContent.innerText = code;
+         codeModal.classList.add('active');
+      } else {
+         alert('الكود المقدم لا يحتوي على HTML.');
+      }
+    }
+    modalClose.addEventListener('click', () => { codeModal.classList.remove('active'); });
+    copyCodeBtn.addEventListener('click', () => {
+      const codeText = codeContent.innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+         alert('تم نسخ الكود!');
+      });
+    });
+    runCodeBtn.addEventListener('click', () => {
+      const codeText = codeContent.innerText;
+      let newWin = window.open("", "_blank", "width=800,height=600");
+      newWin.document.write(codeText);
+      newWin.document.close();
+    });
+    openTabBtn.addEventListener('click', () => {
+      const codeText = codeContent.innerText;
+      let newTab = window.open();
+      newTab.document.write(codeText);
+      newTab.document.close();
+    });
+    
+    async function callGeminiAPI(prompt) {
+      lastUserMessage = prompt;
+      const payload = { contents: [{ parts: [{ text: prompt }] }] };
+      currentAbortController = new AbortController();
+      const signal = currentAbortController.signal;
+      try {
+        showLoading();
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: signal
+        });
+        removeLoading();
+        if(!response.ok) { throw new Error(`استجابة الـ API بالحالة ${response.status}`); }
+        const data = await response.json();
+        let botReply = '';
+        if(data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts) {
+          botReply = data.candidates[0].content.parts.map(part => part.text).join('');
+        } else { botReply = 'لم يتم استلام رد صالح.'; }
+        appendMessage('bot', botReply.trim());
+      } catch(error) {
+        removeLoading();
+        console.error('خطأ في استدعاء Gemini API:', error);
+        let errorMsg = error.name === 'AbortError' ? 'تم إيقاف التوليد.' : error.message.includes("Failed to fetch") ? "خطأ في الشبكة: لا يمكن الوصول إلى الـ API." : 'خطأ: ' + error.message;
+        appendMessage('bot', errorMsg);
+      } finally { currentAbortController = null; }
+    }
+    function showLoading() { appendMessage('bot', '', true, false); }
+    function removeLoading() {
+      const messages = chatContainer.getElementsByClassName('message-row');
+      if(messages.length) {
+        const lastMessage = messages[messages.length - 1];
+        if(lastMessage.querySelector('.typing-indicator')) { lastMessage.remove(); }
+      }
+    }
+    function sendMessage() {
+      const text = userInput.value.trim();
+      if(!text) return;
+      appendMessage('user', text);
+      userInput.value = '';
+      callGeminiAPI(text);
+    }
+    
+    /********************* SPEECH RECOGNITION *********************/
+    if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'ar-SA';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.onstart = () => { micBtn.classList.add('recording'); };
+      recognition.onend = () => { micBtn.classList.remove('recording'); };
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        userInput.value = transcript;
+        sendMessage();
+      };
+      recognition.onerror = (event) => { console.error('خطأ في التعرف على الصوت', event.error); };
+    }
+    
+    /********************* EVENT LISTENERS *********************/
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keydown', (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+    micBtn.addEventListener('click', () => { if(recognition) recognition.start(); });
+    clearChatBtn.addEventListener('click', clearChat);
+    exportChatBtn.addEventListener('click', exportChat);
+    stopGenBtn.addEventListener('click', () => { if(currentAbortController) currentAbortController.abort(); });
+    regenerateBtn.addEventListener('click', () => { if(lastUserMessage) callGeminiAPI(lastUserMessage); });
+    toggleThemeBtn.addEventListener('click', toggleTheme);
+    
+    // Toggle settings panel on click of the gear icon
+    settingsToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const settingsPanel = document.getElementById('right-sidebar');
+      settingsPanel.classList.toggle('active');
+    });
+    // Close settings panel on clicking its close button
+    document.getElementById('settings-close').addEventListener('click', () => {
+      document.getElementById('right-sidebar').classList.remove('active');
+    });
+    // Close settings panel if clicking outside of it
+    document.addEventListener('click', (e) => {
+      const settingsPanel = document.getElementById('right-sidebar');
+      if(settingsPanel.classList.contains('active') && !e.target.closest('#right-sidebar') && !e.target.closest('#settings-toggle')) {
+        settingsPanel.classList.remove('active');
+      }
+    });
+    // Toggle settings panel on Shift+S
+    document.addEventListener('keydown', (e) => {
+      if(e.shiftKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        document.getElementById('right-sidebar').classList.toggle('active');
+      }
+    });
+    
+    sidebarToggle.addEventListener('click', () => {
+      if(window.innerWidth < 769) {
+        leftSidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+      } else {
+        leftSidebar.classList.toggle('collapsed');
+      }
+    });
+    sidebarClose.addEventListener('click', () => {
+      if(window.innerWidth < 769) {
+        leftSidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+      } else {
+        leftSidebar.classList.add('collapsed');
+      }
+    });
+    sidebarOverlay.addEventListener('click', () => {
+      leftSidebar.classList.remove('active');
+      sidebarOverlay.classList.remove('active');
+    });
+    newChatBtn.addEventListener('click', newChat);
+    chatSearchInput.addEventListener('input', () => {
+      const query = chatSearchInput.value.toLowerCase();
+      document.querySelectorAll('.chat-list-item').forEach(item => {
+        const title = item.querySelector('.chat-title').innerText.toLowerCase();
+        item.style.display = title.includes(query) ? '' : 'none';
+      });
+    });
+    document.querySelectorAll('.theme-option').forEach(option => {
+      option.addEventListener('click', () => {
+        const selectedTheme = option.getAttribute('data-theme');
+        document.body.setAttribute('data-theme', selectedTheme);
+        localStorage.setItem('preferredTheme', selectedTheme);
+        updateThemeIcon(selectedTheme);
+      });
+    });
+    listenResultBtn.addEventListener('click', () => {
+      const botMessages = document.querySelectorAll('.message-row.message-bot .message-content');
+      if(botMessages.length > 0) {
+        const lastMessageElem = botMessages[botMessages.length - 1];
+        const text = lastMessageElem.innerText || lastMessageElem.textContent;
+        listenText(text);
+      }
+    });
+    homeBtn.addEventListener('click', () => {
+      window.location.href = "index.html";
+    });
+    
+    // Language Selector Event Listeners
+    document.querySelectorAll('.language-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const lang = this.getAttribute('data-lang');
+        setLanguage(lang);
+      });
+    });
+    
+    // Stop reading button
+    stopReadingBtn.addEventListener('click', () => {
+      speechSynthesis.cancel();
+    });
+    
+    // Set initial language and theme from localStorage
+    const storedLang = localStorage.getItem('preferredLanguage') || 'ar';
+    setLanguage(storedLang);
+    const storedTheme = localStorage.getItem('preferredTheme') || 'light';
+    document.body.setAttribute('data-theme', storedTheme);
+    updateThemeIcon(storedTheme);
+    
+  </script>
+</body>
+</html>
+
