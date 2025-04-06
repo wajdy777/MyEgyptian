@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الموسوعة المصرية- منصة التعلم</title>
+  <!-- Google Fonts: Cairo for Arabic, Roboto for other languages -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      /* Default theme */
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --background: #ecf0f1;
+      --text: #2c3e50;
+      --card-bg: #ffffff;
+    }
+    html {
+      scroll-behavior: smooth;
+      height: 100%;
+    }
+    body {
+      height: 100%;
+      font-family: 'Cairo', sans-serif;
+      font-size: 18px;
+      background: var(--background);
+      color: var(--text);
+      overflow-x: hidden;
+      margin: 0;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: all 0.4s ease;
+    }
+    /* Navbar Styles */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    /* Home icon now navigates to index.html */
+    .logo {
+      font-size: 2rem;
+      color: white;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 500;
+      position: relative;
+      font-size: 1.1rem;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    /* IDs for translatable nav texts */
+    #navHome, #navLearning {
+      /* Set via translations */
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .theme-selector {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .theme-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      outline: none;
+    }
+    .theme-btn:hover {
+      animation: bounce 0.6s;
+    }
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .language-selector select {
+      padding: 0.4rem;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+    }
+    /* Home Page (Hero Section) */
+    .hero {
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 0 1rem;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin: 0.5rem;
+    }
+    .hero p {
+      font-size: 1.4rem;
+      margin: 0.5rem;
+    }
+    /* Original button style (solid, rounded) */
+    .explore-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .explore-btn:hover {
+      background: var(--secondary);
+      transform: scale(1.05);
+    }
+    /* Language Cards */
+    .language-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin: 2rem auto;
+      max-width: 1200px;
+      padding: 0 1rem;
+    }
+    .language-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .language-card:hover {
+      transform: scale(1.05) rotate(0.5deg);
+    }
+    .language-card img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .language-card:hover img {
+      transform: scale(1.1);
+    }
+    .lang-name {
+      padding: 10px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--text);
+    }
+    /* Language Page (Course Videos) */
+    .language-page {
+      display: none;
+    }
+    .language-page .header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .language-page .header .title {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    .language-page .header .back-btn {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .language-page .main-content {
+      padding: 1rem 2rem;
+    }
+    .language-page .search-container {
+      margin: 1rem auto 2rem auto;
+      max-width: 500px;
+      display: flex;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-radius: 30px;
+      overflow: hidden;
+    }
+    .language-page .search-container input {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+    }
+    .language-page .search-container button {
+      padding: 1rem 1.5rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .language-page .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .language-page .video-card {
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    /* Video Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+    .modal-content {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+    }
+    .modal-content iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+      border-radius: 8px;
+    }
+    .modal .close-modal {
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      background: #fff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <div class="nav-left">
+      <!-- Home icon: Clicking navigates to index.html -->
+      <a href="index.html" class="logo"><i class="fas fa-home"></i></a>
+      <!-- Navigation Links -->
+      <div class="nav-links">
+        <!-- "الرئيسية" (Main) shows the courses cards (main page) -->
+        <a id="navHome" onclick="showHome()">الرئيسية</a>
+        <!-- "تعلم" (Learn) navigates to learning.html -->
+        <a id="navLearning" onclick="window.location.href='learning.html'">تعلم</a>
+      </div>
+    </div>
+    <!-- Right Side: Theme & Language Selector -->
+    <div class="nav-right">
+      <div class="theme-selector">
+        <button class="theme-btn" style="background: #2c3e50" onclick="setTheme('default')"></button>
+        <button class="theme-btn" style="background: #000000" onclick="setTheme('dark')"></button>
+      </div>
+      <div class="language-selector">
+        <select id="languageSelect" onchange="changeLanguage(this.value)">
+          <option value="ar" selected>العربية</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <!-- Additional languages can be added here -->
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Home Page Section (Main Page with Courses Cards) -->
+  <section id="home" class="hero">
+    <h1 id="mainTitle">مرحبا بكم في الموسوعة المصرية للتعلم</h1>
+    <p id="mainSubtitle">بوابتك إلى التعلم عن طريق الفيديوهات والدروس</p>
+    <button class="explore-btn" id="exploreBtn" onclick="goLearning()">استكشف الفيديوهات</button>
+    <div class="language-list">
+      <div class="language-card" onclick="openCourseVideos('التاريخ النيل')">
+        <img src="النيل.jpg" alt="النيل" />
+        <div class="lang-name">النيل</div>
+      </div>
+      <div class="language-card" onclick="openCourseVideos(' التاريخ والعلم الاهرامات')">
+        <img src="الاهرامات.jpg" alt="الاهرامات" />
+        <div class="lang-name">الاهرامات</div>
+      </div>
+      <div class="language-card" onclick="openCourseVideos('التاريخ الحضارة المصرية')">
+        <img src="الحضارة_المصرية.jpg" alt="الحضارة المصرية" />
+        <div class="lang-name">الحضارة المصرية</div>
+      </div>
+      <div class="language-card" onclick="openCourseVideos('التاريخ الحضارة الاسلامية')">
+        <img src="https://plus.unsplash.com/premium_photo-1694475362631-37d161f6a28a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8JUQ4JUE3JUQ5JTg0JUQ5JTgyJUQ4JUFGJUQ4JUIzfGVufDB8fDB8fHww" alt="الحضارة الاسلامية" />
+        <div class="lang-name">الحضارة الاسلامية</div>
+      </div>
+      <div class="language-card" onclick="openCourseVideos('الحضارة البابلية التاريخ')">
+        <img src="https://images.unsplash.com/photo-1649927212239-42d23bc22a24?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fCVEOCVBNyVEOSU4NCVEOCVBRCVEOCVCNiVEOCVBNyVEOCVCMSVEOCVBOSUyMCVEOCVBNyVEOSU4NCVEOCVBOCVEOCVBNyVEOCVBOCVEOSU4NCVEOSU4QSVEOCVBOXxlbnwwfHwwfHx8MA%3D%3D" alt="الحضارة البابلية" />
+        <div class="lang-name">الحضارة البابلية</div>
+      </div>
+      <div class="language-card" onclick="openCourseVideos('الحضارة الرومانية')">
+        <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=1396&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="الحضارة الرومانية" />
+        <div class="lang-name">الحضارة الرومانية</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Language Page (Course Videos) -->
+  <section id="language" class="language-page">
+    <div class="header">
+      <button class="back-btn" onclick="showHome()" id="backBtn">عودة</button>
+      <div class="title" id="courseTitle">دروس الفيديو</div>
+      <div></div>
+    </div>
+    <div class="main-content">
+      <div class="search-container">
+        <input type="text" class="search-input" id="courseSearchQuery" placeholder="ابحث في فيديوهات الدورة" onkeydown="if(event.key==='Enter') searchCourseVideos()" />
+        <button class="search-btn" onclick="searchCourseVideos()">بحث</button>
+      </div>
+      <div class="video-grid" id="courseVideoGrid">
+        <!-- سيتم تحميل فيديوهات الدورة هنا -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Modal -->
+  <div id="videoModal" class="modal" onclick="closeVideoModal(event)">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeVideoModal(event)">&times;</button>
+      <iframe id="videoFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    // Global variables to store current course and language
+    let currentCourse = "";
+    let currentLang = 'ar';
+
+    // YouTube API key and endpoint
+    const YOUTUBE_API_KEY = "AIzaSyAk0lJVqzNWRyG1OPHCQhG7wwod3cZjQSw";
+    const YOUTUBE_API_URL = "https://www.googleapis.com/youtube/v3/search";
+
+    async function fetchVideos(query) {
+      const url = `${YOUTUBE_API_URL}?part=snippet&type=video&maxResults=8&q=${encodeURIComponent(query)}&key=${YOUTUBE_API_KEY}`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.items;
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+        return [];
+      }
+    }
+
+    function renderVideos(videos, targetId) {
+      const container = document.getElementById(targetId);
+      container.innerHTML = "";
+      videos.forEach(video => {
+        const videoId = video.id.videoId;
+        const title = video.snippet.title;
+        const thumb = video.snippet.thumbnails.medium.url;
+        const card = document.createElement("div");
+        card.className = "video-card";
+        card.innerHTML = `<img src="${thumb}" alt="${title}" style="width:100%;border-radius:8px;">
+                          <p style="margin-top:0.5rem;">${title}</p>`;
+        card.onclick = () => openVideoModal(videoId);
+        container.appendChild(card);
+      });
+    }
+
+    // Course Page: Open course videos
+    async function openCourseVideos(courseName) {
+      currentCourse = courseName;
+      document.getElementById("courseTitle").innerText = courseName + " " + translations[currentLang].courseVideos;
+      document.getElementById("courseSearchQuery").placeholder = translations[currentLang].courseSearchPlaceholder + " " + courseName;
+      showLanguage();
+      const grid = document.getElementById("courseVideoGrid");
+      grid.innerHTML = "<p>جاري التحميل...</p>";
+      const query = courseName + " programming tutorial";
+      const videos = await fetchVideos(query);
+      renderVideos(videos, "courseVideoGrid");
+    }
+
+    async function searchCourseVideos() {
+      const queryInput = document.getElementById("courseSearchQuery");
+      const queryText = queryInput.value.trim();
+      const grid = document.getElementById("courseVideoGrid");
+      if (!queryText) {
+        grid.innerHTML = "<p>الرجاء إدخال مصطلح البحث.</p>";
+        return;
+      }
+      grid.innerHTML = "<p>جاري التحميل...</p>";
+      const fullQuery = currentCourse + " programming tutorial " + queryText;
+      const videos = await fetchVideos(fullQuery);
+      renderVideos(videos, "courseVideoGrid");
+    }
+
+    // Video Modal functions: play video in modal overlay
+    function openVideoModal(videoId) {
+      const modal = document.getElementById("videoModal");
+      const frame = document.getElementById("videoFrame");
+      frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      modal.style.display = "flex";
+    }
+
+    function closeVideoModal(event) {
+      if (event.target.id === "videoModal" || event.target.classList.contains("close-modal")) {
+        const modal = document.getElementById("videoModal");
+        const frame = document.getElementById("videoFrame");
+        frame.src = "";
+        modal.style.display = "none";
+      }
+    }
+
+    // Navigation functions
+    function showHome() {
+      document.getElementById("home").style.display = "flex";
+      document.getElementById("language").style.display = "none";
+    }
+    function showLanguage() {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("language").style.display = "block";
+    }
+    // When user clicks on the word "تعلم" (Learn), navigate to learning.html
+    function goLearning() {
+      window.location.href = "learning.html";
+    }
+
+    // Translations for texts across the site
+    const translations = {
+      ar: {
+        navHome: "الرئيسية",
+        navLearning: "تعلم",
+        mainTitle: "مرحبا بكم في الموسوعة المصرية للتعلم",
+        mainSubtitle: "بوابتك إلى التعلم عن طريق الفيديوهات والدروس",
+        exploreBtn: "استكشف حضارتك",
+        backBtn: "عودة",
+        courseVideos: "فيديوهات",
+        courseSearchPlaceholder: "ابحث في فيديوهات"
+      },
+      en: {
+        navHome: "Home",
+        navLearning: "Learning",
+        mainTitle: "Welcome to Egyptian Encyclopedia",
+        mainSubtitle: "Your gateway to learn your culture and tutorials",
+        exploreBtn: "Explore Courses",
+        backBtn: "Back",
+        courseVideos: "Videos",
+        courseSearchPlaceholder: "Search in"
+      },
+      es: {
+        navHome: "Inicio",
+        navLearning: "Aprender",
+        mainTitle: "Bienvenido a Egyptian Encyclopedia de Aprendizaje",
+        mainSubtitle: "Tu puerta de entrada a cursos y tutoriales de programación",
+        exploreBtn: "Explorar Cursos",
+        backBtn: "Volver",
+        courseVideos: "Vídeos",
+        courseSearchPlaceholder: "Buscar en"
+      },
+      fr: {
+        navHome: "Accueil",
+        navLearning: "Apprendre",
+        mainTitle: "Bienvenue sur la plateforme d'apprentissage Egyptian Encyclopedia",
+        mainSubtitle: "Votre porte d'entrée vers des cours et tutoriels de programmation",
+        exploreBtn: "Explorer les cours",
+        backBtn: "Retour",
+        courseVideos: "Vidéos",
+        courseSearchPlaceholder: "Rechercher dans"
+      }
+    };
+
+    function changeLanguage(lang) {
+      currentLang = lang;
+      const texts = translations[lang];
+      if (texts) {
+        // Update navbar texts
+        document.getElementById("navHome").innerText = texts.navHome;
+        document.getElementById("navLearning").innerText = texts.navLearning;
+        // Update home page texts
+        document.getElementById("mainTitle").innerText = texts.mainTitle;
+        document.getElementById("mainSubtitle").innerText = texts.mainSubtitle;
+        document.getElementById("exploreBtn").innerText = texts.exploreBtn;
+        // Update language page texts
+        document.getElementById("backBtn").innerText = texts.backBtn;
+        // If on language page, update course title and search placeholder
+        if(document.getElementById("language").style.display !== "none" && currentCourse){
+          document.getElementById("courseTitle").innerText = currentCourse + " " + texts.courseVideos;
+          document.getElementById("courseSearchQuery").placeholder = texts.courseSearchPlaceholder + " " + currentCourse;
+        }
+      }
+      // Change font based on language: Arabic uses Cairo; others use Roboto.
+      if (lang === 'ar') {
+        document.body.style.fontFamily = "'Cairo', sans-serif";
+      } else {
+        document.body.style.fontFamily = "'Roboto', sans-serif";
+      }
+    }
+
+    // Theme configurations: default and dark themes.
+    const themes = {
+      default: {
+        primary: "#2c3e50",
+        secondary: "#3498db",
+        accent: "#e74c3c",
+        background: "#ecf0f1",
+        text: "#2c3e50",
+        cardBg: "#ffffff"
+      },
+      dark: {
+        primary: "#000000",
+        secondary: "#FFD700",
+        accent: "#FFD700",
+        background: "#2d2d2d",
+        text: "#ffffff",
+        cardBg: "#333333"
+      }
+    };
+
+    function setTheme(themeName) {
+      const theme = themes[themeName];
+      if (theme) {
+        document.documentElement.style.setProperty('--primary', theme.primary);
+        document.documentElement.style.setProperty('--secondary', theme.secondary);
+        document.documentElement.style.setProperty('--accent', theme.accent);
+        document.documentElement.style.setProperty('--background', theme.background);
+        document.documentElement.style.setProperty('--text', theme.text);
+        document.documentElement.style.setProperty('--card-bg', theme.cardBg);
+      }
+    }
+
+    // Initialization: set default language and theme, and show home page.
+    changeLanguage('ar');
+    setTheme('default');
+    showHome();
+  </script>
+</body>
+</html>

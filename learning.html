@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>صفحة التعلم - CodeNova</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-size: 18px;
+      font-family: 'Cairo', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      padding: 1rem;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+    :root {
+      --background: #ecf0f1;
+      --text: #2c3e50;
+      --accent: #e74c3c;
+      --card-bg: #ffffff;
+    }
+    .dark-theme {
+      --background: #000;
+      --text: #FFD700;
+      --accent: #FFD700;
+      --card-bg: #1a1a1a;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.5rem;
+      animation: fadeInDown 0.8s;
+    }
+    header .home-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--accent);
+      flex: 0 0 auto;
+      transition: transform 0.3s;
+    }
+    header .home-icon:hover {
+      transform: scale(1.2);
+    }
+    header .main-link {
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.3s;
+      margin: 0 15px;
+    }
+    header .main-link:hover {
+      color: var(--accent);
+    }
+    header .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+    header select, header button, header .theme-btn {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    header select:hover, header button:hover, header .theme-btn:hover {
+      background: var(--accent);
+      color: var(--background);
+    }
+    .controls-container select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .controls-container select:hover {
+      background: var(--accent);
+      color: var(--background);
+    }
+    .learning-page {
+      text-align: center;
+      animation: fadeIn 1s;
+    }
+    .learning-page h2 {
+      margin-bottom: 1.5rem;
+    }
+    .controls-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .search-container {
+      margin: 0 auto;
+      max-width: 500px;
+      display: flex;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-radius: 30px;
+      overflow: hidden;
+      animation: slideInUp 0.8s;
+    }
+    .search-container input {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+    }
+    .search-container button {
+      padding: 1rem 1.5rem;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .search-container button:hover {
+      transform: scale(1.05);
+    }
+    .voice-search-btn {
+      padding: 1rem;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .voice-search-btn:hover {
+      transform: scale(1.05);
+    }
+    .voice-search-btn.listening {
+      animation: pulse 1.5s infinite;
+    }
+    .voice-search-btn i {
+      font-size: 1.2rem;
+    }
+    .search-results {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .video-card {
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .video-card:hover {
+      transform: scale(1.05);
+    }
+    .video-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .video-card p {
+      margin-top: 0.5rem;
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.5s;
+    }
+    .modal iframe {
+      width: 90%;
+      max-width: 800px;
+      height: 450px;
+      border: none;
+      border-radius: 8px;
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2rem;
+      color: #fff;
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      display: none;
+      animation: slideUp 0.5s;
+    }
+    @keyframes slideUp {
+      from { transform: translate(-50%, 100%); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="home-icon" onclick="window.location.href='index.html'">
+      <i class="fas fa-home"></i>
+    </div>
+    <div class="main-link" onclick="window.location.href='fullylearning.html'" id="mainLink">
+      Main
+    </div>
+    <div class="controls">
+      <select id="languageSwitcher" onchange="setLanguage(this.value)">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="de">Deutsch</option>
+      </select>
+      <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <section id="learning" class="learning-page">
+    <h2 data-key="title">ابحث عن موارد التعلم</h2>
+    <div class="controls-container">
+      <select id="categorySelector">
+        <option value="all" data-key="catAll">الكل</option>
+        <option value="history" data-key="catHistory">تاريخ</option>
+        <option value="geography" data-key="catGeography">جغرافيا</option>
+        <option value="policy" data-key="catPolicy">سياسة</option>
+      </select>
+    </div>
+    <div class="search-container">
+      <input type="text" class="search-input" id="searchQuery" placeholder="ابحث عن أي شيء..." onkeydown="if(event.key==='Enter') searchLearningVideos()" />
+      <button class="voice-search-btn" id="voiceSearchBtn" onclick="startVoiceSearch()">
+        <i class="fas fa-microphone"></i>
+      </button>
+      <button class="search-btn" onclick="searchLearningVideos()" data-key="searchBtn">بحث</button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <!-- Video results will appear here -->
+    </div>
+  </section>
+
+  <div id="videoModal" class="modal" onclick="closeVideoModal(event)">
+    <div class="close-modal" onclick="closeVideoModal(event)"><i class="fas fa-times"></i></div>
+    <iframe id="videoFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+  <div id="notification" class="notification"></div>
+
+  <script>
+    const themeToggleBtn = document.getElementById('themeToggle');
+    function toggleTheme() {
+      document.body.classList.toggle('dark-theme');
+      if(document.body.classList.contains('dark-theme')) {
+        themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    }
+
+    const translations = {
+      ar: {
+        title: "ابحث عن موارد التعلم",
+        searchPlaceholder: "ابحث عن أي شيء...",
+        searchBtn: "بحث",
+        loading: "جار التحميل...",
+        enterSearch: "الرجاء إدخال كلمة للبحث.",
+        catAll: "الكل",
+        catHistory: "تاريخ",
+        catGeography: "جغرافيا",
+        catPolicy: "سياسة",
+        main: "الرئيسية",
+        listeningStarted: "جارٍ الاستماع... تحدث الآن",
+        listeningEnded: "تم التعرف على الكلام",
+        voiceError: "حدث خطأ أثناء التعرف على الصوت",
+        browserNotSupported: "متصفحك لا يدعم البحث الصوتي"
+      },
+      en: {
+        title: "Search Learning Resources",
+        searchPlaceholder: "Search for anything...",
+        searchBtn: "Search",
+        loading: "Loading...",
+        enterSearch: "Please enter a search term.",
+        catAll: "All",
+        catHistory: "History",
+        catGeography: "Geography",
+        catPolicy: "Policy",
+        main: "Main",
+        listeningStarted: "Listening... Speak now",
+        listeningEnded: "Speech recognized",
+        voiceError: "Error occurred during voice recognition",
+        browserNotSupported: "Your browser doesn't support voice search"
+      },
+      fr: {
+        title: "Rechercher des ressources d'apprentissage",
+        searchPlaceholder: "Recherchez n'importe quoi...",
+        searchBtn: "Rechercher",
+        loading: "Chargement...",
+        enterSearch: "Veuillez entrer un terme de recherche.",
+        catAll: "Tous",
+        catHistory: "Histoire",
+        catGeography: "Géographie",
+        catPolicy: "Politique",
+        main: "Principal",
+        listeningStarted: "Écoute en cours... Parlez maintenant",
+        listeningEnded: "Parole reconnue",
+        voiceError: "Erreur lors de la reconnaissance vocale",
+        browserNotSupported: "Votre navigateur ne prend pas en charge la recherche vocale"
+      },
+      es: {
+        title: "Buscar recursos de aprendizaje",
+        searchPlaceholder: "Busca cualquier cosa...",
+        searchBtn: "Buscar",
+        loading: "Cargando...",
+        enterSearch: "Por favor, ingrese un término de búsqueda.",
+        catAll: "Todos",
+        catHistory: "Historia",
+        catGeography: "Geografía",
+        catPolicy: "Política",
+        main: "Principal",
+        listeningStarted: "Escuchando... Habla ahora",
+        listeningEnded: "Voz reconocida",
+        voiceError: "Error durante el reconocimiento de voz",
+        browserNotSupported: "Tu navegador no admite la búsqueda por voz"
+      },
+      de: {
+        title: "Lernressourcen suchen",
+        searchPlaceholder: "Nach etwas suchen...",
+        searchBtn: "Suchen",
+        loading: "Laden...",
+        enterSearch: "Bitte geben Sie einen Suchbegriff ein.",
+        catAll: "Alle",
+        catHistory: "Geschichte",
+        catGeography: "Geographie",
+        catPolicy: "Politik",
+        main: "Haupt",
+        listeningStarted: "Zuhören... Sprechen Sie jetzt",
+        listeningEnded: "Sprache erkannt",
+        voiceError: "Fehler bei der Spracherkennung",
+        browserNotSupported: "Ihr Browser unterstützt keine Sprachsuche"
+      }
+    };
+
+    let currentLang = "ar";
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      if(lang === "ar") {
+        document.body.style.fontFamily = "'Cairo', sans-serif";
+      } else {
+        document.body.style.fontFamily = "'Roboto', sans-serif";
+      }
+      document.querySelector('[data-key="title"]').textContent = translations[lang].title;
+      document.getElementById("searchQuery").placeholder = translations[lang].searchPlaceholder;
+      document.querySelector('.search-btn').textContent = translations[lang].searchBtn;
+      const categorySelector = document.getElementById("categorySelector");
+      categorySelector.options[0].text = translations[lang].catAll;
+      categorySelector.options[1].text = translations[lang].catHistory;
+      categorySelector.options[2].text = translations[lang].catGeography;
+      categorySelector.options[3].text = translations[lang].catPolicy;
+      document.getElementById("mainLink").textContent = translations[lang].main;
+    }
+    setLanguage(currentLang);
+
+    const YOUTUBE_API_KEY = "AIzaSyAk0lJVqzNWRyG1OPHCQhG7wwod3cZjQSw";
+    const YOUTUBE_API_URL = "https://www.googleapis.com/youtube/v3/search";
+
+    async function fetchVideos(query) {
+      const url = `${YOUTUBE_API_URL}?part=snippet&type=video&maxResults=15&q=${encodeURIComponent(query)}&key=${YOUTUBE_API_KEY}`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.items;
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+        return [];
+      }
+    }
+
+    function renderVideos(videos, targetId) {
+      const container = document.getElementById(targetId);
+      container.innerHTML = "";
+      videos.forEach(video => {
+        const videoId = video.id.videoId;
+        const title = video.snippet.title;
+        const thumb = video.snippet.thumbnails.medium.url;
+        const card = document.createElement("div");
+        card.className = "video-card";
+        card.innerHTML = `<img src="${thumb}" alt="${title}">
+                          <p>${title}</p>`;
+        card.onclick = () => openVideoModal(videoId);
+        container.appendChild(card);
+      });
+    }
+
+    async function searchLearningVideos() {
+      let query = document.getElementById("searchQuery").value.trim();
+      const category = document.getElementById("categorySelector").value;
+      const resultsDiv = document.getElementById("searchResults");
+      if (!query) {
+        resultsDiv.innerHTML = `<p>${translations[currentLang].enterSearch}</p>`;
+        return;
+      }
+      if(category !== "all") {
+        query += " " + category;
+      }
+      resultsDiv.innerHTML = `<p>${translations[currentLang].loading}</p>`;
+      const videos = await fetchVideos(query);
+      renderVideos(videos, "searchResults");
+    }
+
+    function openVideoModal(videoId) {
+      const modal = document.getElementById("videoModal");
+      const frame = document.getElementById("videoFrame");
+      frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      modal.style.display = "flex";
+    }
+    function closeVideoModal(e) {
+      if(e.target.tagName === "IFRAME") return;
+      const modal = document.getElementById("videoModal");
+      const frame = document.getElementById("videoFrame");
+      frame.src = "";
+      modal.style.display = "none";
+    }
+
+    // Voice Search Functionality
+    function startVoiceSearch() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        showNotification(translations[currentLang].browserNotSupported);
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      
+      // Set language based on current UI language
+      switch(currentLang) {
+        case 'ar': recognition.lang = 'ar-SA'; break;
+        case 'en': recognition.lang = 'en-US'; break;
+        case 'fr': recognition.lang = 'fr-FR'; break;
+        case 'es': recognition.lang = 'es-ES'; break;
+        case 'de': recognition.lang = 'de-DE'; break;
+        default: recognition.lang = 'en-US';
+      }
+      
+      const voiceBtn = document.getElementById('voiceSearchBtn');
+      voiceBtn.classList.add('listening');
+      
+      showNotification(translations[currentLang].listeningStarted);
+      
+      recognition.start();
+      
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('searchQuery').value = transcript;
+        voiceBtn.classList.remove('listening');
+        showNotification(translations[currentLang].listeningEnded);
+        searchLearningVideos();
+      };
+      
+      recognition.onerror = function(event) {
+        console.error('Speech recognition error', event.error);
+        voiceBtn.classList.remove('listening');
+        showNotification(translations[currentLang].voiceError);
+      };
+      
+      recognition.onend = function() {
+        voiceBtn.classList.remove('listening');
+      };
+    }
+    
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.style.display = 'block';
+      
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

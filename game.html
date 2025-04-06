@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اللعبة - موسوعة الحضارة المصرية</title>
+  <style>
+    /* أنماط اللعبة */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", Arial, sans-serif;
+      background-color: #1a1a2e;
+      color: white;
+      direction: rtl;
+    }
+    /* شريط معلومات الحياة والنقاط */
+    .life-info {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 10px;
+    }
+    .score-info span {
+      font-size: 1rem;
+    }
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: 70vh;
+      background: url('الحضارة_المصرية.jpg') no-repeat center center;
+      background-size: cover;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px;
+    }
+    .custom-controller {
+      background-color: #fff;
+      border: 2px solid #007acc;
+      color: #007acc;
+      font-family: "Courier New", monospace;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 3px 3px 0px #999;
+      cursor: pointer;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s, transform 0.3s;
+      animation: bounce 1s infinite;
+    }
+    .custom-controller:active {
+      transform: scale(0.95);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .old-style-button {
+      background-color: #e0e0e0;
+      border: 2px outset #999;
+      color: #000;
+      font-family: "Courier New", monospace;
+      padding: 8px 16px;
+      margin: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+      outline: none;
+    }
+    .old-style-button:hover {
+      background-color: #d0d0d0;
+      transform: scale(1.05);
+    }
+    #toggleGameBtn {
+      display: block;
+      margin: 10px auto;
+    }
+    #restartButton {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 15px 30px;
+      background-color: red;
+      font-size: 1.5rem;
+      border-radius: 10px;
+      display: none;
+      z-index: 2000;
+    }
+    /* قائمة اختيار اللغة للعبة */
+    #gameLangSelector {
+      position: fixed;
+      top: 10px;
+      right: 50px;
+      z-index: 1500;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 5px;
+    }
+    #gameLangSelector select {
+      font-size: 1rem;
+      padding: 2px;
+    }
+    /* أيقونة الصفحة الرئيسية المبسطة */
+    #homeIcon {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1500;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #homeIcon svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- أيقونة الصفحة الرئيسية المبسطة باستخدام SVG -->
+  <div id="homeIcon" onclick="window.location.href='index.html'" title="الصفحة الرئيسية">
+    <svg viewBox="0 0 24 24">
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+  </div>
+  <!-- قائمة اختيار اللغة للعبة -->
+  <div id="gameLangSelector">
+    <select id="gameLanguage" onchange="changeGameLanguage()">
+      <option value="ar">العربية</option>
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+  <!-- شريط المعلومات -->
+  <div class="life-info">
+    <div class="life-bar-container">
+      <span>الشريط الصحي:</span>
+      <div id="lifeBar" style="width:100px; height:10px; background:red; border:1px solid white;"></div>
+    </div>
+    <div class="score-info">
+      <span id="scoreDisplay">النتيجة: 0</span>
+      <span id="highScoreDisplay">أعلى نتيجة: 0</span>
+      <span id="requiredScore">النتيجة المطلوبة: 5</span>
+    </div>
+  </div>
+  <!-- حاوية اللعبة -->
+  <div class="game-container" style="margin-top:70px; text-align:center;">
+    <canvas id="gameCanvas"></canvas>
+    <div class="controls">
+      <button id="rightButton" class="custom-controller">➡</button>
+      <button id="leftButton" class="custom-controller">⬅</button>
+      <button id="shootButton" class="custom-controller">🔫</button>
+      <button id="upButton" class="custom-controller">⬆</button>
+      <button id="downButton" class="custom-controller">⬇</button>
+    </div>
+    <button id="toggleGameBtn" class="old-style-button" onclick="toggleGamePause()"></button>
+    <button id="restartButton" onclick="resetGame()">إعادة تشغيل</button>
+  </div>
+
+  <script>
+    // ترجمات نصوص اللعبة بلغات متعددة
+    const gameTranslations = {
+      ar: {
+        score: "النتيجة",
+        highScore: "أعلى نتيجة",
+        requiredScore: "النتيجة المطلوبة",
+        pause: "إيقاف اللعبة",
+        start: "تشغيل اللعبة",
+        enemy: "عدو",
+        player: "مصر"
+      },
+      en: {
+        score: "Score",
+        highScore: "High Score",
+        requiredScore: "Required Score",
+        pause: "Pause Game",
+        start: "Start Game",
+        enemy: "Enemy",
+        player: "Egypt"
+      },
+      de: {
+        score: "Punktzahl",
+        highScore: "Höchstpunktzahl",
+        requiredScore: "Benötigte Punktzahl",
+        pause: "Spiel anhalten",
+        start: "Spiel starten",
+        enemy: "Feind",
+        player: "Ägypten"
+      },
+      fr: {
+        score: "Score",
+        highScore: "Meilleur score",
+        requiredScore: "Score requis",
+        pause: "Pause",
+        start: "Démarrer",
+        enemy: "Ennemi",
+        player: "Égypte"
+      },
+      es: {
+        score: "Puntuación",
+        highScore: "Mejor puntuación",
+        requiredScore: "Puntuación requerida",
+        pause: "Pausar",
+        start: "Iniciar",
+        enemy: "Enemigo",
+        player: "Egipto"
+      }
+    };
+
+    let currentGameLang = "ar";
+    let gameActive = false;
+    let gameAnimationFrameId = null;
+    let enemyInterval = null;
+    let highScore = localStorage.getItem('highScore') || 0;
+    let score = 0;
+    let requiredScore = 5;
+    let enemySpeedMultiplier = 1;
+    // متغير لتخزين حالة التشغيل قبل تغيير الرؤية
+    let wasRunning = false;
+
+    // تعريف الأصوات مع الملفات المطلوبة
+    const shootSound = new Audio('اطلاق.mp3');
+    const hitSound = new Audio('ضرر.mp3');
+    const loseSound = new Audio('موت.mp3');
+    const scoreSound = new Audio('فوز.mp3');
+
+    // محاولة "إلغاء قفل" الصوت عند التفاعل الأول لتجاوز قيود التشغيل التلقائي
+    document.body.addEventListener('click', function unlockAudio() {
+      shootSound.play().catch(() => {});
+      hitSound.play().catch(() => {});
+      loseSound.play().catch(() => {});
+      scoreSound.play().catch(() => {});
+      document.body.removeEventListener('click', unlockAudio);
+    });
+
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight * 0.7;
+
+    const playerImg = new Image();
+    playerImg.src = "https://i.postimg.cc/nXXZTdhT/player.png";
+    const enemyImg = new Image();
+    enemyImg.src = "العدو.png";
+
+    let player = {
+      x: 50,
+      y: canvas.height / 2 - 50,
+      width: 70,
+      height: 90,
+      speed: 10,
+      health: 100,
+      label: gameTranslations[currentGameLang].player,
+      bullets: []
+    };
+    let enemies = [];
+
+    // تحديث النصوص بناءً على اللغة المختارة
+    function updateGameTexts() {
+      document.getElementById("scoreDisplay").textContent = `${gameTranslations[currentGameLang].score}: ${score}`;
+      document.getElementById("highScoreDisplay").textContent = `${gameTranslations[currentGameLang].highScore}: ${highScore}`;
+      document.getElementById("requiredScore").textContent = `${gameTranslations[currentGameLang].requiredScore}: ${requiredScore}`;
+      document.getElementById("toggleGameBtn").textContent = gameActive ? gameTranslations[currentGameLang].pause : gameTranslations[currentGameLang].start;
+      player.label = gameTranslations[currentGameLang].player;
+    }
+
+    function changeGameLanguage() {
+      currentGameLang = document.getElementById("gameLanguage").value;
+      updateGameTexts();
+    }
+
+    // التحكم بالأزرار
+    document.getElementById("leftButton").addEventListener("click", () => {
+      player.x = Math.max(0, player.x - player.speed);
+    });
+    document.getElementById("rightButton").addEventListener("click", () => {
+      player.x = Math.min(canvas.width - player.width, player.x + player.speed);
+    });
+    document.getElementById("upButton").addEventListener("click", () => {
+      player.y = Math.max(0, player.y - player.speed);
+    });
+    document.getElementById("downButton").addEventListener("click", () => {
+      player.y = Math.min(canvas.height - player.height, player.y + player.speed);
+    });
+    document.getElementById("shootButton").addEventListener("click", () => {
+      player.bullets.push({ x: player.x + player.width, y: player.y + player.height / 2, radius: 5 });
+      shootSound.play();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "s") {
+        player.bullets.push({ x: player.x + player.width, y: player.y + player.height / 2, radius: 5 });
+        shootSound.play();
+      }
+      switch(e.key) {
+        case "ArrowLeft":
+          player.x = Math.max(0, player.x - player.speed);
+          break;
+        case "ArrowRight":
+          player.x = Math.min(canvas.width - player.width, player.x + player.speed);
+          break;
+        case "ArrowUp":
+          player.y = Math.max(0, player.y - player.speed);
+          break;
+        case "ArrowDown":
+          player.y = Math.min(canvas.height - player.height, player.y + player.speed);
+          break;
+        case "p":
+          if (e.shiftKey) {
+            e.preventDefault();
+            toggleGamePause();
+          }
+          break;
+      }
+    });
+
+    function isColliding(a, b) {
+      return a.x < b.x + b.width &&
+             a.x + a.width > b.x &&
+             a.y < b.y + b.height &&
+             a.y + a.height > b.y;
+    }
+
+    function createEnemy() {
+      const enemySize = 70;
+      const enemyY = Math.random() * (canvas.height - enemySize);
+      enemies.push({
+        x: canvas.width,
+        y: enemyY,
+        width: enemySize,
+        height: 90,
+        speed: (3 + Math.random() * 2) * enemySpeedMultiplier,
+        label: gameTranslations[currentGameLang].enemy
+      });
+    }
+
+    function drawPlayer() {
+      ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+      ctx.fillStyle = "white";
+      ctx.font = "20px Arial";
+      ctx.fillText(player.label, player.x + player.width / 4, player.y - 15);
+      player.bullets.forEach((bullet, index) => {
+        bullet.x += 10;
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "yellow";
+        ctx.fill();
+        if (bullet.x > canvas.width) {
+          player.bullets.splice(index, 1);
+        }
+      });
+    }
+
+    function drawEnemies() {
+      enemies.forEach((enemy, index) => {
+        enemy.x -= enemy.speed;
+        if (enemy.x + enemy.width < 0) {
+          enemies.splice(index, 1);
+        }
+        if (isColliding(enemy, player)) {
+          player.health -= 10;
+          hitSound.play();
+          if (player.health < 0) player.health = 0;
+          enemies.splice(index, 1);
+        }
+        player.bullets.forEach((bullet, bulletIndex) => {
+          if (
+            bullet.x > enemy.x &&
+            bullet.x < enemy.x + enemy.width &&
+            bullet.y > enemy.y &&
+            bullet.y < enemy.y + enemy.height
+          ) {
+            enemies.splice(index, 1);
+            player.bullets.splice(bulletIndex, 1);
+            score++;
+            updateHighScore();
+          }
+        });
+        ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.fillText(enemy.label, enemy.x + enemy.width / 4, enemy.y - 15);
+      });
+    }
+
+    function updateLifeBar() {
+      const lifeBar = document.getElementById("lifeBar");
+      lifeBar.style.width = `${player.health}%`;
+      if (player.health <= 0) {
+        endGame();
+      }
+    }
+
+    function updateHighScore() {
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore);
+      }
+      document.getElementById('highScoreDisplay').textContent = `${gameTranslations[currentGameLang].highScore}: ${highScore}`;
+    }
+
+    function checkScore() {
+      if (score >= requiredScore) {
+        scoreSound.play();
+        requiredScore += 5;
+        enemySpeedMultiplier += 0.2;
+        score = 0;
+      }
+    }
+
+    function toggleGamePause() {
+      if (gameActive) {
+        pauseGame();
+        document.getElementById("toggleGameBtn").textContent = gameTranslations[currentGameLang].start;
+      } else {
+        startGame();
+        document.getElementById("toggleGameBtn").textContent = gameTranslations[currentGameLang].pause;
+      }
+    }
+
+    function startGame() {
+      if (!gameActive) {
+        gameActive = true;
+        enemyInterval = setInterval(createEnemy, 2000);
+        gameLoop();
+      }
+    }
+
+    function pauseGame() {
+      if (gameActive) {
+        cancelAnimationFrame(gameAnimationFrameId);
+        clearInterval(enemyInterval);
+        gameActive = false;
+      }
+    }
+
+    function endGame() {
+      cancelAnimationFrame(gameAnimationFrameId);
+      clearInterval(enemyInterval);
+      gameActive = false;
+      loseSound.play();
+      document.getElementById("restartButton").style.display = "block";
+    }
+
+    function resetGame() {
+      player.health = 100;
+      score = 0;
+      requiredScore = 5;
+      enemySpeedMultiplier = 1;
+      enemies = [];
+      document.getElementById("restartButton").style.display = "none";
+      if (!gameActive) {
+        startGame();
+        document.getElementById("toggleGameBtn").textContent = gameTranslations[currentGameLang].pause;
+      }
+    }
+
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawPlayer();
+      drawEnemies();
+      updateLifeBar();
+      document.getElementById("scoreDisplay").textContent = `${gameTranslations[currentGameLang].score}: ${score}`;
+      document.getElementById("requiredScore").textContent = `${gameTranslations[currentGameLang].requiredScore}: ${requiredScore}`;
+      checkScore();
+      gameAnimationFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    // إيقاف اللعبة تلقائياً عند تغيير صفحة اللعبة أو تركها واستئنافها عند العودة
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (gameActive) {
+          wasRunning = true;
+          pauseGame();
+        }
+      } else {
+        if (wasRunning) {
+          startGame();
+          wasRunning = false;
+        }
+      }
+    });
+
+    // عند تحميل الصفحة: تحديث النصوص وبدء اللعبة
+    window.addEventListener("load", () => {
+      updateHighScore();
+      updateGameTexts();
+      startGame();
+    });
+
+    // عند إغلاق الصفحة أو إعادة تحميلها، يتم إيقاف اللعبة
+    window.addEventListener("beforeunload", () => {
+      pauseGame();
+    });
+  </script>
+</body>
+</html>
