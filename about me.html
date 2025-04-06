@@ -1,1 +1,596 @@
 
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Me - CodeNova</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables for Dynamic Theming */
+    :root {
+      --bg-color: #f8f8f8;
+      --text-color: #333333;
+      --accent-color: #4caf50;
+      --secondary-bg: #ffffff;
+      --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      --font-size-base: 18px;
+      --font-family-ar: 'Cairo', sans-serif;
+      --font-family-en: 'Roboto', sans-serif;
+    }
+
+    /* Dark Theme Colors */
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #f8f8f8;
+      --accent-color: #ffd700; /* Golden Yellow */
+      --secondary-bg: #1e1e1e;
+      --card-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+
+    /* Reset & Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      font-family: var(--font-family-ar);
+      font-size: var(--font-size-base);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      transition: background-color 0.5s, color 0.5s;
+    }
+    
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    /* Main Content Container */
+    .main-container {
+      padding: 30px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header (Right-Aligned for RTL) */
+    header {
+      text-align: right;
+      margin-bottom: 40px;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .header-content {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    header h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+      color: var(--text-color);
+      animation: slideInRight 1s ease-out;
+    }
+    
+    header p {
+      font-size: 1.2em;
+      line-height: 1.4;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    /* Profile Image Container */
+    .profile-image-container {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 20px;
+      border: 3px solid var(--accent-color);
+      box-shadow: var(--card-shadow);
+      animation: fadeIn 1.5s ease-out;
+    }
+    
+    .profile-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Sections */
+    .section {
+      margin: 30px auto;
+      max-width: 900px;
+      padding: 25px 30px;
+      text-align: right;
+      background-color: var(--secondary-bg);
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      animation: fadeIn 1.5s ease-out;
+      transition: all 0.5s ease;
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    
+    .section.in-view {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .section h2 {
+      font-size: 2em;
+      margin-bottom: 15px;
+      color: var(--accent-color);
+      animation: slideInRight 1s ease-out;
+    }
+    
+    .section p {
+      font-size: 1.1em;
+      line-height: 1.7;
+      margin-top: 10px;
+      animation: fadeIn 1.5s ease-out;
+    }
+    
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Language Selector */
+    .language-selector {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 3;
+      background-color: var(--secondary-bg);
+      border-radius: 25px;
+      padding: 5px 10px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .language-option {
+      cursor: pointer;
+      margin: 5px;
+      padding: 5px 10px;
+      border-radius: 15px;
+      transition: background-color 0.3s;
+    }
+    
+    .language-option:hover {
+      background-color: var(--accent-color);
+      color: var(--secondary-bg);
+    }
+    
+    .language-option.active {
+      background-color: var(--accent-color);
+      color: var(--secondary-bg);
+    }
+
+    /* Keyframe Animations */
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes floatUp {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Theme Toggle Button */
+    #theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+      background-color: var(--accent-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      transition: transform 0.3s ease, background-color 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    #theme-toggle:hover {
+      transform: rotate(30deg);
+    }
+    
+    #theme-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--bg-color);
+    }
+
+    /* Home Button */
+    #home-button {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+      background-color: var(--accent-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      transition: transform 0.3s ease, background-color 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    #home-button:hover {
+      transform: scale(1.1);
+    }
+    
+    #home-button svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--bg-color);
+    }
+
+    /* LTR Support */
+    [dir="ltr"] header,
+    [dir="ltr"] .section {
+      text-align: left;
+    }
+    
+    [dir="ltr"] header h1,
+    [dir="ltr"] .section h2 {
+      animation: slideInLeft 1s ease-out;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .profile-image-container {
+        margin: 20px auto;
+      }
+      
+      header h1 {
+        font-size: 2.5em;
+      }
+      
+      .header-content {
+        text-align: center;
+      }
+      
+      [dir="ltr"] .header-content,
+      [dir="rtl"] .header-content {
+        text-align: center;
+      }
+      
+      .language-selector {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin: 20px auto;
+        width: fit-content;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2em;
+      }
+      
+      header p, .section p {
+        font-size: 1em;
+      }
+      
+      #theme-toggle, #home-button {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .profile-image-container {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle Button with Crescent Moon -->
+  <div id="theme-toggle" onclick="toggleTheme()">
+    <!-- Crescent Moon icon -->
+    <svg id="theme-icon" viewBox="0 0 24 24">
+      <path d="M10,2C8.18,2 6.47,2.5 5,3.35C8,5.08 10,8.3 10,12C10,15.7 8,18.92 5,20.65C6.47,21.5 8.18,22 10,22A10,10 0 0,0 20,12A10,10 0 0,0 10,2Z" />
+    </svg>
+  </div>
+  
+  <!-- Home Button -->
+  <a id="home-button" href="index.html">
+    <svg viewBox="0 0 24 24">
+      <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
+    </svg>
+  </a>
+
+  <!-- Language Selector -->
+  <div class="language-selector">
+    <div class="language-option active" data-lang="ar">العربية</div>
+    <div class="language-option" data-lang="en">English</div>
+    <div class="language-option" data-lang="fr">Français</div>
+    <div class="language-option" data-lang="es">Español</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <header>
+      <div class="header-content">
+        <h1 class="text-ar">عني</h1>
+        <h1 class="text-en">About Me</h1>
+        <h1 class="text-fr">À Propos De Moi</h1>
+        <h1 class="text-es">Sobre Mí</h1>
+        
+        <p class="text-ar">مرحباً! أنا <strong>وجدي أحمد وجدي</strong>، مطور مبدع شغوف ببناء تجارب رقمية غامرة.</p>
+        <p class="text-en">Hello! I'm <strong>Wagdy Ahmed Wagdy</strong>, a creative developer passionate about building immersive digital experiences.</p>
+        <p class="text-fr">Bonjour! Je suis <strong>Wagdy Ahmed Wagdy</strong>, un développeur créatif passionné par la création d'expériences numériques immersives.</p>
+        <p class="text-es">¡Hola! Soy <strong>Wagdy Ahmed Wagdy</strong>, un desarrollador creativo apasionado por crear experiencias digitales inmersivas.</p>
+      </div>
+      
+      <div class="profile-image-container">
+        <!-- Replace with your actual image path -->
+        <img src="أنا.jpg" alt="Wagdy Ahmed Wagdy" class="profile-image">
+      </div>
+    </header>
+
+    <section class="section" id="bio">
+      <h2 class="text-ar">قصتي</h2>
+      <h2 class="text-en">My Story</h2>
+      <h2 class="text-fr">Mon Histoire</h2>
+      <h2 class="text-es">Mi Historia</h2>
+      
+      <p class="text-ar">
+        عمري 14 عاماً وقد كرست وقتي لمزج الفن بالتكنولوجيا. قادتني رحلتي لاستكشاف تجارب الويب المبتكرة والتصميمات التفاعلية الآسرة.
+      </p>
+      <p class="text-en">
+        I'm 14 years old and I've dedicated my time to blending art with technology. My journey has led me to explore innovative web experiences and captivating interactive designs.
+      </p>
+      <p class="text-fr">
+        J'ai 14 ans et j'ai consacré mon temps à mélanger l'art et la technologie. Mon parcours m'a amené à explorer des expériences web innovantes et des designs interactifs captivants.
+      </p>
+      <p class="text-es">
+        Tengo 14 años y he dedicado mi tiempo a combinar el arte con la tecnología. Mi viaje me ha llevado a explorar experiencias web innovadoras y cautivadores diseños interactivos.
+      </p>
+    </section>
+
+    <section class="section" id="skills">
+      <h2 class="text-ar">مهاراتي</h2>
+      <h2 class="text-en">My Skills</h2>
+      <h2 class="text-fr">Mes Compétences</h2>
+      <h2 class="text-es">Mis Habilidades</h2>
+      
+      <p class="text-ar">
+        <strong>تطوير الويب:</strong> HTML, CSS, JavaScript<br>
+        <strong>البرمجة:</strong> Python<br>
+        <strong>طموحاتي وتطلعاتي:</strong> امل لتعلم البرمجة الخلفية (backend) 
+      </p>
+      <p class="text-en">
+        <strong>Web Development:</strong> HTML, CSS, JavaScript<br>
+        <strong>Programming:</strong> Python<br>
+        <strong>My ambitions and aspirations:</strong> Hope to learn backend programming
+      </p>
+      <p class="text-fr">
+        <strong>Développement Web:</strong> HTML, CSS, JavaScript<br>
+        <strong>Programmation:</strong> Python<br>
+        <strong>Mes ambitions et aspirations:</strong> J'espère apprendre la programmation backend
+      </p>
+      <p class="text-es">
+        <strong>Desarrollo Web:</strong> HTML, CSS, JavaScript<br>
+        <strong>Programación:</strong> Python<br>
+        <strong>Mis ambiciones y aspiraciones:</strong> Espero aprender programación backend.
+      </p>
+    </section>
+
+    <section class="section" id="projects">
+      <h2 class="text-ar">المشاريع المميزة</h2>
+      <h2 class="text-en">Featured Projects</h2>
+      <h2 class="text-fr">Projets en Vedette</h2>
+      <h2 class="text-es">Proyectos Destacados</h2>
+      
+      <p class="text-ar">
+يعرض ملفي الشخصي على GitHub احدث اعمالي و مشاريعي التي منها حاليا " الموسوعة المصرية "الموقع التي ترونه الان و  <strong> CodeNova </strong>  موقع تعليم البرمجة الخاص بي والذي امال لنشره  
+      </p>
+      <p class="text-en">
+My GitHub profile displays my latest work and projects, including the Egyptian Encyclopedia website you are currently seeing, and CodeNova, my programming education website, which I hope to publish.
+      </p>
+      <p class="text-fr">
+Mon profil GitHub affiche mes derniers travaux et projets, y compris le site Web de l'Encyclopédie égyptienne que vous consultez actuellement et CodeNova, mon site Web d'éducation à la programmation, que j'espère publier.
+      </p>
+      <p class="text-es">
+Mi perfil de GitHub muestra mis últimos trabajos y proyectos, incluido el sitio web de la Enciclopedia Egipcia que estás viendo actualmente, y CodeNova, mi sitio web de educación en programación, que espero publicar.
+      </p>
+    </section>
+    
+    <section class="section" id="about Encyclopedia">
+      <h2 class="text-ar">عن الموسوعة المصرية</h2>
+      <h2 class="text-en">About the Egyptian Encyclopedia</h2>
+      <h2 class="text-fr">À Propos de Encyclopédie égyptienne</h2>
+      <h2 class="text-es">Sobre Enciclopedia egipcia</h2>
+      
+      <p class="text-ar">
+        الموسوعة المصرية لم تكن مجرد موقع يحاكي المواقع المتقدمة مثل ويكيبديا بل هوا عبارة عن اثبات ان مصر هي اصل الثقافة وهوا ايضا يعتبر وسيلة لبناء شباب وطنيين يعتزون بحضراتهم ويرونها ام الحضارات و ام الدنيا , وهذا الموقع ايضا كان بالنسبة لي تحديا بسبب معرفتي القليلة والسطحية جدا بالبرمجة قبله لاكنني لم ايأس بتشجيع من مدرسيني ووالديا مما حفزني الى تعلم البرمجة الامامية (frontend) في فترة وجيزة وقصيرة مما ادى الى  مقابلتي مع مدير ادارة المدارس الرسمية للغات مما حعلني القب بالمدرسة بانني من موهبين مدرسة قها الرسمية للغات مما ادى الى ازدياد ثقتي بنفسي وامل انا  ، <strong>وجدي أحمد</strong> ان يعجبكم هذا الموقع و تحياتي لكم .
+      </p>
+      <p class="text-en">
+The Egyptian Encyclopedia was not just a website that imitates advanced websites such as Wikipedia, but it is a proof that Egypt is the origin of culture. It is also considered a means to build patriotic youth who are proud of their civilization and see it as the mother of civilizations and the mother of the world. This website was also a challenge for me because of my very little and superficial knowledge of programming before it, but I did not despair with the encouragement of my teachers and my father, which motivated me to learn front-end programming in a short period of time, which led to my meeting with the director of the administration of official language schools, which made me known in the school that I am one of the talented students of Qaha Official Language School, which led to an increase in my self-confidence. I <strong>Wagdy Ahmed</strong> hope you like this website. Thank you.
+      </p>
+      <p class="text-fr">
+L'Encyclopédie égyptienne n'était pas seulement un site Web imitant des sites Web avancés tels que Wikipédia, mais c'est une preuve que l'Égypte est à l'origine de la culture. Elle est également considérée comme un moyen de former une jeunesse patriote, fière de sa civilisation et la considérant comme la mère des civilisations et la mère du monde. Ce site Web a également été un défi pour moi en raison de mes connaissances très limitées et superficielles en programmation avant lui, mais je n'ai pas désespéré avec les encouragements de mes professeurs et de mon père, qui m'ont motivé à apprendre la programmation front-end en peu de temps, ce qui a conduit à ma rencontre avec le directeur de l'administration des écoles de langues officielles, qui m'a fait savoir à l'école que j'étais l'un des étudiants talentueux de l'école de langues officielles de Qaha, ce qui a conduit à une augmentation de ma confiance en moi. J' <strong>Wagdy Ahmed</strong> espère que vous aimez ce site. Merci.
+      </p>
+      <p class="text-es">
+La Enciclopedia Egipcia no es sólo un sitio web que imita sitios web avanzados como Wikipedia, sino que es una prueba de que Egipto es el origen de la cultura. También se considera un medio para formar una juventud patriótica que esté orgullosa de su civilización y la vea como la madre de las civilizaciones y la madre del mundo. Este sitio web también fue un reto para mí debido a mis muy pocos y superficiales conocimientos de programación anteriores a él, pero no desesperé con el estímulo de mis profesores y mi padre, lo que me motivó a aprender programación front-end en un corto período de tiempo, lo que llevó a mi encuentro con el director de la administración de las escuelas oficiales de idiomas, lo que me hizo saber en la escuela que soy uno de los estudiantes talentosos de la Escuela Oficial de Idiomas Qaha, lo que provocó un aumento de mi confianza en mí mismo. Espero <strong>Wagdy Ahmed</strong> que te guste este sitio web. Gracias.
+      </p>
+    </section>
+
+    <section class="section" id="contact">
+      <h2 class="text-ar">اتصل بي</h2>
+      <h2 class="text-en">Contact Me</h2>
+      <h2 class="text-fr">Contactez-Moi</h2>
+      <h2 class="text-es">Contáctame</h2>
+      
+      <p class="text-ar">
+        تواصل معي عبر <a href="mailto:w957315@gmail.com">البريد الإلكتروني</a> أو الهاتف: <a href="tel:+201288305521">+201288305521</a> أو تواصل معي على وسائل التواصل الاجتماعي.
+      </p>
+      <p class="text-en">
+        Reach out via <a href="mailto:w957315@gmail.com">email</a> or phone: <a href="tel:+201288305521">+201288305521</a> or connect on social media.
+      </p>
+      <p class="text-fr">
+        Contactez-moi par <a href="mailto:w957315@gmail.com">e-mail</a> ou téléphone: <a href="tel:+20123456789">+20123456789</a> ou connectez-vous sur les réseaux sociaux.
+      </p>
+      <p class="text-es">
+        Ponte en contacto a través de <a href="mailto:w957315@gmail.com">correo electrónico</a> o teléfono: <a href="tel:+201288305521">+201288305521</a> o conéctate en las redes sociales.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    // Theme Toggle Functionality
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('theme-icon');
+      
+      if (body.getAttribute('data-theme') === 'dark') {
+        // Switch to light theme
+        body.removeAttribute('data-theme');
+        // Change to crescent moon icon
+        themeIcon.innerHTML = '<path d="M10,2C8.18,2 6.47,2.5 5,3.35C8,5.08 10,8.3 10,12C10,15.7 8,18.92 5,20.65C6.47,21.5 8.18,22 10,22A10,10 0 0,0 20,12A10,10 0 0,0 10,2Z" />';
+      } else {
+        // Switch to dark theme
+        body.setAttribute('data-theme', 'dark');
+        // Change to sun icon
+        themeIcon.innerHTML = '<path d="M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,6.65C6.9,7.16 6.36,7.78 5.94,8.5C5.5,9.24 5.25,10 5.11,10.79L3.34,7M3.36,17L5.12,13.23C5.26,14 5.53,14.78 5.95,15.5C6.37,16.24 6.91,16.86 7.5,17.37L3.36,17M20.65,7L18.88,10.79C18.74,10 18.47,9.23 18.05,8.5C17.63,7.78 17.1,7.15 16.5,6.64L20.65,7M20.64,17L16.5,17.36C17.09,16.85 17.62,16.22 18.04,15.5C18.46,14.77 18.73,14 18.87,13.21L20.64,17M12,22L9.59,18.56C10.33,18.83 11.14,19 12,19C12.82,19 13.63,18.83 14.37,18.56L12,22Z" />';
+      }
+      
+      // Save theme preference to localStorage
+      localStorage.setItem('theme', body.getAttribute('data-theme') || 'light');
+    }
+    
+    // Language Selector Functionality
+    function setupLanguageSelector() {
+      const languageOptions = document.querySelectorAll('.language-option');
+      const htmlElement = document.documentElement;
+      
+      // Hide all language text initially except Arabic
+      document.querySelectorAll('.text-en, .text-fr, .text-es').forEach(el => {
+        el.style.display = 'none';
+      });
+      
+      languageOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          const language = this.getAttribute('data-lang');
+          
+          // Update active class
+          languageOptions.forEach(opt => opt.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Update HTML lang and dir attributes
+          htmlElement.setAttribute('lang', language);
+          htmlElement.setAttribute('dir', language === 'ar' ? 'rtl' : 'ltr');
+          
+          // Show only text for selected language
+          document.querySelectorAll('.text-ar, .text-en, .text-fr, .text-es').forEach(el => {
+            el.style.display = 'none';
+          });
+          document.querySelectorAll(`.text-${language}`).forEach(el => {
+            el.style.display = 'block';
+          });
+          
+          // Save language preference
+          localStorage.setItem('language', language);
+        });
+      });
+      
+      // Load saved language preference
+      const savedLanguage = localStorage.getItem('language') || 'ar';
+      document.querySelector(`.language-option[data-lang="${savedLanguage}"]`).click();
+    }
+    
+    // Section Animation
+    function observeSections() {
+      const sections = document.querySelectorAll('.section');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      sections.forEach(section => observer.observe(section));
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load saved theme preference
+      const savedTheme = localStorage.getItem('theme');
+      const themeIcon = document.getElementById('theme-icon');
+      
+      if (savedTheme === 'dark') {
+        document.body.setAttribute('data-theme', 'dark');
+        // Set sun icon
+        themeIcon.innerHTML = '<path d="M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,6.65C6.9,7.16 6.36,7.78 5.94,8.5C5.5,9.24 5.25,10 5.11,10.79L3.34,7M3.36,17L5.12,13.23C5.26,14 5.53,14.78 5.95,15.5C6.37,16.24 6.91,16.86 7.5,17.37L3.36,17M20.65,7L18.88,10.79C18.74,10 18.47,9.23 18.05,8.5C17.63,7.78 17.1,7.15 16.5,6.64L20.65,7M20.64,17L16.5,17.36C17.09,16.85 17.62,16.22 18.04,15.5C18.46,14.77 18.73,14 18.87,13.21L20.64,17M12,22L9.59,18.56C10.33,18.83 11.14,19 12,19C12.82,19 13.63,18.83 14.37,18.56L12,22Z" />';
+      }
+      
+      // Setup language functionality
+      setupLanguageSelector();
+      
+      // Initialize section animations
+      observeSections();
+    });
+  </script>
+</body>
+</html>
