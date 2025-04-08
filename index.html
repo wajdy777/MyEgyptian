@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -471,17 +469,29 @@
     .input {
       font-size: medium;
     }
+    /* Retro Styled Submit Button */
     .submit {
-      border: none;
-      padding: 10px;
-      border-radius: 10px;
-      color: #fff;
+      background-color: #e0e0e0;
+      border: 2px outset #999;
+      color: #000;
+      font-family: "Courier New", monospace;
+      padding: 12px 20px;
+      border-radius: 0;
+      box-shadow: 2px 2px 0px #ccc;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
       font-size: 16px;
-      background-color: #0000ff;
-      transition: background-color 0.5s;
+      width: 100%;
+      max-width: 300px;
+      margin: 10px auto;
+      display: block;
+    }
+    .submit:active {
+      border-style: inset;
+      box-shadow: none;
     }
     .submit:hover {
-      background-color: #0000e6;
+      background-color: #d0d0d0;
     }
     @keyframes pulse {
       from { transform: scale(0.9); opacity: 1; }
@@ -549,6 +559,10 @@
               <input class="input" type="password" id="password" placeholder="رقم المرور" required>
               <span></span>
             </label>
+            <!-- Added password rule hint -->
+            <small style="color: #000080; font-size: 0.8em; margin-bottom: 5px;">
+              يجب أن يتكون رقم المرور من 12 حرفاً وأرقام، ويجب أن يكون قويًا
+            </small>
             <label>
               <input class="input" type="password" id="confirmPassword" placeholder="تأكيد رقم المرور" required>
               <span></span>
