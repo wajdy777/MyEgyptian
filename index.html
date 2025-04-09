@@ -1,1233 +1,832 @@
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موسوعة الحضارة المصرية</title>
+  <title>موسوعة الحضارة المصرية - الأم</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* GENERAL STYLES */
+    :root {
+      --gold: #d4af37;
+      --deep-blue: #14213d;
+      --sand: #e5dcc5;
+      --papyrus: #f4eed7;
+      --nile: #256d7b;
+    }
+    
     body {
-      margin: 0;
-      padding: 0;
-      font-family: "Cairo", Arial, sans-serif;
-      direction: rtl;
-      background-color: #f5f5f5;
+      font-family: 'Amiri', serif;
+      background-color: var(--papyrus);
       color: #333;
-      transition: background-color 0.5s, color 0.5s;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
-    /* FIXED TOP NAVIGATION BAR */
-    .top-bar {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      background-color: #2a4d69;
-      color: white;
-      padding: 15px 0;
-      border-bottom: 4px solid #007acc;
+    
+    /* Dark theme overrides */
+    body.dark-theme {
+      background-color: #000;
+      color: var(--gold);
+    }
+    body.dark-theme h1,
+    body.dark-theme h2,
+    body.dark-theme h3,
+    body.dark-theme h4,
+    body.dark-theme h5,
+    body.dark-theme h6 {
+      color: var(--gold);
+    }
+    header {
+      background-color: white;
+      transition: background-color 0.3s ease;
+    }
+    body.dark-theme header {
+      background-color: #000;
+    }
+    .nav-link {
+      color: var(--deep-blue);
+      transition: color 0.3s ease;
+    }
+    body.dark-theme .nav-link {
+      color: var(--gold);
+    }
+    .nav-link::after {
+      background-color: var(--gold);
+      transition: width 0.3s ease;
+    }
+    body.dark-theme .nav-link:hover {
+      color: var(--gold);
+    }
+    body.dark-theme .nav-link:hover::after {
+      background-color: var(--gold);
+    }
+    .gold-text {
+      color: var(--gold);
+    }
+    
+    /* Settings Panel Styles */
+    #settings-panel {
       position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      transition: background-color 0.5s, border-bottom-color 0.5s;
-      animation: slideInDown 0.8s;
-    }
-    @keyframes slideInDown {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    /* OLD-STYLE BUTTONS */
-    .old-style-button {
-      background-color: #e0e0e0;
-      border: 2px outset #999;
-      color: #000;
-      font-family: "Courier New", monospace;
-      padding: 8px 16px;
-      border-radius: 0;
-      box-shadow: 2px 2px 0px #ccc;
-      margin: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-      outline: none;
-    }
-    .old-style-button:active {
-      border-style: inset;
-      box-shadow: none;
-    }
-    .top-bar button:hover {
-      background-color: #d0d0d0;
-      transform: scale(1.05);
-    }
-    /* SECTION STYLING */
-    .section {
+      top: 60px;
+      right: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 100;
       display: none;
-      padding: 20px;
-      margin-top: 80px;
-      animation: fadeIn 0.5s ease-in-out;
+      width: 200px;
     }
-    .section.active {
-      display: block;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    /* APP SECTION STYLING */
-    #app {
-      background-color: #f9f9f9;
-      color: #333;
-      text-align: center;
-      padding: 20px;
-      transition: background-color 0.5s, color 0.5s;
-      position: relative;
-    }
-    #app header {
-      padding: 20px;
-      background-color: #2a4d69;
-      color: white;
-      position: relative;
-      transition: background-color 0.5s, color 0.5s;
-      animation: fadeInDown 0.8s;
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    #app header h1 {
-      font-size: 2.5em;
-      margin: 0;
-    }
-    #app header p {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #d1ecf1;
-    }
-    /* Theme Toggle Button */
-    #themeToggle {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 8px;
-      font-size: 1.8em;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      background-color: transparent;
-      color: white;
-      transition: transform 0.5s;
-      outline: none;
-      -webkit-appearance: none;
-    }
-    #themeToggle:hover,
-    #themeToggle:focus {
-      transform: rotate(360deg);
-    }
-    /* Settings Gear - removed extra styling by eliminating the old-style-button class */
-    #settingsToggle {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 8px;
-      font-size: 1.8em;
-      border: none;
-      background: transparent;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.5s;
-      outline: none;
-      -webkit-appearance: none;
-    }
-    #settingsToggle:hover,
-    #settingsToggle:focus {
-      transform: rotate(-360deg);
-    }
-    /* Settings Panel for Reader Speed, User Info & Navigation */
-    #settingsPanel {
-      position: absolute;
-      top: 50px;
-      right: 10px;
-      background-color: #fff;
-      border: 2px solid #007acc;
-      border-radius: 12px;
-      padding: 10px;
-      display: none;
-      z-index: 1500;
-      min-width: 180px;
-      /* Enhanced slide down animation */
-      animation: slideDown 0.5s ease;
-    }
-    @keyframes slideDown {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    #settingsPanel p {
-      margin: 5px 0;
-      font-family: "Courier New", monospace;
-    }
-    .speed-option {
-      background-color: #e0e0e0;
-      border: 2px outset #999;
-      color: #000;
-      font-family: "Courier New", monospace;
-      padding: 5px 10px;
-      margin: 3px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-      outline: none;
-    }
-    .speed-option.active,
-    .speed-option:hover {
-      background-color: #d0d0d0;
-      transform: scale(1.1);
-    }
-    /* New Navigation Buttons Container */
-    #navButtons {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-top: 10px;
-    }
-    /* Mic Icon for Voice Search */
-    .mic-icon {
-      background-color: #007acc;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      font-size: 1.6em;
-      padding: 8px;
-      margin-left: 5px;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      outline: none;
-      -webkit-appearance: none;
-    }
-    .mic-icon:hover,
-    .mic-icon:focus {
-      transform: scale(1.2);
-      box-shadow: 0 0 8px rgba(0,122,204,0.8);
-    }
-    /* Mic Icon Listening Animation */
-    .mic-icon.listening {
-      animation: pulseMic 1s infinite;
-    }
-    @keyframes pulseMic {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-      100% { transform: scale(1); }
-    }
-    /* DARK THEME STYLES */
-    .dark-theme body {
-      background-color: #000;
-      color: #DAA520;
-    }
-    .dark-theme .top-bar {
-      background-color: #000;
-      border-bottom-color: #DAA520;
-      color: #DAA520;
-    }
-    .dark-theme #app {
-      background-color: #000;
-      color: #DAA520;
-    }
-    .dark-theme #app header {
-      background-color: #000;
-      color: #DAA520;
-    }
-    .dark-theme #content-section {
+    body.dark-theme #settings-panel {
       background-color: #111;
-      color: #DAA520;
+      border-color: #333;
     }
-    .dark-theme #search-bar {
-      background-color: #333;
-      color: #DAA520;
-      border-color: #DAA520;
-    }
-    .dark-theme .old-style-button,
-    .dark-theme .top-bar button {
-      background-color: gold;
-      color: black;
-      border: 2px outset #b8860b;
-    }
-    .dark-theme #settingsPanel {
-      background-color: #000;
-      border-color: #DAA520;
-      color: #DAA520;
-    }
-    /* Flags without animation */
-    .flag-icons img {
-      width: 30px;
-      vertical-align: middle;
-      margin: 0 5px;
-      animation: none;
-    }
-    .language-selector {
-      margin-top: 10px;
-      animation: fadeIn 1s;
-    }
-    .language-selector label {
-      font-size: 1em;
-      color: #f9f9f9;
-    }
-    .language-selector select {
-      font-size: 1em;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #2a4d69;
-      color: #2a4d69;
-      background-color: #fff;
-    }
-    .search-container {
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fadeInUp 0.8s;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    #search-bar {
-      width: 90%;
-      max-width: 400px;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #007acc;
-      font-size: 1em;
+    #settings-panel button {
+      width: 100%;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border: none;
+      background: none;
       text-align: right;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.5s, border-color 0.5s;
-    }
-    #search-bar:focus {
-      border-color: #005f99;
-      outline: none;
-    }
-    #content-section {
-      margin-top: 20px;
-      background-color: #f1f1f1;
-      padding: 20px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 600px;
-      margin: 20px auto;
-      box-shadow: 0px 4px 8px rgba(0, 0, 51, 0.3);
-      transition: background-color 0.5s, color 0.5s;
-    }
-    #content-section h2 {
-      color: #2a4d69;
-    }
-    #content-section img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    .full-content {
-      text-align: left;
-      padding: 10px;
-      margin-top: 10px;
-      max-width: 100%;
-      overflow-x: auto;
-      word-wrap: break-word;
-    }
-    .full-content img,
-    .full-content audio,
-    .full-content video {
-      max-width: 100%;
-      height: auto;
-      margin-top: 10px;
-    }
-    /* CUSTOM GAME CONTROLLER STYLE */
-    .custom-controller {
-      background-color: #fff;
-      border: 2px solid #007acc;
-      color: #007acc;
-      font-family: "Courier New", monospace;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 3px 3px 0px #999;
+      font-size: 1rem;
       cursor: pointer;
+      color: inherit;
+    }
+    #settings-panel button:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* Settings icon in top bar */
+    #settings-toggle {
       font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s, transform 0.3s;
-      animation: bounce 1s infinite;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--deep-blue);
+      transition: color 0.3s ease;
     }
-    .custom-controller:active {
-      transform: scale(0.95);
+    body.dark-theme #settings-toggle {
+      color: var(--gold);
     }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
+    
+    /* Existing styles remain unchanged */
+    .hero-section {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://cdn.jsdelivr.net/gh/egyptgeo/assets@main/pyramids-giza.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 600px;
     }
-    /* AUTHENTICATION STYLES */
-    .auth-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f4f4f4;
-    }
-    .auth-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 90%;
-      max-width: 350px;
-      padding: 15px 20px;
-      border-radius: 20px;
-      background-color: #ffffff;
-      color: #000080;
-      border: 1px solid #0000ff;
-      transition: background-color 0.5s, color 0.5s;
-      animation: fadeIn 1s;
-    }
-    /* Larger screens: increase width and reduce padding */
-    @media (min-width: 1024px) {
-      .form {
-        max-width: 600px;
-        padding: 10px 40px;
-      }
-    }
-    .title {
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: -1px;
-      padding-left: 30px;
-      color: #0000ff;
+    .section-decoration {
       position: relative;
     }
-    .title::before,
-    .title::after {
+    .section-decoration::before {
+      content: "☥";
+      font-size: 2rem;
+      color: var(--gold);
+      position: absolute;
+      top: -20px;
+      right: 50%;
+      transform: translateX(50%);
+    }
+    .timeline-item {
+      position: relative;
+      padding-right: 30px;
+      margin-bottom: 2rem;
+      border-right: 3px solid var(--gold);
+    }
+    .timeline-item::before {
       content: "";
       position: absolute;
-      height: 16px;
-      width: 16px;
+      right: -10px;
+      top: 0;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
+      background-color: var(--gold);
+    }
+    .gallery-item {
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+    .gallery-item img {
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    .gallery-item .caption {
+      position: absolute;
+      bottom: 0;
       left: 0;
-      background-color: #0000ff;
+      right: 0;
+      background-color: rgba(20, 33, 61, 0.8);
+      color: white;
+      padding: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    .title::after {
-      animation: pulse 1s linear infinite;
+    .gallery-item:hover .caption {
+      opacity: 1;
     }
-    .message, .signin {
-      font-size: 14.5px;
-      color: #000080;
-    }
-    .signin {
-      text-align: center;
-    }
-    .signin a {
-      color: #0000ff;
-    }
-    .signin a:hover {
-      text-decoration: underline;
-    }
-    .flex {
-      display: flex;
-      gap: 6px;
-      width: 100%;
-    }
-    .form label {
+    .hieroglyph-border {
+      border-top: 8px solid var(--deep-blue);
       position: relative;
     }
-    .form label .input {
-      background-color: #e6f0ff;
-      color: #000080;
-      width: 100%;
-      padding: 20px 5px 5px 10px;
-      border: 1px solid #0000ff;
-      border-radius: 10px;
-      outline: none;
-      transition: background-color 0.5s, border-color 0.5s;
-    }
-    .form label .input + span {
-      color: #000080;
+    .hieroglyph-border::before {
+      content: "𓂀 𓁶 𓁷 𓁢 𓁣 𓏤 𓂝 𓆓 𓆙 𓆣 𓆤 𓆣 𓆙 𓆓 𓂝 𓏤 𓁣 𓁢 𓁷 𓁶 𓂀";
       position: absolute;
-      left: 10px;
-      top: 0;
-      font-size: 0.9em;
-      cursor: text;
-      transition: 0.3s ease;
+      top: -25px;
+      right: 0;
+      left: 0;
+      text-align: center;
+      color: var(--gold);
+      font-size: 20px;
+      white-space: nowrap;
     }
-    .form label .input:placeholder-shown + span {
-      top: 12.5px;
-      font-size: 0.9em;
+    .temple-card {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .form label .input:focus + span,
-    .form label .input:valid + span {
-      color: #0000ff;
-      top: 0;
-      font-size: 0.7em;
-      font-weight: 600;
+    .temple-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
-    .input {
-      font-size: medium;
+    .god-card {
+      background-color: var(--deep-blue);
+      color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    /* Retro Styled Submit Button */
-    .submit {
-      background-color: #e0e0e0;
-      border: 2px outset #999;
-      color: #000;
-      font-family: "Courier New", monospace;
-      padding: 12px 20px;
-      border-radius: 0;
-      box-shadow: 2px 2px 0px #ccc;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-      font-size: 16px;
+    .god-card::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0) 70%);
+      z-index: 0;
+    }
+    .god-card-content {
+      position: relative;
+      z-index: 1;
+    }
+    .nav-link {
+      position: relative;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      right: 0;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
       width: 100%;
-      max-width: 300px;
-      margin: 10px auto;
-      display: block;
     }
-    .submit:active {
-      border-style: inset;
-      box-shadow: none;
+    .scroll-animation {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
-    .submit:hover {
-      background-color: #d0d0d0;
+    .scroll-animation.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
-    @keyframes pulse {
-      from { transform: scale(0.9); opacity: 1; }
-      to { transform: scale(1.8); opacity: 0; }
+    .pyramid-section {
+      background: linear-gradient(to bottom, var(--papyrus), var(--sand));
     }
-    /* Mobile responsiveness tweaks */
-    @media (max-width: 600px) {
-      #app header h1 { font-size: 1.8em; }
-      #app header p { font-size: 1em; }
-      #search-bar { width: 80%; padding: 12px; }
-      #content-section { padding: 15px; }
-      .controls button { width: 50px; height: 50px; font-size: 1.2rem; }
-      .custom-controller { width: 50px; height: 50px; font-size: 1.2rem; }
+    .daily-life-section {
+      background-color: var(--sand);
     }
-    /* Dark mode for auth form */
-    .dark-theme .form {
-      background-color: #000;
-      color: gold;
-      border: 1px solid gold;
+    .gods-section {
+      background: linear-gradient(to right, var(--deep-blue), var(--nile));
+      color: white;
     }
-    .dark-theme .form .input {
-      background-color: #333;
-      color: gold;
-      border-color: gold;
+    .timeline-section {
+      background-color: white;
     }
-    .dark-theme .submit {
-      background-color: gold;
-      color: black;
-      border: 2px outset #b8860b;
+    .quote-box {
+      background-color: var(--deep-blue);
+      color: white;
+      border-right: 5px solid var(--gold);
+      padding: 25px;
+      position: relative;
+    }
+    .quote-box::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      right: 10px;
+      font-size: 60px;
+      color: var(--gold);
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
-  <!-- TOP NAVIGATION BAR -->
-  <div class="top-bar">
-    <button id="btnApp" class="old-style-button" onclick="showSection('app')">التطبيق</button>
-    <!-- عند النقر على زر اللعبة يتم فتح ملف game.html -->
-    <button id="btnGame" class="old-style-button" onclick="window.location.href='game.html'">اللعبة</button>
-    <button id="btnAuth" class="old-style-button" onclick="showSection('auth')">تسجيل</button>
+  <!-- Header -->
+  <header class="sticky top-0 z-50 shadow-md">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-3xl font-bold flex items-center">
+        <span class="gold-text ml-2">☥</span>
+        <span>الحضارة المصرية القديمة</span>
+      </h1>
+      <nav class="hidden md:block">
+        <ul class="flex">
+          <li><a href="#intro" class="nav-link">مقدمة</a></li>
+          <li><a href="#pyramids" class="nav-link">الأهرامات</a></li>
+          <li><a href="#temples" class="nav-link">المعابد</a></li>
+          <li><a href="#daily-life" class="nav-link">الحياة اليومية</a></li>
+          <li><a href="#gods" class="nav-link">الآلهة</a></li>
+          <li><a href="#timeline" class="nav-link">التاريخ</a></li>
+          <li><a href="#gallery" class="nav-link">معرض الصور</a></li>
+        </ul>
+      </nav>
+      <div class="flex items-center">
+        <!-- Settings toggle icon -->
+        <button id="settings-toggle" class="mr-2">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button class="md:hidden text-2xl">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Settings Panel -->
+  <div id="settings-panel">
+    <!-- Five vertical buttons for other pages -->
+    <button onclick="location.href='main.html'">الرئيسية</button>
+    <button onclick="location.href='game.html'">اللعبة</button>
+    <button onclick="location.href='AI.html'">الذكاء الأصطناعي</button>
+    <button onclick="location.href='about me.html'">من أنا ؟</button>
+    <button onclick="location.href='fullylearning.html'">منصة التعلم</button>
+    <!-- Theme toggle button -->
+    <button id="theme-toggle" class="mt-2 text-right">
+      <i class="fas fa-moon"></i> تبديل الثيم
+    </button>
   </div>
-  <!-- AUTH SECTION -->
-  <div id="auth" class="section">
-    <div class="auth-container">
-      <div class="auth-box">
-        <div id="authSection">
-          <!-- SIGNUP FORM -->
-          <form class="form" id="signupForm">
-            <p id="signupTitle" class="title">إنشاء حساب</p>
-            <p id="signupMessage" class="message">أنشئ حسابك وتمكن من التطبيق</p>
-            <div class="flex">
-              <label>
-                <input class="input" type="text" id="firstname" placeholder="الاسم الأول" required>
-                <span></span>
-              </label>
-              <label>
-                <input class="input" type="text" id="lastname" placeholder="الاسم الثاني" required>
-                <span></span>
-              </label>
+
+  <!-- Hero Section -->
+  <section class="hero-section flex items-center justify-center">
+    <div class="text-center text-white">
+      <h1 class="text-5xl md:text-7xl font-bold mb-4">الحضارة المصرية القديمة</h1>
+      <p class="text-xl md:text-2xl mb-8">سبعة آلاف عام من الحضارة والتاريخ والإبداع</p>
+      <a href="#intro" class="inline-block bg-gold text-deep-blue px-6 py-3 rounded-full font-bold hover:bg-opacity-90 transition duration-300" style="background-color: var(--gold); color: var(--deep-blue);">
+        اكتشف المزيد
+      </a>
+    </div>
+  </section>
+
+  <!-- Introduction Section -->
+  <section id="intro" class="py-16 px-4">
+    <div class="container mx-auto">
+      <div class="section-decoration">
+        <h2 class="text-4xl font-bold text-center mb-16">لمحة عن الحضارة المصرية القديمة</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div class="scroll-animation">
+          <p class="text-lg mb-4">تعتبر الحضارة المصرية القديمة من أقدم الحضارات في تاريخ البشرية، حيث امتدت لأكثر من ثلاثة آلاف عام. بدأت حوالي 3100 قبل الميلاد مع توحيد مصر العليا والسفلى، واستمرت حتى ضمها إلى الإمبراطورية الرومانية في العام 30 قبل الميلاد.</p>
+          <p class="text-lg mb-4">تميزت هذه الحضارة العظيمة بإنجازاتها المذهلة في العمارة والفن والعلوم والطب والرياضيات والزراعة، وتركت إرثاً ثقافياً هائلاً لا يزال يثير الإعجاب حتى يومنا هذا.</p>
+          <div class="quote-box my-6">
+            <p class="text-lg italic">نهر النيل هبة لمصر، ومصر هبة للعالم. فقد أنجبت حضارة عظيمة قدمت للبشرية أساسات التقدم والعلوم والفنون والمعرفة.</p>
+          </div>
+          <p class="text-lg">كان نهر النيل العمود الفقري للحضارة المصرية، حيث وفر المياه العذبة والتربة الخصبة التي سمحت بازدهار الزراعة وقيام مجتمع مستقر. وحول ضفاف النيل، بنى المصريون القدماء مدناً عظيمة وأهرامات شاهقة ومعابد مهيبة لا تزال شاهدة على عبقريتهم وإبداعهم.</p>
+        </div>
+        <div class="scroll-animation">
+          <img src="مصر القديمة.jpeg" alt="خريطة مصر القديمة" class="rounded-lg shadow-xl">
+          <p class="text-sm text-center mt-2 text-gray-600">خريطة مصر القديمة توضح أهم المواقع الأثرية على طول نهر النيل</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pyramids Section -->
+  <section id="pyramids" class="pyramid-section py-16 px-4">
+    <div class="container mx-auto">
+      <div class="section-decoration">
+        <h2 class="text-4xl font-bold text-center mb-16">الأهرامات - عجائب الدنيا</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div class="scroll-animation order-2 md:order-1">
+          <img src="الهرم الاكبر.jpeg" alt="الهرم الأكبر" class="rounded-lg shadow-xl">
+          <p class="text-sm text-center mt-2 text-gray-600">الهرم الأكبر في الجيزة - أحد عجائب الدنيا السبع</p>
+        </div>
+        <div class="scroll-animation order-1 md:order-2">
+          <h3 class="text-2xl font-bold mb-4">أهرامات الجيزة</h3>
+          <p class="text-lg mb-4">تعد أهرامات الجيزة الثلاثة (خوفو، خفرع، منقرع) أيقونة للحضارة المصرية القديمة وواحدة من أكثر المعالم شهرة في العالم. الهرم الأكبر، الذي بناه الملك خوفو حوالي 2560 قبل الميلاد، هو آخر العجائب الباقية من عجائب الدنيا السبع القديمة.</p>
+          <h4 class="text-xl font-bold mb-2">حقائق مذهلة عن الأهرامات:</h4>
+          <ul class="list-disc list-inside mb-4 pr-4">
+            <li>استغرق بناء الهرم الأكبر حوالي 20 عاماً</li>
+            <li>يتكون الهرم الأكبر من أكثر من 2.3 مليون كتلة حجرية</li>
+            <li>متوسط وزن كل كتلة حجرية حوالي 2.5 طن</li>
+            <li>ارتفاع الهرم الأكبر عند بنائه كان 146.5 متراً</li>
+            <li>تم بناء الهرم بدقة هندسية مذهلة، حيث أن الفرق بين أطوال أضلاع قاعدته لا يتجاوز 2 سم</li>
+          </ul>
+          <p class="text-lg">لا تزال الأهرامات تمثل تحدياً للعلماء في فهم كيفية تمكن المصريين القدماء من بناء هذه الصروح الضخمة بهذه الدقة المذهلة قبل آلاف السنين، مما يعكس مستوى متقدماً من المعرفة الهندسية والفلكية والرياضية.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Temples Section -->
+  <section id="temples" class="bg-white py-16 px-4">
+    <div class="container mx-auto">
+      <div class="section-decoration">
+        <h2 class="text-4xl font-bold text-center mb-16">المعابد المصرية</h2>
+      </div>
+      <p class="text-lg text-center max-w-4xl mx-auto mb-12">شيد المصريون القدماء معابدَ ضخمة لعبادة آلهتهم وتخليد ذكرى ملوكهم. تُعد هذه المعابد من روائع العمارة القديمة بأعمدتها الضخمة ونقوشها المذهلة التي تروي قصص الآلهة والفراعنة.</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="temple-card scroll-animation">
+          <div class="overflow-hidden h-56">
+            <img src="معبد الكرنك.jpeg" alt="معبد الكرنك" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">معبد الكرنك</h3>
+            <p class="text-gray-700 mb-4">يعد معبد الكرنك في الأقصر أحد أكبر المواقع الدينية القديمة في العالم. بُني على مدار 1500 عام، وكان مكرساً للإله آمون-رع.</p>
+            <div class="flex items-center">
+              <span class="text-gold mr-2" style="color: var(--gold);">☥</span>
+              <p class="font-bold">الأقصر، مصر</p>
             </div>
-            <label>
-              <input class="input" type="email" id="email" placeholder="البريد الإلكتروني" required>
-              <span></span>
-            </label>
-            <label>
-              <input class="input" type="password" id="password" placeholder="رقم المرور" required>
-              <span></span>
-            </label>
-            <!-- Added password rule hint -->
-            <small style="color: #000080; font-size: 0.8em; margin-bottom: 5px;">
-              يجب أن يتكون رقم المرور من 12 حرفاً وأرقام، ويجب أن يكون قويًا
-            </small>
-            <label>
-              <input class="input" type="password" id="confirmPassword" placeholder="تأكيد رقم المرور" required>
-              <span></span>
-            </label>
-            <button type="button" class="submit" onclick="signup()">إنشاء</button>
-            <p class="signin">هل لديك حساب بالفعل؟ 
-              <a href="#" onclick="showSignin()">تسجيل الدخول</a>
-            </p>
-          </form>
-          <!-- SIGNIN FORM -->
-          <form class="form" id="signinForm" style="display: none;">
-            <p id="signinTitle" class="title">تسجيل الدخول</p>
-            <p id="signinMessage" class="message">مرحبًا من جديد! يرجى تسجيل الدخول للتمكن من التطبيق</p>
-            <label>
-              <input class="input" type="email" id="signinEmail" placeholder="البريد الإلكتروني" required>
-              <span></span>
-            </label>
-            <label>
-              <input class="input" type="password" id="signinPassword" placeholder="رقم المرور" required>
-              <span></span>
-            </label>
-            <button type="button" class="submit" onclick="signin()">سجل الدخول</button>
-            <p class="signin">ليس لديك حساب؟  
-              <a href="#" onclick="showSignup()">إنشاء حساب</a>
-            </p>
-          </form>
-          <!-- LOGOUT OPTION -->
-          <div id="logoutOption" style="display: none;">
-            <p id="logoutMessage">أنت مسجل</p>
-            <button class="submit" onclick="logout()">تسجيل الخروج</button>
+          </div>
+        </div>
+        
+        <div class="temple-card scroll-animation" style="transition-delay: 0.2s;">
+          <div class="overflow-hidden h-56">
+            <img src="معبد ابو سمبل.jpeg" alt="معبد أبو سمبل" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">معبد أبو سمبل</h3>
+            <p class="text-gray-700 mb-4">تم نحت معبدَي أبو سمبل في الجبل بأمر من الملك رمسيس الثاني. يُعرف بتماثيله الأربعة الضخمة التي تمثل رمسيس الثاني.</p>
+            <div class="flex items-center">
+              <span class="text-gold mr-2" style="color: var(--gold);">☥</span>
+              <p class="font-bold">أسوان، مصر</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="temple-card scroll-animation" style="transition-delay: 0.4s;">
+          <div class="overflow-hidden h-56">
+            <img src="معبد الفيلة.jpeg" alt="معبد فيلة" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">معبد فيلة</h3>
+            <p class="text-gray-700 mb-4">يقع معبد فيلة على جزيرة صغيرة في نهر النيل. كان مكرساً لعبادة الإلهة إيزيس، وهو آخر معبد مصري قديم استمرت فيه العبادة حتى القرن السادس الميلادي.</p>
+            <div class="flex items-center">
+              <span class="text-gold mr-2" style="color: var(--gold);">☥</span>
+              <p class="font-bold">أسوان، مصر</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- APP SECTION -->
-  <div id="app" class="section">
-    <header>
-      <!-- Theme Toggle & Settings buttons -->
-      <button id="themeToggle" onclick="toggleTheme()">🌙</button>
-      <!-- Settings icon without inline onclick; event listener will handle the click -->
-      <button id="settingsToggle">⚙</button>
-      <!-- Settings Panel for Reader Speed, User Info & Navigation -->
-      <div id="settingsPanel">
-        <p id="settingsText">سرعة القراءة:</p>
-        <div id="userInfo" style="margin-bottom:8px;"></div>
-        <button class="speed-option" data-speed="0.5">0.5x</button>
-        <button class="speed-option active" data-speed="1">1x</button>
-        <button class="speed-option" data-speed="1.5">1.5x</button>
-        <button class="speed-option" data-speed="2">2x</button>
-        <!-- Navigation buttons container -->
-        <div id="navButtons">
-          <button id="navChatbot" class="old-style-button" onclick="window.location.href='AI.html'">الذكاء الأصطناعي</button>
-          <button id="navAbout" class="old-style-button" onclick="window.location.href='about me.html'">من أنا ؟</button>
-          <button id="navVideos" class="old-style-button" onclick="window.location.href='fullylearning.html'">صفحة التعلم</button>
+  </section>
+
+  <!-- Daily Life Section -->
+  <section id="daily-life" class="daily-life-section py-16 px-4">
+    <div class="container mx-auto">
+      <div class="section-decoration">
+        <h2 class="text-4xl font-bold text-center mb-16">الحياة اليومية في مصر القديمة</h2>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-12">
+        <div class="scroll-animation">
+          <h3 class="text-2xl font-bold mb-4">الطبقات الاجتماعية</h3>
+          <p class="text-lg mb-4">كان المجتمع المصري القديم مقسماً إلى طبقات اجتماعية واضحة. في قمة الهرم الاجتماعي كان الفرعون، الذي اعتُبر إلهاً حياً، يليه كبار رجال الدولة والكهنة، ثم الكتبة والتجار والحرفيين، وفي قاعدة الهرم كان المزارعون والعمال.</p>
+          
+          <h3 class="text-2xl font-bold mb-4 mt-8">المنازل والطعام</h3>
+          <p class="text-lg mb-4">عاش معظم المصريين في منازل بسيطة مبنية من الطوب اللبن، بينما كانت قصور النبلاء والفراعنة فخمة ومزينة. تضمن النظام الغذائي الأساسي الخبز والجعة والبصل والثوم والفواكه، مع تناول اللحوم في المناسبات الخاصة بالنسبة لعامة الناس.</p>
+        </div>
+        <div class="scroll-animation">
+          <img src="الحياة المصرية.jpeg" alt="الحياة اليومية في مصر القديمة" class="rounded-lg shadow-xl">
+          <p class="text-sm text-center mt-2 text-gray-600">نقش يصور مشاهد من الحياة اليومية في مصر القديمة</p>
         </div>
       </div>
-      <div id="top-message">
-        <span>Free Palestine فلسطين في القلب</span>
-        <div class="flag-icons">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_Palestine.svg" alt="Palestine Flag">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Egypt.svg" alt="Egypt Flag">
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+        <div class="bg-white p-6 rounded-lg shadow-lg scroll-animation">
+          <div class="text-center mb-4">
+            <span class="text-4xl gold-text" style="color: var(--gold);">𓂋</span>
+            <h3 class="text-xl font-bold mt-2">الكتابة والتعليم</h3>
+          </div>
+          <p class="text-gray-700">كانت الكتابة الهيروغليفية نظاماً معقداً مقتصراً على الكتبة والكهنة. اقتصر التعليم على أبناء النخبة، خاصةً الذكور، ليتم إعدادهم للمناصب الحكومية أو الدينية المرموقة.</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-lg scroll-animation" style="transition-delay: 0.2s;">
+          <div class="text-center mb-4">
+            <span class="text-4xl gold-text" style="color: var(--gold);">𓃀</span>
+            <h3 class="text-xl font-bold mt-2">الملابس والزينة</h3>
+          </div>
+          <p class="text-gray-700">ارتدى المصريون ملابس بسيطة من الكتان الأبيض بسبب المناخ الحار. اهتم الرجال والنساء بالمظهر الخارجي واستخدموا مستحضرات التجميل والعطور والمجوهرات بكثرة.</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-lg scroll-animation" style="transition-delay: 0.4s;">
+          <div class="text-center mb-4">
+            <span class="text-4xl gold-text" style="color: var(--gold);">𓐍</span>
+            <h3 class="text-xl font-bold mt-2">الترفيه والرياضة</h3>
+          </div>
+          <p class="text-gray-700">استمتع المصريون بالألعاب والرياضات مثل الصيد والرماية والمصارعة. كما استمتعوا بالموسيقى والرقص والتمثيل في الاحتفالات والمناسبات الخاصة.</p>
         </div>
       </div>
-      <h1 id="main-title">موسوعة الحضارة المصرية</h1>
-      <p id="main-subtitle">مصر - تاريخ، حضارة، وثقافة</p>
-      <div class="language-selector">
-        <label for="language" id="language-label">اختر اللغة:</label>
-        <select id="language" onchange="changeLanguage()">
-          <option value="ar">العربية</option>
-          <option value="en">English</option>
-          <option value="de">Deutsch</option>
-          <option value="fr">Français</option>
-          <option value="es">Español</option>
-        </select>
+    </div>
+  </section>
+
+  <!-- Egyptian Gods Section -->
+  <section id="gods" class="gods-section py-16 px-4">
+    <div class="container mx-auto">
+      <div class="section-decoration">
+        <h2 class="text-4xl font-bold text-center mb-16 text-white">الآلهة المصرية القديمة</h2>
       </div>
-    </header>
-    <main>
-      <section class="introduction">
-        <h2 id="introduction-title">لمحة عن الحضارة المصرية القديمة</h2>
-        <div class="search-container">
-          <input type="text" id="search-bar" placeholder="ابحث عن التاريخ المصري...">
-          <button id="search-button" class="old-style-button" onclick="fetchContent()">ابحث</button>
-          <button id="voiceSearchBtn" class="mic-icon" title="بحث صوتي">🎤</button>
+      
+      <p class="text-lg text-center max-w-4xl mx-auto mb-12 text-white">آمن المصريون القدماء بمجموعة كبيرة من الآلهة التي كان لكل منها دور محدد في حياتهم وفي تفسير ظواهر الكون. كانت هذه الآلهة تُعبد في المعابد الضخمة وكان لها تأثير كبير على كافة جوانب الحياة.</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div class="god-card scroll-animation">
+          <div class="god-card-content">
+            <h3 class="text-xl font-bold mb-3 text-gold-text" style="color: var(--gold);">رع</h3>
+            <p class="mb-3">إله الشمس وخالق العالم، يُصور برأس صقر وقرص الشمس. كان يُعتبر أحد أهم الآلهة في مصر القديمة.</p>
+            <p class="text-sm gold-text" style="color: var(--gold);">إله الشمس والخلق</p>
+          </div>
         </div>
-      </section>
-      <section id="content-section">
-        <!-- Wikipedia content will load here -->
-      </section>
-    </main>
-    <footer>
-      <p>جميع الحقوق محفوظة &copy; 2024 - موسوعة الحضارة المصرية</p>
-    </footer>
-  </div>
+        
+        <div class="god-card scroll-animation" style="transition-delay: 0.1s;">
+          <div class="god-card-content">
+            <h3 class="text-xl font-bold mb-3 text-gold-text" style="color: var(--gold);">أوزيريس</h3>
+            <p class="mb-3">إله العالم السفلي والبعث والخصوبة. يُصور على هيئة إنسان ملفوف بأكفان المومياء ويرتدي التاج الأبيض.</p>
+            <p class="text-sm gold-text" style="color: var(--gold);">إله الموتى والبعث</p>
+          </div>
+        </div>
+        
+        <div class="god-card scroll-animation" style="transition-delay: 0.2s;">
+          <div class="god-card-content">
+            <h3 class="text-xl font-bold mb-3 text-gold-text" style="color: var(--gold);">إيزيس</h3>
+            <p class="mb-3">إلهة السحر والأمومة والولادة وزوجة أوزيريس. لعبت دوراً محورياً في أسطورة إحياء زوجها بعد مقتله.</p>
+            <p class="text-sm gold-text" style="color: var(--gold);">إلهة السحر والأمومة</p>
+          </div>
+        </div>
+        
+        <div class="god-card scroll-animation" style="transition-delay: 0.3s;">
+          <div class="god-card-content">
+            <h3 class="text-xl font-bold mb-3 text-gold-text" style="color: var(--gold);">حورس</h3>
+            <p class="mb-3">إله السماء وابن إيزيس وأوزيريس. يُصور برأس صقر، وارتبط بالملكية المصرية حيث اعتُبر الفرعون تجسيداً له.</p>
+            <p class="text-sm gold-text" style="color: var(--gold);">إله السماء والملكية</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="god-card scroll-animation">
+          <div class="god-card-content">
+            <h3 class="text-xl font-bold mb-3 text-gold-text" style="color: var(--gold);">أنوبيس</h3>
+            <p class="mb-3">إله الموتى والتحنيط، يُصور برأس ابن آوى أو كلب. كان مسؤولاً عن حماية المقابر وقيادة الروح في العالم الآخر.</p>
+            <p class="text-sm gold-text" style="color: var(--gold);">إله التحنيط</p>
+          </div>
+        </div>
+        
+        <div class="god-card scroll-animation" style="transition-delay: 0.1s;">
+          <div class="god-card-content">
+            <h3 class="text-xl font-bold mb-3 text-gold-text" style="color: var(--gold);">تحوت</h3>
+            <p class="mb-3">إله الحكمة والكتابة والعلوم والسحر. يُصور برأس طائر أبو منجل (إيبيس) أو قرد البابون.</p>
+            <p class="text-sm gold-text" style="color: var(--gold);">إله الحكمة والكتابة</p>
+          </div>
+        </div>
+        
+        <div class="god-card scroll-animation" style="transition-delay: 0.2s;">
+          <div class="god-card-content">
+            <h3 class="text-xl font-bold mb-3 text-gold-text" style="color: var(--gold);">حتحور</h3>
+            <p class="mb-3">إلهة الحب والجمال والموسيقى والسماء. تُصور على هيئة امرأة أو بقرة، وكانت تُعتبر راعية للنساء.</p>
+            <p class="text-sm gold-text" style="color: var(--gold);">إلهة الحب والجمال</p>
+          </div>
+        </div>
+        
+        <div class="god-card scroll-animation" style="transition-delay: 0.3s;">
+          <div class="god-card-content">
+            <h3 class="text-xl font-bold mb-3 text-gold-text" style="color: var(--gold);">بتاح</h3>
+            <p class="mb-3">إله الخلق والحرفيين والبناء. اعتقد المصريون أنه خلق العالم عن طريق قلبه ولسانه (الفكر والكلام).</p>
+            <p class="text-sm gold-text" style="color: var(--gold);">إله الحرف والبناء</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Historical Timeline Section -->
+  <section id="timeline" class="timeline-section py-16 px-4">
+    <div class="container mx-auto">
+      <div class="section-decoration">
+        <h2 class="text-4xl font-bold text-center mb-16">المراحل التاريخية للحضارة المصرية</h2>
+      </div>
+      
+      <div class="max-w-3xl mx-auto">
+        <div class="timeline-item scroll-animation pr-12">
+          <h3 class="text-2xl font-bold mb-2">عصر ما قبل الأسرات (5500-3100 ق.م)</h3>
+          <p class="text-lg">فترة تطور المجتمعات الزراعية الأولى على ضفاف النيل وتشكل الممالك الصغيرة قبل توحيد مصر.</p>
+        </div>
+        
+        <div class="timeline-item scroll-animation pr-12" style="transition-delay: 0.1s;">
+          <h3 class="text-2xl font-bold mb-2">العصر العتيق (3100-2686 ق.م)</h3>
+          <p class="text-lg">توحيد مصر على يد الملك مينا (نارمر) وتأسيس الأسرات الأولى وتطوير النظام الإداري للدولة.</p>
+        </div>
+        
+        <div class="timeline-item scroll-animation pr-12" style="transition-delay: 0.2s;">
+          <h3 class="text-2xl font-bold mb-2">الدولة القديمة (2686-2181 ق.م)</h3>
+          <p class="text-lg">عصر بناء الأهرامات الكبرى وتطور العبادة الشمسية. شهدت هذه الفترة استقراراً سياسياً وازدهاراً اقتصادياً وفنياً.</p>
+        </div>
+        
+        <div class="timeline-item scroll-animation pr-12" style="transition-delay: 0.3s;">
+          <h3 class="text-2xl font-bold mb-2">الفترة الانتقالية الأولى (2181-2055 ق.م)</h3>
+          <p class="text-lg">فترة اضطرابات وتفكك سياسي بعد انهيار الدولة القديمة، حيث انقسمت مصر إلى ممالك صغيرة متنافسة.</p>
+        </div>
+        
+        <div class="timeline-item scroll-animation pr-12" style="transition-delay: 0.4s;">
+          <h3 class="text-2xl font-bold mb-2">الدولة الوسطى (2055-1650 ق.م)</h3>
+          <p class="text-lg">إعادة توحيد مصر على يد ملوك طيبة (الأسرة الحادية عشرة) وعصر النهضة الأدبية والفنية.</p>
+        </div>
+        
+        <div class="timeline-item scroll-animation pr-12" style="transition-delay: 0.5s;">
+          <h3 class="text-2xl font-bold mb-2">الفترة الانتقالية الثانية (1650-1550 ق.م)</h3>
+          <p class="text-lg">فترة حكم الهكسوس (شعوب أجنبية) لشمال مصر مع استمرار حكم الأسر المصرية في الجنوب.</p>
+        </div>
+        
+        <div class="timeline-item scroll-animation pr-12" style="transition-delay: 0.6s;">
+          <h3 class="text-2xl font-bold mb-2">الدولة الحديثة (1550-1069 ق.م)</h3>
+          <p class="text-lg">العصر الذهبي للإمبراطورية المصرية وتوسعها خارج حدودها التقليدية. شهدت هذه الفترة حكم فراعنة عظماء مثل تحتمس الثالث، أخناتون، وتوت عنخ آمون، ورمسيس الثاني.</p>
+        </div>
+        
+        <div class="timeline-item scroll-animation pr-12" style="transition-delay: 0.7s;">
+          <h3 class="text-2xl font-bold mb-2">الفترة المتأخرة (1069-332 ق.م)</h3>
+          <p class="text-lg">فترة تدهور نفوذ مصر وتعرضها للغزوات الأجنبية من الليبيين والنوبيين والآشوريين والفرس.</p>
+        </div>
+        
+        <div class="timeline-item scroll-animation pr-12" style="transition-delay: 0.8s;">
+          <h3 class="text-2xl font-bold mb-2">العصر اليوناني والروماني (332 ق.م - 395 م)</h3>
+          <p class="text-lg">غزو الإسكندر الأكبر لمصر وتأسيس الأسرة البطلمية، ثم ضم مصر للإمبراطورية الرومانية، مما أنهى عصر الحضارة المصرية القديمة المستقلة.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="py-16 px-4 bg-gradient-to-b from-papyrus to-sand" style="background: linear-gradient(to bottom, var(--papyrus), var(--sand));">
+    <div class="container mx-auto">
+      <div class="section-decoration">
+        <h2 class="text-4xl font-bold text-center mb-16">معرض الحضارة المصرية</h2>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="gallery-item scroll-animation rounded-lg overflow-hidden">
+          <img src="قناع عنخ.jpeg" alt="قناع توت عنخ آمون" class="w-full h-64 object-cover">
+          <div class="caption">
+            <h3 class="font-bold">قناع توت عنخ آمون</h3>
+            <p>من أشهر القطع الأثرية المصرية القديمة في العالم</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item scroll-animation rounded-lg overflow-hidden" style="transition-delay: 0.1s;">
+          <img src="الهيروغليفية.jpeg" alt="الكتابة الهيروغليفية" class="w-full h-64 object-cover">
+          <div class="caption">
+            <h3 class="font-bold">الكتابة الهيروغليفية</h3>
+            <p>نظام الكتابة المصري القديم الذي استخدم الرموز والصور</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item scroll-animation rounded-lg overflow-hidden" style="transition-delay: 0.2s;">
+          <img src="ابو الهول.jpeg" alt="أبو الهول" class="w-full h-64 object-cover">
+          <div class="caption">
+            <h3 class="font-bold">أبو الهول</h3>
+            <p>تمثال أسطوري برأس إنسان وجسد أسد في الجيزة</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item scroll-animation rounded-lg overflow-hidden" style="transition-delay: 0.3s;">
+          <img src="المومياء.jpeg" alt="المومياء المصرية" class="w-full h-64 object-cover">
+          <div class="caption">
+            <h3 class="font-bold">المومياء المصرية</h3>
+            <p>فن التحنيط وحفظ الجثث الذي اشتهر به المصريون القدماء</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item scroll-animation rounded-lg overflow-hidden" style="transition-delay: 0.4s;">
+          <img src="النيل.jpg" alt="نهر النيل" class="w-full h-64 object-cover">
+          <div class="caption">
+            <h3 class="font-bold">نهر النيل</h3>
+            <p>شريان الحياة الذي ازدهرت حوله الحضارة المصرية القديمة</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item scroll-animation rounded-lg overflow-hidden" style="transition-delay: 0.5s;">
+          <img src="البردي.jpeg" alt="ورق البردي" class="w-full h-64 object-cover">
+          <div class="caption">
+            <h3 class="font-bold">ورق البردي</h3>
+            <p>مادة الكتابة القديمة المصنوعة من نبات البردي</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item scroll-animation rounded-lg overflow-hidden" style="transition-delay: 0.6s;">
+          <img src="وادي الملوك.jpeg" alt="وادي الملوك" class="w-full h-64 object-cover">
+          <div class="caption">
+            <h3 class="font-bold">وادي الملوك</h3>
+            <p>موقع دفن الفراعنة خلال فترة الدولة الحديثة</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item scroll-animation rounded-lg overflow-hidden" style="transition-delay: 0.7s;">
+          <img src="المجوهرات.jpeg" alt="المجوهرات المصرية" class="w-full h-64 object-cover">
+          <div class="caption">
+            <h3 class="font-bold">المجوهرات المصرية</h3>
+            <p>حرفة صناعة المجوهرات التي تميز بها المصريون القدماء</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-deep-blue text-white py-12 px-4 hieroglyph-border" style="background-color: var(--deep-blue);">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <h3 class="text-2xl font-bold mb-4 gold-text" style="color: var(--gold);">الحضارة المصرية القديمة</h3>
+          <p>موقع يهدف إلى نشر المعرفة عن الحضارة المصرية العريقة والحفاظ على إرثها الثقافي والتاريخي.</p>
+        </div>
+        
+        <div>
+          <h3 class="text-xl font-bold mb-4 gold-text" style="color: var(--gold);">روابط مهمة</h3>
+          <ul class="space-y-2">
+            <li><a href="#intro" class="hover:text-gold transition duration-300" style="--gold: var(--gold);">مقدمة</a></li>
+            <li><a href="#pyramids" class="hover:text-gold transition duration-300" style="--gold: var(--gold);">الأهرامات</a></li>
+            <li><a href="#temples" class="hover:text-gold transition duration-300" style="--gold: var(--gold);">المعابد</a></li>
+            <li><a href="#daily-life" class="hover:text-gold transition duration-300" style="--gold: var(--gold);">الحياة اليومية</a></li>
+            <li><a href="#gods" class="hover:text-gold transition duration-300" style="--gold: var(--gold);">الآلهة المصرية</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-xl font-bold mb-4 gold-text" style="color: var(--gold);">المراجع والمصادر</h3>
+          <ul class="space-y-2 text-sm">
+            <li>المتحف المصري - القاهرة</li>
+            <li>هيئة الآثار المصرية</li>
+            <li>موسوعة الحضارة المصرية القديمة</li>
+            <li>المجلس الأعلى للآثار</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="text-center pt-8 border-t border-gray-700">
+        <p>© 2023 الحضارة المصرية القديمة - جميع الحقوق محفوظة</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
   <script>
-    // -------------------- Global Variables and Translations --------------------
-    let fullArticleDisplayed = false;
-    let currentLanguage = 'ar';
-    let searchResults = [];
-    let speechSynthesisInstance = null;
-    let currentArticleTitle = "";
-    let currentArticleExtract = "";
-    let readerSpeed = 1;
-    const YOUTUBE_API_KEY = "AIzaSyCe3BZbOsFYE4HtHU2n1AgGqFCNORciGks";
-    const translations = {
-      ar: {
-        mainTitle: "موسوعة الحضارة المصرية",
-        mainSubtitle: "مصر - تاريخ، حضارة، وثقافة",
-        searchPlaceholder: "ابحث عن التاريخ المصري...",
-        searchButton: "ابحث",
-        readMore: "عرض المزيد",
-        readLess: "عرض أقل",
-        listenArticle: "استمع إلى المقال",
-        stopListening: "أوقف القراءة",
-        noResults: "لا توجد نتائج",
-        topBar: { app: "التطبيق", game: "اللعبة", auth: "تسجيل", highScore: "أعلى نتيجة" },
-        signupTitle: "إنشاء حساب",
-        signupMessage: "تم التسجيل بنجاح!",
-        signinTitle: "تسجيل الدخول",
-        signinMessage: "مرحبًا من جديد! تم تسجيل الدخول.",
-        logoutMessage: "أنت مسجل",
-        settingsText: "سرعة القراءة:",
-        navChatbot: "الدردشة",
-        navAbout: "عني",
-        navVideos: "فيديوهات",
-        wrongCredentials: "البريد الإلكتروني أو كلمة المرور خاطئة!",
-        topMessage: "Free Palestine فلسطين في القلب",
-        languageLabel: "اختر اللغة:"
-      },
-      en: {
-        mainTitle: "Egyptian Civilization Encyclopedia",
-        mainSubtitle: "Egypt - History, Civilization, and Culture",
-        searchPlaceholder: "Search for Egyptian history...",
-        searchButton: "Search",
-        readMore: "Show more",
-        readLess: "Show less",
-        listenArticle: "Listen to the article",
-        stopListening: "Stop Listening",
-        noResults: "No results found",
-        topBar: { app: "App", game: "Game", auth: "Auth", highScore: "High Score" },
-        signupTitle: "Sign Up",
-        signupMessage: "You're registered!",
-        signinTitle: "Sign In",
-        signinMessage: "Welcome back! You're signed in.",
-        logoutMessage: "You are logged in",
-        settingsText: "Reader Speed:",
-        navChatbot: "Chatbot",
-        navAbout: "About Me",
-        navVideos: "Videos",
-        wrongCredentials: "Email or password is incorrect!",
-        topMessage: "Free Palestine, Palestine in our hearts",
-        languageLabel: "Choose language:"
-      },
-      de: {
-        mainTitle: "Enzyklopädie der ägyptischen Zivilisation",
-        mainSubtitle: "Ägypten – Geschichte, Zivilisation und Kultur",
-        searchPlaceholder: "Suche nach ägyptischer Geschichte...",
-        searchButton: "Suchen",
-        readMore: "Mehr anzeigen",
-        readLess: "Weniger anzeigen",
-        listenArticle: "Artikel anhören",
-        stopListening: "Anhalten",
-        noResults: "Keine Ergebnisse gefunden",
-        topBar: { app: "App", game: "Spiel", auth: "Anmeldung", highScore: "Bestpunktzahl" },
-        signupTitle: "Registrieren",
-        signupMessage: "Du bist registriert!",
-        signinTitle: "Anmelden",
-        signinMessage: "Willkommen zurück! Du bist angemeldet.",
-        logoutMessage: "Du bist angemeldet",
-        settingsText: "Lesegeschwindigkeit:",
-        navChatbot: "Chatbot",
-        navAbout: "Über mich",
-        navVideos: "Videos",
-        wrongCredentials: "E-Mail oder Passwort ist falsch!",
-        topMessage: "Freies Palästina, Palästina im Herzen",
-        languageLabel: "Sprache wählen:"
-      },
-      fr: {
-        mainTitle: "Encyclopédie de la civilisation égyptienne",
-        mainSubtitle: "Égypte – Histoire, civilisation et culture",
-        searchPlaceholder: "Recherchez l'histoire égyptienne...",
-        searchButton: "Rechercher",
-        readMore: "Afficher plus",
-        readLess: "Afficher moins",
-        listenArticle: "Écouter l'article",
-        stopListening: "Arrêter",
-        noResults: "Aucun résultat trouvé",
-        topBar: { app: "Application", game: "Jeu", auth: "Authentification", highScore: "Meilleur score" },
-        signupTitle: "S'inscrire",
-        signupMessage: "Vous êtes inscrit(e)!",
-        signinTitle: "Se connecter",
-        signinMessage: "Bon retour ! Vous êtes connecté(e).",
-        logoutMessage: "Vous êtes connecté(e)",
-        settingsText: "Vitesse de lecture:",
-        navChatbot: "Chatbot",
-        navAbout: "À propos de moi",
-        navVideos: "Vidéos",
-        wrongCredentials: "L'email ou le mot de passe est incorrect!",
-        topMessage: "Libérez la Palestine, Palestine dans nos cœurs",
-        languageLabel: "Choisir la langue:"
-      },
-      es: {
-        mainTitle: "Enciclopedia de la Civilización Egipcia",
-        mainSubtitle: "Egipto - Historia, Civilización y Cultura",
-        searchPlaceholder: "Busca la historia de Egipto...",
-        searchButton: "Buscar",
-        readMore: "Mostrar más",
-        readLess: "Mostrar menos",
-        listenArticle: "Escuchar el artículo",
-        stopListening: "Detener",
-        noResults: "No se encontraron resultados",
-        topBar: { app: "Aplicación", game: "Juego", auth: "Autenticación", highScore: "Mejor puntuación" },
-        signupTitle: "Registrarse",
-        signupMessage: "¡Te has registrado!",
-        signinTitle: "Iniciar sesión",
-        signinMessage: "¡Bienvenido de nuevo! Has iniciado sesión.",
-        logoutMessage: "Estás conectado",
-        settingsText: "Velocidad de lectura:",
-        navChatbot: "Chatbot",
-        navAbout: "Acerca de mí",
-        navVideos: "Videos",
-        wrongCredentials: "¡El correo electrónico o la contraseña es incorrecta!",
-        topMessage: "Palestina Libre, Palestina en el corazón",
-        languageLabel: "Elige idioma:"
-      }
-    };
-
-    // -------------------- Language Update Function --------------------
-    function updateLanguageTexts() {
-      const trans = translations[currentLanguage];
-      document.getElementById('main-title').textContent = trans.mainTitle;
-      document.getElementById('main-subtitle').textContent = trans.mainSubtitle;
-      document.getElementById('search-bar').placeholder = trans.searchPlaceholder;
-      document.getElementById('search-button').textContent = trans.searchButton;
-      document.getElementById('settingsText').textContent = trans.settingsText;
-      // Top bar buttons
-      document.getElementById('btnApp').textContent = trans.topBar.app;
-      document.getElementById('btnGame').textContent = trans.topBar.game;
-      document.getElementById('btnAuth').textContent = trans.topBar.auth;
-      // Auth forms
-      document.getElementById('signupTitle').textContent = trans.signupTitle;
-      document.getElementById('signupMessage').textContent = trans.signupMessage;
-      document.getElementById('signinTitle').textContent = trans.signinTitle;
-      document.getElementById('signinMessage').textContent = trans.signinMessage;
-      document.getElementById('logoutMessage').textContent = trans.logoutMessage;
-      // Update high score text if element exists
-      const highScoreDisplay = document.getElementById('highScoreDisplay');
-      if(highScoreDisplay) {
-        highScoreDisplay.textContent = `${trans.topBar.highScore}: ${localStorage.getItem('highScore') || 0}`;
-      }
-      // If settings panel is open, update its text
-      const settingsPanel = document.getElementById('settingsPanel');
-      if(settingsPanel.style.display !== 'none') {
-        settingsPanel.querySelector('p').textContent = trans.settingsText;
-      }
-      // Update top message and language selector label
-      document.querySelector('#top-message span').textContent = trans.topMessage;
-      document.getElementById('language-label').textContent = trans.languageLabel;
-    }
-
-    // -------------------- Check Login State on Load --------------------
-    function checkLoginState() {
-      const storedName = localStorage.getItem('userName');
-      const storedEmail = localStorage.getItem('userEmail');
-      if(storedName && storedEmail) {
-        document.getElementById('signupForm').style.display = 'none';
-        document.getElementById('signinForm').style.display = 'none';
-        document.getElementById('logoutOption').style.display = 'block';
-      } else {
-        document.getElementById('signupForm').style.display = 'block';
-        document.getElementById('signinForm').style.display = 'none';
-        document.getElementById('logoutOption').style.display = 'none';
-      }
-    }
-
-    // -------------------- Theme Toggle --------------------
-    let isDarkTheme = false;
-    function toggleTheme() {
-      const htmlEl = document.documentElement;
-      const themeBtn = document.getElementById("themeToggle");
-      isDarkTheme = !isDarkTheme;
-      if(isDarkTheme) {
-        htmlEl.classList.add("dark-theme");
-        themeBtn.textContent = "☀️";
-      } else {
-        htmlEl.classList.remove("dark-theme");
-        themeBtn.textContent = "🌙";
-      }
-    }
-
-    // -------------------- Settings Panel for Reader Speed, User Info & Navigation --------------------
-    function toggleSettingsPanel() {
-      const panel = document.getElementById('settingsPanel');
-      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-      if(panel.style.display === 'block') {
-        const userInfo = document.getElementById('userInfo');
-        const storedName = localStorage.getItem('userName');
-        const storedEmail = localStorage.getItem('userEmail');
-        if(storedName && storedEmail) {
-          userInfo.innerHTML = `<p>${storedName} - ${storedEmail}</p>`;
-        } else {
-          userInfo.innerHTML = '';
-        }
-      }
-    }
-    // Attach event listener for settings toggle
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('settingsToggle').addEventListener('click', function(e){
-        e.stopPropagation();
-        toggleSettingsPanel();
-      });
-      document.addEventListener('click', function(e){
-        const panel = document.getElementById('settingsPanel');
-        const toggle = document.getElementById('settingsToggle');
-        if(panel.style.display === 'block' && !panel.contains(e.target) && e.target !== toggle) {
-          panel.style.display = 'none';
-        }
-      });
-      // Other initialization functions
-      checkLoginState();
-      showSection("app");
-      window.speechSynthesis.getVoices();
-      fetchContent("الحضارة المصرية");
-      updateLanguageTexts();
-      const highScoreDisplay = document.getElementById('highScoreDisplay');
-      if(highScoreDisplay) {
-        highScoreDisplay.textContent = `${translations[currentLanguage].topBar.highScore}: ${localStorage.getItem('highScore') || 0}`;
-      }
-    });
-    document.querySelectorAll('.speed-option').forEach(btn => {
-      btn.addEventListener('click', function(e){
-        readerSpeed = parseFloat(this.getAttribute('data-speed'));
-        document.querySelectorAll('.speed-option').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        if(speechSynthesisInstance) {
-          speechSynthesisInstance.rate = readerSpeed;
-        }
-        document.getElementById('settingsPanel').style.display = 'none';
-        e.stopPropagation();
-      });
-    });
-
-    // -------------------- Voice Search using Speech Recognition --------------------
-    const voiceSearchBtn = document.getElementById('voiceSearchBtn');
-    let recognition;
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRecognition();
-      recognition.lang = currentLanguage === 'ar' ? 'ar-EG' : 'en-US';
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.onstart = () => {
-        voiceSearchBtn.classList.add("listening");
-      };
-      recognition.onend = () => {
-        voiceSearchBtn.classList.remove("listening");
-      };
-      recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById('search-bar').value = transcript;
-        fetchContent(transcript);
-      };
-    } else {
-      voiceSearchBtn.style.display = 'none';
-    }
-    voiceSearchBtn.addEventListener('pointerup', function(e){
-      e.stopPropagation();
-      if(recognition) {
-        recognition.lang = currentLanguage === 'ar' ? 'ar-EG' : (currentLanguage === 'de' ? 'de-DE' : (currentLanguage === 'fr' ? 'fr-FR' : (currentLanguage === 'es' ? 'es-ES' : 'en-US')));
-        recognition.start();
-      }
-    });
-
-    // -------------------- Game Control Variables (if applicable) --------------------
-    let gameActive = false;
-    let gameAnimationFrameId = null;
-    let enemyInterval = null;
-    let highScore = localStorage.getItem('highScore') || 0;
-
-    function updateHighScore() {
-      if(score > highScore) {
-        highScore = score;
-        localStorage.setItem('highScore', highScore);
-        const trans = translations[currentLanguage];
-        document.getElementById('highScoreDisplay').textContent = `${trans.topBar.highScore}: ${highScore}`;
-      }
-    }
-
-    function toggleGamePause() {
-      if (gameActive) {
-        pauseGame();
-        document.getElementById("toggleGameBtn").textContent = currentLanguage === 'en' ? "Start Game" : "تشغيل اللعبة";
-      } else {
-        startGame();
-        document.getElementById("toggleGameBtn").textContent = currentLanguage === 'en' ? "Pause Game" : "إيقاف اللعبة";
-      }
-    }
-    function startGame() {
-      if (!gameActive) {
-        gameActive = true;
-        enemyInterval = setInterval(createEnemy, 2000);
-        gameLoop();
-      }
-    }
-    function pauseGame() {
-      if (gameActive) {
-        cancelAnimationFrame(gameAnimationFrameId);
-        clearInterval(enemyInterval);
-        gameActive = false;
-      }
-    }
-
-    // -------------------- Language Change and UI Update --------------------
-    function changeLanguage() {
-      const languageSelect = document.getElementById("language");
-      currentLanguage = languageSelect.value;
-      updateLanguageTexts();
-      if(recognition) {
-        recognition.lang = currentLanguage === 'ar' ? 'ar-EG' : (currentLanguage === 'de' ? 'de-DE' : (currentLanguage === 'fr' ? 'fr-FR' : (currentLanguage === 'es' ? 'es-ES' : 'en-US')));
-      }
-      fetchContent("الحضارة المصرية");
-    }
-
-    // -------------------- Section Navigation --------------------
-    function showSection(sectionId) {
-      const currentActive = document.querySelector('.section.active');
-      if (currentActive && currentActive.id === 'game' && sectionId !== 'game') {
-        pauseGame();
-      }
-      document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-      document.getElementById(sectionId).classList.add('active');
-      if (sectionId === 'game' && !gameActive) {
-        startGame();
-        document.getElementById("toggleGameBtn").textContent = currentLanguage === 'en' ? "Pause Game" : "إيقاف اللعبة";
-      }
-    }
-
-    // -------------------- Auth Functions with User Data Storage --------------------
-    function showSignup() {
-      document.getElementById('signupForm').style.display = 'block';
-      document.getElementById('signinForm').style.display = 'none';
-      document.getElementById('logoutOption').style.display = 'none';
-    }
-    function showSignin() {
-      document.getElementById('signupForm').style.display = 'none';
-      document.getElementById('signinForm').style.display = 'block';
-      document.getElementById('logoutOption').style.display = 'none';
-    }
-    function signup() {
-      const firstName = document.getElementById('firstname').value;
-      const lastName = document.getElementById('lastname').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      if (password !== confirmPassword) {
-        alert(currentLanguage === 'en' ? "Passwords do not match!" : "كلمات المرور غير متطابقة!");
-        return;
-      }
-      const userName = firstName + " " + lastName;
-      localStorage.setItem('userName', userName);
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userPassword', password);
-      alert(translations[currentLanguage].signupMessage);
-      document.getElementById('signupForm').style.display = 'none';
-      document.getElementById('signinForm').style.display = 'none';
-      document.getElementById('logoutOption').style.display = 'block';
-    }
-    function signin() {
-      const email = document.getElementById('signinEmail').value;
-      const password = document.getElementById('signinPassword').value;
-      if (password.trim() === '') {
-        alert(currentLanguage === 'en' ? "Please enter your password!" : "الرجاء إدخال كلمة المرور!");
-        return;
-      }
-      const storedEmail = localStorage.getItem('userEmail');
-      const storedPassword = localStorage.getItem('userPassword');
-      if(email === storedEmail && password === storedPassword) {
-        alert(translations[currentLanguage].signinMessage);
-        document.getElementById('signupForm').style.display = 'none';
-        document.getElementById('signinForm').style.display = 'none';
-        document.getElementById('logoutOption').style.display = 'block';
-      } else {
-        alert(translations[currentLanguage].wrongCredentials);
-      }
-    }
-    function logout() {
-      alert(currentLanguage === 'en' ? "Logged out!" : "لقد تم تسجيل الخروج!");
-      document.getElementById('logoutOption').style.display = 'none';
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userPassword');
-      document.getElementById('userInfo').innerHTML = "";
-      showSignin();
-    }
-
-    // -------------------- Wikipedia & YouTube Integration --------------------
-    function fetchContent(query = null) {
-      const searchQuery = query || document.getElementById("search-bar").value.trim() || "الحضارة المصرية";
-      const wikiApiUrl = `https://${currentLanguage}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchQuery)}&format=json&origin=*`;
-      fetch(wikiApiUrl)
-        .then(response => response.json())
-        .then(data => {
-          searchResults = data.query.search;
-          displayContent();
-          fetchYouTubeVideo(searchQuery);
-        })
-        .catch(error => {
-          console.error("Error fetching data:", error);
+    document.addEventListener('DOMContentLoaded', function() {
+      // Scroll Animation
+      const animatedElements = document.querySelectorAll('.scroll-animation');
+      showVisibleElements();
+      window.addEventListener('scroll', showVisibleElements);
+      function showVisibleElements() {
+        const windowHeight = window.innerHeight;
+        animatedElements.forEach(element => {
+          const elementPosition = element.getBoundingClientRect().top;
+          if (elementPosition < windowHeight - 100) {
+            element.classList.add('visible');
+          }
         });
-    }
-    function displayContent() {
-      if (searchResults.length === 0) {
-        document.getElementById("content-section").innerHTML = `<p>${translations[currentLanguage].noResults}</p>`;
-        return;
       }
-      const result = searchResults[0];
-      fetchPageContent(result.title);
-    }
-    function fetchPageContent(title) {
-      currentArticleTitle = title;
-      const wikiApiUrl = `https://${currentLanguage}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
-      fetch(wikiApiUrl)
-        .then(response => response.json())
-        .then(data => {
-          currentArticleExtract = data.extract;
-          document.getElementById("content-section").innerHTML = `
-            <h2>${data.title}</h2>
-            <p>${data.extract}</p>
-            ${data.thumbnail ? `<img src="${data.thumbnail.source}" alt="${data.title}">` : ''}
-            <div id="fullArticleContainer"></div>
-            <button id="readMoreBtn" class="old-style-button" onclick="toggleFullArticle('${data.title}')">${translations[currentLanguage].readMore}</button>
-            <button id="speechBtn" class="old-style-button" onclick="toggleSpeech('${data.extract.replace(/'/g, "\\'")}')">${translations[currentLanguage].listenArticle}</button>
-            <div id="youtube-video"></div>
-          `;
-          fullArticleDisplayed = false;
-          interceptArticleLinks();
-        })
-        .catch(error => {
-          console.error("Error fetching page content:", error);
-        });
-    }
-    async function toggleFullArticle(title) {
-      const container = document.getElementById("fullArticleContainer");
-      const btn = document.getElementById("readMoreBtn");
-      if (fullArticleDisplayed) {
-        container.innerHTML = "";
-        btn.textContent = translations[currentLanguage].readMore;
-        fullArticleDisplayed = false;
-      } else {
-        const wikiApiUrl = `https://${currentLanguage}.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(title)}&format=json&origin=*`;
-        try {
-          const response = await fetch(wikiApiUrl);
-          const data = await response.json();
-          let fullContentHtml = data.parse.text['*'];
-          fullContentHtml = fullContentHtml.replace(/src="\/\/(.*?)"/g, 'src="https://$1"');
-          fullContentHtml = fullContentHtml.replace(/data-src="\/\/(.*?)"/g, 'data-src="https://$1"');
-          container.innerHTML = `<div class="full-content">${fullContentHtml}</div>`;
-          const audioTags = container.querySelectorAll('audio');
-          audioTags.forEach(audio => audio.setAttribute('controls', true));
-          const videoTags = container.querySelectorAll('video');
-          videoTags.forEach(video => video.setAttribute('controls', true));
-          const imgTags = container.querySelectorAll('img');
-          imgTags.forEach(img => {
-            img.style.maxWidth = "100%";
-            img.style.height = "auto";
-            img.style.display = "block";
-            if(img.hasAttribute('data-src')){
-              img.src = img.getAttribute('data-src');
-            }
-          });
-          btn.textContent = translations[currentLanguage].readLess;
-          fullArticleDisplayed = true;
-          interceptArticleLinks();
-        } catch (error) {
-          console.error("Error fetching full page content:", error);
-        }
-      }
-    }
-    function interceptArticleLinks() {
-      const container = document.getElementById("fullArticleContainer");
-      if (!container) return;
-      container.querySelectorAll("a").forEach(link => {
-        link.style.color = "#007acc";
-        link.addEventListener("click", function(e) {
+      
+      // Mobile menu toggle
+      const menuButton = document.querySelector('button:not(#settings-toggle)');
+      const nav = document.querySelector('nav');
+      menuButton.addEventListener('click', () => {
+        nav.classList.toggle('hidden');
+        nav.classList.toggle('block');
+      });
+      
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
           e.preventDefault();
-          const newTopic = this.innerText.trim();
-          if(newTopic) {
-            document.getElementById("search-bar").value = newTopic;
-            fetchContent(newTopic);
-            window.scrollTo(0, 0);
+          if (!nav.classList.contains('hidden')) {
+            nav.classList.add('hidden');
+            nav.classList.remove('block');
           }
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
         });
       });
-    }
-    function toggleSpeech(text) {
-      const speechBtn = document.getElementById("speechBtn");
-      if (speechSynthesisInstance && speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-        speechSynthesisInstance = null;
-        speechBtn.textContent = translations[currentLanguage].listenArticle;
-        return;
+      
+      // Settings Panel Toggle
+      const settingsToggle = document.getElementById('settings-toggle');
+      const settingsPanel = document.getElementById('settings-panel');
+      const themeToggle = document.getElementById('theme-toggle');
+      
+      function toggleSettingsPanel() {
+        if (settingsPanel.style.display === 'none' || settingsPanel.style.display === '') {
+          settingsPanel.style.display = 'block';
+        } else {
+          settingsPanel.style.display = 'none';
+        }
       }
-      let voices = window.speechSynthesis.getVoices();
-      let selectedVoice = voices.find(voice => voice.lang.startsWith(currentLanguage === 'ar' ? 'ar' : (currentLanguage === 'es' ? 'es' : 'en')));
-      speechSynthesisInstance = new SpeechSynthesisUtterance(text);
-      if (selectedVoice) {
-        speechSynthesisInstance.voice = selectedVoice;
-      }
-      speechSynthesisInstance.lang = currentLanguage === 'ar' ? 'ar-EG' : (currentLanguage === 'de' ? 'de-DE' : (currentLanguage === 'fr' ? 'fr-FR' : (currentLanguage === 'es' ? 'es-ES' : 'en-US')));
-      speechSynthesisInstance.rate = readerSpeed;
-      window.speechSynthesis.speak(speechSynthesisInstance);
-      speechBtn.textContent = translations[currentLanguage].stopListening;
-    }
-    function fetchYouTubeVideo(query) {
-      if(query.trim().toLowerCase() === "egypt") {
-        query = "Egypt history";
-      }
-      const youtubeApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${YOUTUBE_API_KEY}&type=video&maxResults=1`;
-      fetch(youtubeApiUrl)
-        .then(response => response.json())
-        .then(data => {
-          if (data.items && data.items.length > 0) {
-            const video = data.items[0];
-            displayYouTubeVideo(video);
-          } else {
-            document.getElementById("youtube-video").innerHTML = `<p>${translations[currentLanguage].noResults}</p>`;
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching YouTube video:", error);
-        });
-    }
-    function displayYouTubeVideo(video) {
-      document.getElementById("youtube-video").innerHTML = `
-        <div class="video-player">
-          <iframe width="100%" height="315" src="https://www.youtube.com/embed/${video.id.videoId}" 
-          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen></iframe>
-          <p>${video.snippet.title}</p>
-        </div>
-      `;
-    }
-    document.getElementById("search-bar").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        fetchContent();
-      }
-    });
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.getVoices();
-    };
-    // -------------------- Keyboard Shortcuts --------------------
-    document.addEventListener("keydown", function(e) {
-      if(e.shiftKey && e.key.toLowerCase() === "m") {
-        // Toggle full article view
-        if(currentArticleTitle) toggleFullArticle(currentArticleTitle);
-      }
-      if(e.shiftKey && e.key.toLowerCase() === "l") {
-        // Toggle speech reading
-        if(currentArticleExtract) toggleSpeech(currentArticleExtract);
-      }
-      if(e.shiftKey && e.key.toLowerCase() === "s") {
-        // Toggle settings panel
+      
+      settingsToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
         toggleSettingsPanel();
-      }
+      });
+      
+      // Close panel when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!settingsPanel.contains(e.target) && e.target !== settingsToggle) {
+          settingsPanel.style.display = 'none';
+        }
+      });
+      
+      // Keyboard shortcut: Shift + S toggles the settings panel
+      document.addEventListener('keydown', function(e) {
+        if (e.shiftKey && (e.key === 'S' || e.key === 's')) {
+          toggleSettingsPanel();
+        }
+      });
+      
+      // Theme toggle functionality
+      themeToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        document.body.classList.toggle('dark-theme');
+        // Update the icon based on theme
+        if (document.body.classList.contains('dark-theme')) {
+          themeToggle.innerHTML = '<i class="fas fa-sun"></i> تبديل الثيم';
+        } else {
+          themeToggle.innerHTML = '<i class="fas fa-moon"></i> تبديل الثيم';
+        }
+      });
     });
   </script>
 </body>
