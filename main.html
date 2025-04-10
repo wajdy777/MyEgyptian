@@ -1,1234 +1,1079 @@
 
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موسوعة الحضارة المصرية - الرئيسية</title>
+  <title>موسوعة الحضارات - الحضارة المصرية القديمة</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+  <!-- Import fonts: original and new ones -->
   <style>
-    /* GENERAL STYLES */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;700&family=Scheherazade&family=Amiri&display=swap');
+    
+    :root {
+      --main-bg-color: #ffffff;
+      --content-bg-color: #ffffff;
+      --main-text-color: #202122;
+      --link-color: #0645ad;
+      --link-hover-color: #3366bb;
+      --border-color: #a2a9b1;
+      /* Header retains its original blue color */
+      --header-bg-color: #2563eb;
+      --toc-bg-color: #f8f9fa;
+      --quote-bg-color: #f8f9fa;
+      --table-header-bg: #eaecf0;
+      --table-row-odd: #f8f9fa;
+      --table-border: #a2a9b1;
+    }
+    
+    /* Dark theme: golden yellow and black */
+    .dark-theme {
+      --main-bg-color: #000000;
+      --content-bg-color: #000000;
+      --main-text-color: #FFD700;
+      --link-color: #FFD700;
+      --link-hover-color: #FFD700;
+      --border-color: #FFD700;
+      --header-bg-color: #000000;
+      --toc-bg-color: #000000;
+      --quote-bg-color: #000000;
+      --table-header-bg: #000000;
+      --table-row-odd: #000000;
+      --table-border: #FFD700;
+    }
+    
+    /* Use Scheherazade font in dark theme */
+    body.dark-theme {
+      font-family: 'Scheherazade', serif;
+    }
+    
     body {
-      margin: 0;
-      padding: 0;
-      font-family: "Cairo", Arial, sans-serif;
-      direction: rtl;
-      background-color: #f5f5f5;
-      color: #333;
-      transition: background-color 0.5s, color 0.5s;
+      background-color: var(--main-bg-color);
+      color: var(--main-text-color);
+      font-family: 'Noto Sans Arabic', Arial, sans-serif;
     }
-    /* FIXED TOP NAVIGATION BAR */
-    .top-bar {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      background-color: #2a4d69;
-      color: white;
-      padding: 15px 0;
-      border-bottom: 4px solid #007acc;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      transition: background-color 0.5s, border-bottom-color 0.5s;
-      animation: slideInDown 0.8s;
+    
+    body.ltr {
+      direction: ltr;
+      font-family: 'Arial', 'Helvetica', sans-serif;
     }
-    @keyframes slideInDown {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    /* OLD-STYLE BUTTONS */
-    .old-style-button {
-      background-color: #e0e0e0;
-      border: 2px outset #999;
-      color: #000;
-      font-family: "Courier New", monospace;
-      padding: 8px 16px;
-      border-radius: 0;
-      box-shadow: 2px 2px 0px #ccc;
-      margin: 5px;
+    
+    .wiki-link {
+      color: var(--link-color);
+      text-decoration: none;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-      outline: none;
     }
-    .old-style-button:active {
-      border-style: inset;
-      box-shadow: none;
+    
+    .wiki-link:hover {
+      text-decoration: underline;
+      color: var(--link-hover-color);
     }
-    .top-bar button:hover {
-      background-color: #d0d0d0;
-      transform: scale(1.05);
-    }
-    /* SECTION STYLING */
-    .section {
-      display: none;
-      padding: 20px;
-      margin-top: 80px;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-    .section.active {
-      display: block;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    /* APP SECTION STYLING */
-    #app {
-      background-color: #f9f9f9;
-      color: #333;
-      text-align: center;
-      padding: 20px;
-      transition: background-color 0.5s, color 0.5s;
-      position: relative;
-    }
-    #app header {
-      padding: 20px;
-      background-color: #2a4d69;
-      color: white;
-      position: relative;
-      transition: background-color 0.5s, color 0.5s;
-      animation: fadeInDown 0.8s;
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    #app header h1 {
-      font-size: 2.5em;
-      margin: 0;
-    }
-    #app header p {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #d1ecf1;
-    }
-    /* Theme Toggle Button */
-    #themeToggle {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 8px;
-      font-size: 1.8em;
-      border: none;
-      border-radius: 50%;
+    
+    .toc-link {
+      color: var(--link-color);
+      text-decoration: none;
       cursor: pointer;
-      background-color: transparent;
-      color: white;
-      transition: transform 0.5s;
-      outline: none;
-      -webkit-appearance: none;
     }
-    #themeToggle:hover,
-    #themeToggle:focus {
-      transform: rotate(360deg);
+    
+    .toc-link:hover {
+      text-decoration: underline;
+      color: var(--link-hover-color);
     }
-    /* Settings Gear - removed extra styling by eliminating the old-style-button class */
-    #settingsToggle {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 8px;
-      font-size: 1.8em;
-      border: none;
-      background: transparent;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.5s;
-      outline: none;
-      -webkit-appearance: none;
+    
+    blockquote {
+      background-color: var(--quote-bg-color);
+      border-right: 4px solid var(--border-color);
+      padding: 15px;
+      margin: 15px 0;
+      font-style: italic;
     }
-    #settingsToggle:hover,
-    #settingsToggle:focus {
-      transform: rotate(-360deg);
+    
+    body.ltr blockquote {
+      border-right: none;
+      border-left: 4px solid var(--border-color);
     }
-    /* Settings Panel for Reader Speed, User Info & Navigation */
-    #settingsPanel {
-      position: absolute;
-      top: 50px;
-      right: 10px;
-      background-color: #fff;
-      border: 2px solid #007acc;
-      border-radius: 12px;
-      padding: 10px;
-      display: none;
-      z-index: 1500;
-      min-width: 180px;
-      /* Enhanced slide down animation */
-      animation: slideDown 0.5s ease;
-    }
-    @keyframes slideDown {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    #settingsPanel p {
-      margin: 5px 0;
-      font-family: "Courier New", monospace;
-    }
-    .speed-option {
-      background-color: #e0e0e0;
-      border: 2px outset #999;
-      color: #000;
-      font-family: "Courier New", monospace;
-      padding: 5px 10px;
-      margin: 3px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-      outline: none;
-    }
-    .speed-option.active,
-    .speed-option:hover {
-      background-color: #d0d0d0;
-      transform: scale(1.1);
-    }
-    /* New Navigation Buttons Container */
-    #navButtons {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-top: 10px;
-    }
-    /* Mic Icon for Voice Search */
-    .mic-icon {
-      background-color: #007acc;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      font-size: 1.6em;
-      padding: 8px;
-      margin-left: 5px;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      outline: none;
-      -webkit-appearance: none;
-    }
-    .mic-icon:hover,
-    .mic-icon:focus {
-      transform: scale(1.2);
-      box-shadow: 0 0 8px rgba(0,122,204,0.8);
-    }
-    /* Mic Icon Listening Animation */
-    .mic-icon.listening {
-      animation: pulseMic 1s infinite;
-    }
-    @keyframes pulseMic {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-      100% { transform: scale(1); }
-    }
-    /* DARK THEME STYLES */
-    .dark-theme body {
-      background-color: #000;
-      color: #DAA520;
-    }
-    .dark-theme .top-bar {
-      background-color: #000;
-      border-bottom-color: #DAA520;
-      color: #DAA520;
-    }
-    .dark-theme #app {
-      background-color: #000;
-      color: #DAA520;
-    }
-    .dark-theme #app header {
-      background-color: #000;
-      color: #DAA520;
-    }
-    .dark-theme #content-section {
-      background-color: #111;
-      color: #DAA520;
-    }
-    .dark-theme #search-bar {
-      background-color: #333;
-      color: #DAA520;
-      border-color: #DAA520;
-    }
-    .dark-theme .old-style-button,
-    .dark-theme .top-bar button {
-      background-color: gold;
-      color: black;
-      border: 2px outset #b8860b;
-    }
-    .dark-theme #settingsPanel {
-      background-color: #000;
-      border-color: #DAA520;
-      color: #DAA520;
-    }
-    /* Flags without animation */
-    .flag-icons img {
-      width: 30px;
-      vertical-align: middle;
-      margin: 0 5px;
-      animation: none;
-    }
-    .language-selector {
-      margin-top: 10px;
-      animation: fadeIn 1s;
-    }
-    .language-selector label {
-      font-size: 1em;
-      color: #f9f9f9;
-    }
-    .language-selector select {
-      font-size: 1em;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #2a4d69;
-      color: #2a4d69;
-      background-color: #fff;
-    }
-    .search-container {
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fadeInUp 0.8s;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    #search-bar {
-      width: 90%;
-      max-width: 400px;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #007acc;
-      font-size: 1em;
-      text-align: right;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.5s, border-color 0.5s;
-    }
-    #search-bar:focus {
-      border-color: #005f99;
-      outline: none;
-    }
-    #content-section {
-      margin-top: 20px;
-      background-color: #f1f1f1;
-      padding: 20px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 600px;
-      margin: 20px auto;
-      box-shadow: 0px 4px 8px rgba(0, 0, 51, 0.3);
-      transition: background-color 0.5s, color 0.5s;
-    }
-    #content-section h2 {
-      color: #2a4d69;
-    }
-    #content-section img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    .full-content {
-      text-align: left;
-      padding: 10px;
-      margin-top: 10px;
-      max-width: 100%;
+    
+    .table-container {
       overflow-x: auto;
-      word-wrap: break-word;
     }
-    .full-content img,
-    .full-content audio,
-    .full-content video {
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th {
+      background-color: var(--table-header-bg);
+      padding: 12px;
+      text-align: right;
+      border: 1px solid var(--table-border);
+      font-weight: bold;
+    }
+    
+    body.ltr th {
+      text-align: left;
+    }
+    
+    td {
+      padding: 10px;
+      border: 1px solid var(--table-border);
+    }
+    
+    tr:nth-child(odd) {
+      background-color: var(--table-row-odd);
+    }
+    
+    .metadata-item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    
+    .metadata-label {
+      font-weight: bold;
+      min-width: 100px;
+    }
+    
+    .article-content img {
       max-width: 100%;
       height: auto;
-      margin-top: 10px;
-    }
-    /* CUSTOM GAME CONTROLLER STYLE */
-    .custom-controller {
-      background-color: #fff;
-      border: 2px solid #007acc;
-      color: #007acc;
-      font-family: "Courier New", monospace;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 3px 3px 0px #999;
-      cursor: pointer;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s, transform 0.3s;
-      animation: bounce 1s infinite;
-    }
-    .custom-controller:active {
-      transform: scale(0.95);
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-    /* AUTHENTICATION STYLES */
-    .auth-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f4f4f4;
-    }
-    .auth-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 90%;
-      max-width: 350px;
-      padding: 15px 20px;
-      border-radius: 20px;
-      background-color: #ffffff;
-      color: #000080;
-      border: 1px solid #0000ff;
-      transition: background-color 0.5s, color 0.5s;
-      animation: fadeIn 1s;
-    }
-    /* Larger screens: increase width and reduce padding */
-    @media (min-width: 1024px) {
-      .form {
-        max-width: 600px;
-        padding: 10px 40px;
-      }
-    }
-    .title {
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: -1px;
-      padding-left: 30px;
-      color: #0000ff;
-      position: relative;
-    }
-    .title::before,
-    .title::after {
-      content: "";
-      position: absolute;
-      height: 16px;
-      width: 16px;
-      border-radius: 50%;
-      left: 0;
-      background-color: #0000ff;
-    }
-    .title::after {
-      animation: pulse 1s linear infinite;
-    }
-    .message, .signin {
-      font-size: 14.5px;
-      color: #000080;
-    }
-    .signin {
-      text-align: center;
-    }
-    .signin a {
-      color: #0000ff;
-    }
-    .signin a:hover {
-      text-decoration: underline;
-    }
-    .flex {
-      display: flex;
-      gap: 6px;
-      width: 100%;
-    }
-    .form label {
-      position: relative;
-    }
-    .form label .input {
-      background-color: #e6f0ff;
-      color: #000080;
-      width: 100%;
-      padding: 20px 5px 5px 10px;
-      border: 1px solid #0000ff;
-      border-radius: 10px;
-      outline: none;
-      transition: background-color 0.5s, border-color 0.5s;
-    }
-    .form label .input + span {
-      color: #000080;
-      position: absolute;
-      left: 10px;
-      top: 0;
-      font-size: 0.9em;
-      cursor: text;
-      transition: 0.3s ease;
-    }
-    .form label .input:placeholder-shown + span {
-      top: 12.5px;
-      font-size: 0.9em;
-    }
-    .form label .input:focus + span,
-    .form label .input:valid + span {
-      color: #0000ff;
-      top: 0;
-      font-size: 0.7em;
-      font-weight: 600;
-    }
-    .input {
-      font-size: medium;
-    }
-    /* Retro Styled Submit Button */
-    .submit {
-      background-color: #e0e0e0;
-      border: 2px outset #999;
-      color: #000;
-      font-family: "Courier New", monospace;
-      padding: 12px 20px;
-      border-radius: 0;
-      box-shadow: 2px 2px 0px #ccc;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-      font-size: 16px;
-      width: 100%;
-      max-width: 300px;
-      margin: 10px auto;
+      margin: 15px auto;
       display: block;
     }
-    .submit:active {
-      border-style: inset;
-      box-shadow: none;
+    
+    /* Font sizes for reading options */
+    .font-size-normal {
+      font-size: 1rem;
     }
-    .submit:hover {
-      background-color: #d0d0d0;
+    
+    .font-size-large {
+      font-size: 1.25rem;
     }
-    @keyframes pulse {
-      from { transform: scale(0.9); opacity: 1; }
-      to { transform: scale(1.8); opacity: 0; }
+    
+    .font-size-larger {
+      font-size: 1.5rem;
     }
-    /* Mobile responsiveness tweaks */
-    @media (max-width: 600px) {
-      #app header h1 { font-size: 1.8em; }
-      #app header p { font-size: 1em; }
-      #search-bar { width: 80%; padding: 12px; }
-      #content-section { padding: 15px; }
-      .controls button { width: 50px; height: 50px; font-size: 1.2rem; }
-      .custom-controller { width: 50px; height: 50px; font-size: 1.2rem; }
+    
+    /* Loading spinner */
+    .loader {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 2s linear infinite;
+      margin: 20px auto;
     }
-    /* Dark mode for auth form */
-    .dark-theme .form {
-      background-color: #000;
-      color: gold;
-      border: 1px solid gold;
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
-    .dark-theme .form .input {
-      background-color: #333;
-      color: gold;
-      border-color: gold;
+    
+    /* Search results styling */
+    .search-result {
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px;
+      cursor: pointer;
     }
-    .dark-theme .submit {
-      background-color: gold;
-      color: black;
-      border: 2px outset #b8860b;
+    
+    .search-result:hover {
+      background-color: var(--toc-bg-color);
+    }
+    
+    /* Wikipedia content formatting */
+    .mw-content-ltr table.infobox {
+      border: 1px solid #a2a9b1;
+      background-color: #f8f9fa;
+      margin: 0.5em 0 0.5em 1em;
+      padding: 0.2em;
+      float: right;
+      clear: right;
+      font-size: 88%;
+      line-height: 1.5em;
+    }
+    
+    body.ltr .mw-content-ltr table.infobox {
+      margin: 0.5em 1em 0.5em 0;
+      float: left;
+      clear: left;
+    }
+    
+    /* Hide full article initially */
+    #full-article {
+      display: none;
+    }
+    
+    /* Wiki references styling */
+    .reference {
+      font-size: 0.8em;
+      vertical-align: super;
+      line-height: 1;
+      color: var(--link-color);
+    }
+    
+    /* Responsive videos */
+    video {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Settings panel styling */
+    #settings-panel {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      background-color: var(--content-bg-color);
+      border: 1px solid var(--border-color);
+      box-shadow: -2px 2px 10px rgba(0,0,0,0.2);
+      padding: 10px;
+      display: none;
+      z-index: 1000;
+      cursor: pointer;
+    }
+    
+    #settings-panel button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 8px;
+      background-color: var(--header-bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: right;
+    }
+    
+    /* Reading options dropdown styling */
+    #reading-options-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 0.25rem;
+      width: 12rem;
+      background-color: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-radius: 0.375rem;
+      padding: 0.5rem 0;
+      z-index: 50;
+    }
+    
+    #reading-options-dropdown button {
+      width: 100%;
+      text-align: right;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      color: #374151;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    
+    #reading-options-dropdown button:hover {
+      background-color: #f3f4f6;
+    }
+    
+    /* Mobile menu extra items styling */
+    #mobile-menu ul li {
+      margin-bottom: 0.5rem;
+    }
+    
+    #mobile-menu ul li button {
+      width: 100%;
+      text-align: right;
+      background: none;
+      border: none;
+      padding: 0.5rem 1rem;
+      color: inherit;
+      cursor: pointer;
     }
   </style>
 </head>
-<body>
-  <!-- TOP NAVIGATION BAR -->
-  <div class="top-bar">
-    <button id="btnApp" class="old-style-button" onclick="showSection('app')">التطبيق</button>
-    <!-- عند النقر على زر اللعبة يتم فتح ملف game.html -->
-    <button id="btnGame" class="old-style-button" onclick="window.location.href='game.html'">اللعبة</button>
-    <button id="btnAuth" class="old-style-button" onclick="showSection('auth')">تسجيل</button>
-  </div>
-  <!-- AUTH SECTION -->
-  <div id="auth" class="section">
-    <div class="auth-container">
-      <div class="auth-box">
-        <div id="authSection">
-          <!-- SIGNUP FORM -->
-          <form class="form" id="signupForm">
-            <p id="signupTitle" class="title">إنشاء حساب</p>
-            <p id="signupMessage" class="message">أنشئ حسابك وتمكن من التطبيق</p>
-            <div class="flex">
-              <label>
-                <input class="input" type="text" id="firstname" placeholder="الاسم الأول" required>
-                <span></span>
-              </label>
-              <label>
-                <input class="input" type="text" id="lastname" placeholder="الاسم الثاني" required>
-                <span></span>
-              </label>
+<body class="bg-gray-100">
+  <!-- Header with original blue background -->
+  <div class="bg-blue-600 text-white py-2 px-4 fixed w-full z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-4 space-x-reverse">
+        <h1 class="text-xl font-bold">موسوعة الحضارات</h1>
+        <div class="hidden md:flex items-center space-x-4 space-x-reverse">
+          <button id="lang-toggle" class="px-3 py-1 rounded hover:bg-blue-700 transition">
+            <i class="fas fa-language mr-1"></i> تغيير اللغة
+          </button>
+          <button id="theme-switcher" class="px-3 py-1 rounded hover:bg-blue-700 transition">
+            <i id="theme-icon" class="fas fa-moon mr-1"></i> تبديل المظهر
+          </button>
+          <div class="relative">
+            <button id="reading-options-button" class="px-3 py-1 rounded hover:bg-blue-700 transition">
+              <i class="fas fa-font mr-1"></i> خيارات القراءة
+            </button>
+            <div id="reading-options-dropdown">
+              <button id="font-normal">حجم الخط العادي</button>
+              <button id="font-large">حجم الخط الكبير</button>
+              <button id="font-larger">حجم الخط الأكبر</button>
+              <button id="listen-article">استمع إلى المقال</button>
+              <button id="font-scheherazade">خط Scheherazade</button>
+              <button id="font-amiri">خط Amiri</button>
             </div>
-            <label>
-              <input class="input" type="email" id="email" placeholder="البريد الإلكتروني" required>
-              <span></span>
-            </label>
-            <label>
-              <input class="input" type="password" id="password" placeholder="رقم المرور" required>
-              <span></span>
-            </label>
-            <!-- Added password rule hint -->
-            <small style="color: #000080; font-size: 0.8em; margin-bottom: 5px;">
-              يجب أن يتكون رقم المرور من 12 حرفاً وأرقام، ويجب أن يكون قويًا
-            </small>
-            <label>
-              <input class="input" type="password" id="confirmPassword" placeholder="تأكيد رقم المرور" required>
-              <span></span>
-            </label>
-            <button type="button" class="submit" onclick="signup()">إنشاء</button>
-            <p class="signin">هل لديك حساب بالفعل؟ 
-              <a href="#" onclick="showSignin()">تسجيل الدخول</a>
-            </p>
-          </form>
-          <!-- SIGNIN FORM -->
-          <form class="form" id="signinForm" style="display: none;">
-            <p id="signinTitle" class="title">تسجيل الدخول</p>
-            <p id="signinMessage" class="message">مرحبًا من جديد! يرجى تسجيل الدخول للتمكن من التطبيق</p>
-            <label>
-              <input class="input" type="email" id="signinEmail" placeholder="البريد الإلكتروني" required>
-              <span></span>
-            </label>
-            <label>
-              <input class="input" type="password" id="signinPassword" placeholder="رقم المرور" required>
-              <span></span>
-            </label>
-            <button type="button" class="submit" onclick="signin()">سجل الدخول</button>
-            <p class="signin">ليس لديك حساب؟  
-              <a href="#" onclick="showSignup()">إنشاء حساب</a>
-            </p>
-          </form>
-          <!-- LOGOUT OPTION -->
-          <div id="logoutOption" style="display: none;">
-            <p id="logoutMessage">أنت مسجل</p>
-            <button class="submit" onclick="logout()">تسجيل الخروج</button>
           </div>
+        </div>
+      </div>
+      <div class="flex-1 mx-4 max-w-xl">
+        <div class="relative">
+          <input id="search-input" type="text" placeholder="ابحث في الموسوعة..." class="w-full px-4 py-2 pr-10 rounded-full text-gray-900">
+          <button id="search-button" class="absolute left-0 top-0 mt-2 ml-3 text-gray-600">
+            <i class="fas fa-search"></i>
+          </button>
+          <button id="voice-search-button" class="absolute right-0 top-0 mt-2 mr-3 text-gray-600">
+            <i class="fas fa-microphone"></i>
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4 space-x-reverse">
+        <button id="settings-toggle" class="rounded p-1 hover:bg-blue-700 transition">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button id="mobile-menu-button" class="md:hidden rounded p-1 hover:bg-blue-700 transition">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden bg-blue-500 text-white py-2 hidden transition-all duration-300 ease-in-out" style="margin-top: 52px;">
+    <div class="container mx-auto px-4">
+      <ul>
+        <li>
+          <button id="mobile-lang-toggle"><i class="fas fa-language mr-1"></i> تغيير اللغة</button>
+        </li>
+        <li>
+          <button id="mobile-theme-switcher"><i class="fas fa-moon mr-1"></i> تبديل المظهر</button>
+        </li>
+        <!-- New Mobile Items -->
+        <li>
+          <button id="mobile-listen-article"><i class="fas fa-headphones mr-1"></i> استمع إلى المقال</button>
+        </li>
+        <li>
+          <button id="mobile-font-amiri"><i class="fas fa-font mr-1"></i> خط Amiri</button>
+        </li>
+        <!-- Existing Mobile Items -->
+        <li>
+          <button id="mobile-reading-options">خيارات القراءة</button>
+        </li>
+        <li>
+          <button id="mobile-font-normal"><i class="fas fa-font mr-1"></i> حجم الخط العادي</button>
+        </li>
+        <li>
+          <button id="mobile-font-large"><i class="fas fa-font mr-1"></i> حجم الخط الكبير</button>
+        </li>
+        <li>
+          <button id="mobile-font-larger"><i class="fas fa-font mr-1"></i> حجم الخط الأكبر</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- Settings Panel -->
+  <div id="settings-panel">
+    <button onclick="location.href='index.html'">الأم</button>
+    <button onclick="location.href='fullpage.html'">الصفحة الكاملة</button>
+    <button onclick="location.href='AI.html'">الذكاء الاصطناعي</button>
+    <button onclick="location.href='game.html'">اللعبة</button>
+    <button onclick="location.href='about me.html'">من أنا ؟</button>
+    <button onclick="location.href='fullylearning.html'">منصة التعلم</button>
+  </div>
+  
+  <div class="container mx-auto pt-24 pb-8 flex flex-col lg:flex-row">
+    <!-- Left sidebar -->
+    <div class="lg:w-64 lg:pr-6 mb-6 lg:mb-0">
+      <div class="bg-white rounded-lg shadow-md p-4 sticky top-24">
+        <h3 class="text-lg font-bold mb-4 pb-2 border-b border-gray-200">تصفح الموسوعة</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="wiki-link">الصفحة الرئيسية</a></li>
+          <li><a href="#" class="wiki-link">أحدث المقالات</a></li>
+          <li><a href="#" class="wiki-link">مقال عشوائي</a></li>
+          <li>
+            <span class="font-bold block mb-2 mt-4">الحضارات القديمة</span>
+            <ul class="pr-4 space-y-1">
+              <li><a href="#" class="wiki-link"><strong>الحضارة المصرية</strong></a></li>
+              <li><a href="#" class="wiki-link">الحضارة السومرية</a></li>
+              <li><a href="#" class="wiki-link">الحضارة الإغريقية</a></li>
+              <li><a href="#" class="wiki-link">الحضارة الرومانية</a></li>
+              <li><a href="#" class="wiki-link">الحضارة الصينية</a></li>
+            </ul>
+          </li>
+          <li><a href="#" class="wiki-link">الحضارات الإسلامية</a></li>
+          <li><a href="#" class="wiki-link">الحضارات الأوروبية</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Main content -->
+    <div class="flex-1 bg-white rounded-lg shadow-md overflow-hidden">
+      <!-- Search results container -->
+      <div id="search-results" class="p-6 hidden">
+        <h2 class="text-2xl font-bold mb-4" id="search-results-title">نتائج البحث</h2>
+        <div id="results-list" class="space-y-2"></div>
+      </div>
+      
+      <!-- Article container -->
+      <div id="article-container">
+        <div id="article-header" class="px-6 py-4 border-b border-gray-200">
+          <h1 id="article-title" class="text-3xl font-bold">الحضارة المصرية القديمة</h1>
+          <div class="flex items-center mt-2 space-x-2 space-x-reverse">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_Palestine.svg" alt="علم فلسطين" class="w-6 h-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Egypt.svg" alt="علم مصر" class="w-6 h-4">
+          </div>
+        </div>
+        
+        <div id="article-actions" class="bg-gray-100 p-4 flex justify-between items-center">
+          <div class="flex space-x-4 space-x-reverse">
+            <button id="view-toggle" class="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 transition hidden">
+              عرض المقال كاملاً
+            </button>
+          </div>
+          <div class="text-sm text-gray-600" id="article-info">
+            آخر تحديث: 15 يونيو 2023
+          </div>
+        </div>
+        
+        <!-- Article summary content -->
+        <div id="article-summary" class="p-6 article-content font-size-normal">
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="md:w-2/3">
+              <div class="article-metadata bg-gray-50 p-4 rounded-lg mb-6">
+                <div class="metadata-item">
+                  <span class="metadata-label">الفترة الزمنية:</span> 
+                  <span>٣١٠٠ ق.م - ٣٠ ق.م</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">الموقع:</span> 
+                  <span>وادي النيل، شمال أفريقيا</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">اللغة:</span> 
+                  <span>اللغة المصرية القديمة</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">الكتابة:</span> 
+                  <span>الهيروغليفية</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">الدين:</span> 
+                  <span>متعدد الآلهة</span>
+                </div>
+                <div class="metadata-item">
+                  <span class="metadata-label">العاصمة:</span> 
+                  <span>منف، طيبة، الإسكندرية</span>
+                </div>
+              </div>
+              
+              <p class="mb-4">تُعد <strong>الحضارة المصرية القديمة</strong> واحدة من أقدم وأعظم الحضارات في تاريخ البشرية. ازدهرت على ضفاف نهر النيل في شمال أفريقيا لأكثر من ثلاثة آلاف عام، من حوالي ٣١٠٠ قبل الميلاد إلى الغزو الروماني في عام ٣٠ قبل الميلاد. امتاز المصريون القدماء بإنجازاتهم المذهلة في الهندسة المعمارية والفنون والعلوم والطب والكتابة والدين.</p>
+              
+              <p>يُعزى نجاح الحضارة المصرية القديمة واستمرارها لفترة طويلة إلى موقعها الجغرافي المميز حول نهر النيل، الذي وفّر الأرض الخصبة للزراعة والحماية الطبيعية من الغزاة. كما ساهم استقرار النظام السياسي والاجتماعي في مصر القديمة في تطور المعارف والفنون والعلوم بشكل مستمر عبر العصور المختلفة.</p>
+            </div>
+            
+            <div class="md:w-1/3">
+              <figure class="bg-white p-2 border border-gray-200 rounded">
+                <img src="ابو الهول.jpeg" alt="أبو الهول والأهرامات" class="w-full h-auto">
+                <figcaption class="text-sm text-center py-2 bg-gray-50">أبو الهول وهرم خوفو</figcaption>
+              </figure>
+            </div>
+          </div>
+          
+          <div class="my-6 bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-bold mb-2">المحتويات</h3>
+            <ul class="pr-5">
+              <li class="mb-1"><a href="#history" class="toc-link">١ التاريخ</a>
+                <ul class="pr-5">
+                  <li class="mb-1"><a href="#early-period" class="toc-link">١.١ العصر ما قبل الأسرات</a></li>
+                  <li class="mb-1"><a href="#old-kingdom" class="toc-link">١.٢ الدولة القديمة</a></li>
+                  <li class="mb-1"><a href="#middle-kingdom" class="toc-link">١.٣ الدولة الوسطى</a></li>
+                  <li class="mb-1"><a href="#new-kingdom" class="toc-link">١.٤ الدولة الحديثة</a></li>
+                  <li class="mb-1"><a href="#late-period" class="toc-link">١.٥ العصر المتأخر والعصر البطلمي</a></li>
+                </ul>
+              </li>
+              <li class="mb-1"><a href="#culture" class="toc-link">٢ الثقافة والمجتمع</a></li>
+              <li class="mb-1"><a href="#art" class="toc-link">٣ الفن والعمارة</a></li>
+              <li class="mb-1"><a href="#religion" class="toc-link">٤ الدين والمعتقدات</a></li>
+              <li class="mb-1"><a href="#pharaohs" class="toc-link">٥ أشهر الفراعنة</a></li>
+              <li class="mb-1"><a href="#science" class="toc-link">٦ العلوم والتكنولوجيا</a></li>
+              <li class="mb-1"><a href="#references" class="toc-link">٧ المراجع</a></li>
+            </ul>
+          </div>
+          
+          <h2 id="history" class="text-2xl font-bold mt-8 mb-4 pb-2 border-b border-gray-200">١ التاريخ</h2>
+          <p class="mb-4">يمتد تاريخ الحضارة المصرية القديمة على مدى آلاف السنين، وقد قسّم المؤرخون هذا التاريخ الطويل إلى عدة فترات وعصور رئيسية لتسهيل دراسته وفهمه. تميزت كل فترة بخصائص سياسية وثقافية وفنية مختلفة، مما يعكس تطور الحضارة المصرية عبر الزمن.</p>
+          
+          <h3 id="early-period" class="text-xl font-bold mt-6 mb-3">١.١ العصر ما قبل الأسرات (٥٥٠٠-٣١٠٠ ق.م)</h3>
+          <p class="mb-4">شهدت هذه الفترة المبكرة بداية الاستيطان البشري حول وادي النيل وتطور المجتمعات الزراعية. تميزت بظهور المستوطنات الأولى والتقدم في الصناعات اليدوية والفخار. مع نهاية هذه الفترة، بدأت توحيد مصر العليا والسفلى تحت حكم موحد.</p>
+          
+          <figure class="mb-6 text-center">
+            <img src="صلاية نارمر.jpeg" alt="صلاية نارمر" class="inline-block max-w-lg">
+            <figcaption class="text-sm mt-2">صلاية نارمر، التي تمثل توحيد مصر العليا والسفلى، المتحف المصري</figcaption>
+          </figure>
+          
+          <h3 id="old-kingdom" class="text-xl font-bold mt-6 mb-3">١.٢ الدولة القديمة (٢٧٠٠-٢١٨١ ق.م)</h3>
+          <p class="mb-4">تمثل هذه الفترة العصر الذهبي الأول للحضارة المصرية وتشمل الأسرات من الثالثة إلى السادسة. شهدت بناء الأهرامات العظيمة في الجيزة، بما في ذلك هرم خوفو، أحد عجائب الدنيا السبع في العالم القديم. تميزت هذه الفترة بالاستقرار السياسي والتقدم الفني والمعماري الهائل.</p>
+          
+          <h3 id="middle-kingdom" class="text-xl font-bold mt-6 mb-3">١.٣ الدولة الوسطى (٢٠٥٥-١٦٥٠ ق.م)</h3>
+          <p class="mb-4">بعد فترة من الاضطرابات، استعادت مصر استقرارها خلال عصر الدولة الوسطى. تميزت هذه الفترة بإحياء الفنون والآداب، وتطور الصناعات والتجارة. تم توسيع الحدود المصرية وازدهرت العلاقات التجارية مع المناطق المجاورة.</p>
+          
+          <blockquote class="mb-6">
+            "إن الكاتب الماهر له مكانة في القصر، وعقله هو كنزه، وقلمه يجلب له الثروة." - من تعاليم العصر الوسيط
+          </blockquote>
+          
+          <h3 id="new-kingdom" class="text-xl font-bold mt-6 mb-3">١.٤ الدولة الحديثة (١٥٥٠-١٠٦٩ ق.م)</h3>
+          <p class="mb-4">تعتبر الدولة الحديثة فترة القوة الإمبراطورية لمصر القديمة، حيث امتد نفوذها إلى بلاد الشام والنوبة. شهدت هذه الفترة حكم بعض أشهر الفراعنة مثل تحتمس الثالث، حتشبسوت، أخناتون، وتوت عنخ آمون. تضمنت هذه الفترة أيضاً محاولة أخناتون للتحول إلى عبادة إله واحد (آتون) في ثورة دينية غير مسبوقة، قبل العودة إلى النظام الديني التقليدي.</p>
+          
+          <figure class="mb-6 text-center">
+            <img src="قناع عنخ.jpeg" alt="قناع توت عنخ آمون" class="inline-block max-w-lg">
+            <figcaption class="text-sm mt-2">القناع الذهبي للملك توت عنخ آمون (الأسرة الثامنة عشر)، المتحف المصري</figcaption>
+          </figure>
+          
+          <h2 id="pharaohs" class="text-2xl font-bold mt-8 mb-4 pb-2 border-b border-gray-200">٥ أشهر الفراعنة</h2>
+          <p class="mb-4">كان الفرعون في مصر القديمة ليس مجرد ملك، بل كان يُعتبر تجسيداً للإله وحلقة الوصل بين العالم الإلهي والبشر. حكم مصر على مدى تاريخها الطويل العديد من الفراعنة البارزين الذين تركوا بصمات واضحة في التاريخ.</p>
+          
+          <div class="table-container mb-6">
+            <table>
+              <thead>
+                <tr>
+                  <th>الفرعون</th>
+                  <th>الأسرة</th>
+                  <th>فترة الحكم (تقريباً)</th>
+                  <th>أهم الإنجازات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>خوفو</td>
+                  <td>الرابعة</td>
+                  <td>٢٥٨٩-٢٥٦٦ ق.م</td>
+                  <td>بناء الهرم الأكبر في الجيزة</td>
+                </tr>
+                <tr>
+                  <td>حتشبسوت</td>
+                  <td>الثامنة عشر</td>
+                  <td>١٤٧٩-١٤٥٨ ق.م</td>
+                  <td>أول ملكة تحكم بسلطة كاملة، وتوسعت في التجارة</td>
+                </tr>
+                <tr>
+                  <td>تحتمس الثالث</td>
+                  <td>الثامنة عشر</td>
+                  <td>١٤٧٩-١٤٢٥ ق.م</td>
+                  <td>أعظم الفراعنة المحاربين، وسع الإمبراطورية المصرية</td>
+                </tr>
+                <tr>
+                  <td>أخناتون</td>
+                  <td>الثامنة عشر</td>
+                  <td>١٣٥٣-١٣٣٦ ق.م</td>
+                  <td>أدخل عبادة إله واحد (آتون) وغيّر العاصمة</td>
+                </tr>
+                <tr>
+                  <td>توت عنخ آمون</td>
+                  <td>الثامنة عشر</td>
+                  <td>١٣٣٢-١٣٢٣ ق.م</td>
+                  <td>اشتهر باكتشاف مقبرته شبه الكاملة عام ١٩٢٢م</td>
+                </tr>
+                <tr>
+                  <td>رمسيس الثاني</td>
+                  <td>التاسعة عشر</td>
+                  <td>١٢٧٩-١٢١٣ ق.م</td>
+                  <td>بنى العديد من المعابد والمنشآت الضخمة، وحكم ٦٦ عاماً</td>
+                </tr>
+                <tr>
+                  <td>كليوباترا السابعة</td>
+                  <td>البطلمية</td>
+                  <td>٥١-٣٠ ق.م</td>
+                  <td>آخر حكام مصر القديمة، تحالفت مع يوليوس قيصر ومارك أنطوني</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Full article content (initially hidden) -->
+        <div id="full-article" class="p-6 article-content font-size-normal">
+          <div id="full-article-content"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right sidebar (hidden on mobile) -->
+    <div class="hidden lg:block lg:w-64 lg:pl-6">
+      <div class="bg-white rounded-lg shadow-md p-4 sticky top-24">
+        <h3 class="text-lg font-bold mb-4 pb-2 border-b border-gray-200">مقالات ذات صلة</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="wiki-link">الأهرامات المصرية</a></li>
+          <li><a href="#" class="wiki-link">الديانة المصرية القديمة</a></li>
+          <li><a href="#" class="wiki-link">الكتابة الهيروغليفية</a></li>
+          <li><a href="#" class="wiki-link">وادي الملوك</a></li>
+          <li><a href="#" class="wiki-link">توت عنخ آمون</a></li>
+          <li><a href="#" class="wiki-link">كليوباترا السابعة</a></li>
+          <li><a href="#" class="wiki-link">مصر القديمة والنوبة</a></li>
+        </ul>
+        
+        <h3 class="text-lg font-bold mt-6 mb-4 pb-2 border-b border-gray-200">تصنيفات</h3>
+        <div class="flex flex-wrap gap-2">
+          <a href="#" class="inline-block px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm">تاريخ قديم</a>
+          <a href="#" class="inline-block px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm">حضارات</a>
+          <a href="#" class="inline-block px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm">مصر</a>
+          <a href="#" class="inline-block px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm">الآثار</a>
+          <a href="#" class="inline-block px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm">فراعنة</a>
         </div>
       </div>
     </div>
   </div>
-  <!-- APP SECTION -->
-  <div id="app" class="section">
-    <header>
-      <!-- Theme Toggle & Settings buttons -->
-      <button id="themeToggle" onclick="toggleTheme()">🌙</button>
-      <!-- Settings icon without inline onclick; event listener will handle the click -->
-      <button id="settingsToggle">⚙</button>
-      <!-- Settings Panel for Reader Speed, User Info & Navigation -->
-      <div id="settingsPanel">
-        <p id="settingsText">سرعة القراءة:</p>
-        <div id="userInfo" style="margin-bottom:8px;"></div>
-        <button class="speed-option" data-speed="0.5">0.5x</button>
-        <button class="speed-option active" data-speed="1">1x</button>
-        <button class="speed-option" data-speed="1.5">1.5x</button>
-        <button class="speed-option" data-speed="2">2x</button>
-        <!-- Navigation buttons container -->
-        <div id="navButtons">
-          <button id="navVideos" class="old-style-button" onclick="window.location.href='index.html'">الصفحة الأم</button>
-          <button id="navAbout" class="old-style-button" onclick="window.location.href='about me.html'">من أنا ؟</button>
-          <button id="navVideos" class="old-style-button" onclick="window.location.href='fullylearning.html'">صفحة التعلم</button>
-          <button id="navChatbot" class="old-style-button" onclick="window.location.href='AI.html'">الذكاء الأصطناعي</button>
+  
+  <footer class="bg-gray-800 text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between">
+        <div class="mb-6 md:mb-0">
+          <h3 class="text-xl font-bold mb-4">موسوعة الحضارات</h3>
+          <p class="text-gray-400 max-w-md">موسوعة شاملة للحضارات القديمة والحديثة، تقدم معلومات موثوقة ومفصلة عن مختلف الحضارات البشرية عبر العصور.</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div>
+            <h4 class="text-lg font-semibold mb-3">الموسوعة</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white">عن الموسوعة</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white">المساهمون</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white">سياسة الخصوصية</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-3">المحتوى</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white">أقسام الموسوعة</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white">المقالات المميزة</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white">الصور والوسائط</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-3">تواصل معنا</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white">اتصل بنا</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white">الدعم الفني</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white">اقتراحات وملاحظات</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div id="top-message">
-        <span>Free Palestine فلسطين في القلب</span>
-        <div class="flag-icons">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_Palestine.svg" alt="Palestine Flag">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Egypt.svg" alt="Egypt Flag">
-        </div>
+      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+        <p>&copy; 2023 موسوعة الحضارات. جميع الحقوق محفوظة.</p>
       </div>
-      <h1 id="main-title">موسوعة الحضارة المصرية</h1>
-      <p id="main-subtitle">مصر - تاريخ، حضارة، وثقافة</p>
-      <div class="language-selector">
-        <label for="language" id="language-label">اختر اللغة:</label>
-        <select id="language" onchange="changeLanguage()">
-          <option value="ar">العربية</option>
-          <option value="en">English</option>
-          <option value="de">Deutsch</option>
-          <option value="fr">Français</option>
-          <option value="es">Español</option>
-        </select>
-      </div>
-    </header>
-    <main>
-      <section class="introduction">
-        <h2 id="introduction-title">لمحة عن الحضارة المصرية القديمة</h2>
-        <div class="search-container">
-          <input type="text" id="search-bar" placeholder="ابحث عن التاريخ المصري...">
-          <button id="search-button" class="old-style-button" onclick="fetchContent()">ابحث</button>
-          <button id="voiceSearchBtn" class="mic-icon" title="بحث صوتي">🎤</button>
-        </div>
-      </section>
-      <section id="content-section">
-        <!-- Wikipedia content will load here -->
-      </section>
-    </main>
-    <footer>
-      <p>جميع الحقوق محفوظة &copy; 2024 - موسوعة الحضارة المصرية</p>
-    </footer>
-  </div>
+    </div>
+  </footer>
+  
   <script>
-    // -------------------- Global Variables and Translations --------------------
-    let fullArticleDisplayed = false;
+    // Element references
+    const langToggle = document.getElementById('lang-toggle');
+    const mobileLangToggle = document.getElementById('mobile-lang-toggle');
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const searchResults = document.getElementById('search-results');
+    const resultsList = document.getElementById('results-list');
+    const searchResultsTitle = document.getElementById('search-results-title');
+    const articleContainer = document.getElementById('article-container');
+    const articleTitle = document.getElementById('article-title');
+    const viewToggle = document.getElementById('view-toggle');
+    const articleSummary = document.getElementById('article-summary');
+    const fullArticle = document.getElementById('full-article');
+    const fullArticleContent = document.getElementById('full-article-content');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const settingsToggle = document.getElementById('settings-toggle');
+    const settingsPanel = document.getElementById('settings-panel');
+    const themeSwitcher = document.getElementById('theme-switcher');
+    const themeIcon = document.getElementById('theme-icon');
+    const voiceSearchButton = document.getElementById('voice-search-button');
+    const readingOptionsButton = document.getElementById('reading-options-button');
+    const readingOptionsDropdown = document.getElementById('reading-options-dropdown');
+    const mobileThemeSwitcher = document.getElementById('mobile-theme-switcher');
+    const mobileReadingOptions = document.getElementById('mobile-reading-options'); // (if exists)
+    
+    // New mobile menu buttons
+    const mobileListenArticle = document.getElementById('mobile-listen-article');
+    const mobileFontAmiri = document.getElementById('mobile-font-amiri');
+    
+    // Current state variables
     let currentLanguage = 'ar';
-    let searchResults = [];
-    let speechSynthesisInstance = null;
-    let currentArticleTitle = "";
-    let currentArticleExtract = "";
-    let readerSpeed = 1;
-    const YOUTUBE_API_KEY = "AIzaSyCe3BZbOsFYE4HtHU2n1AgGqFCNORciGks";
-    const translations = {
-      ar: {
-        mainTitle: "موسوعة الحضارة المصرية",
-        mainSubtitle: "مصر - تاريخ، حضارة، وثقافة",
-        searchPlaceholder: "ابحث عن التاريخ المصري...",
-        searchButton: "ابحث",
-        readMore: "عرض المزيد",
-        readLess: "عرض أقل",
-        listenArticle: "استمع إلى المقال",
-        stopListening: "أوقف القراءة",
-        noResults: "لا توجد نتائج",
-        topBar: { app: "التطبيق", game: "اللعبة", auth: "تسجيل", highScore: "أعلى نتيجة" },
-        signupTitle: "إنشاء حساب",
-        signupMessage: "تم التسجيل بنجاح!",
-        signinTitle: "تسجيل الدخول",
-        signinMessage: "مرحبًا من جديد! تم تسجيل الدخول.",
-        logoutMessage: "أنت مسجل",
-        settingsText: "سرعة القراءة:",
-        navChatbot: "الدردشة",
-        navAbout: "عني",
-        navVideos: "فيديوهات",
-        wrongCredentials: "البريد الإلكتروني أو كلمة المرور خاطئة!",
-        topMessage: "Free Palestine فلسطين في القلب",
-        languageLabel: "اختر اللغة:"
-      },
-      en: {
-        mainTitle: "Egyptian Civilization Encyclopedia",
-        mainSubtitle: "Egypt - History, Civilization, and Culture",
-        searchPlaceholder: "Search for Egyptian history...",
-        searchButton: "Search",
-        readMore: "Show more",
-        readLess: "Show less",
-        listenArticle: "Listen to the article",
-        stopListening: "Stop Listening",
-        noResults: "No results found",
-        topBar: { app: "App", game: "Game", auth: "Auth", highScore: "High Score" },
-        signupTitle: "Sign Up",
-        signupMessage: "You're registered!",
-        signinTitle: "Sign In",
-        signinMessage: "Welcome back! You're signed in.",
-        logoutMessage: "You are logged in",
-        settingsText: "Reader Speed:",
-        navChatbot: "Chatbot",
-        navAbout: "About Me",
-        navVideos: "Videos",
-        wrongCredentials: "Email or password is incorrect!",
-        topMessage: "Free Palestine, Palestine in our hearts",
-        languageLabel: "Choose language:"
-      },
-      de: {
-        mainTitle: "Enzyklopädie der ägyptischen Zivilisation",
-        mainSubtitle: "Ägypten – Geschichte, Zivilisation und Kultur",
-        searchPlaceholder: "Suche nach ägyptischer Geschichte...",
-        searchButton: "Suchen",
-        readMore: "Mehr anzeigen",
-        readLess: "Weniger anzeigen",
-        listenArticle: "Artikel anhören",
-        stopListening: "Anhalten",
-        noResults: "Keine Ergebnisse gefunden",
-        topBar: { app: "App", game: "Spiel", auth: "Anmeldung", highScore: "Bestpunktzahl" },
-        signupTitle: "Registrieren",
-        signupMessage: "Du bist registriert!",
-        signinTitle: "Anmelden",
-        signinMessage: "Willkommen zurück! Du bist angemeldet.",
-        logoutMessage: "Du bist angemeldet",
-        settingsText: "Lesegeschwindigkeit:",
-        navChatbot: "Chatbot",
-        navAbout: "Über mich",
-        navVideos: "Videos",
-        wrongCredentials: "E-Mail oder Passwort ist falsch!",
-        topMessage: "Freies Palästina, Palästina im Herzen",
-        languageLabel: "Sprache wählen:"
-      },
-      fr: {
-        mainTitle: "Encyclopédie de la civilisation égyptienne",
-        mainSubtitle: "Égypte – Histoire, civilisation et culture",
-        searchPlaceholder: "Recherchez l'histoire égyptienne...",
-        searchButton: "Rechercher",
-        readMore: "Afficher plus",
-        readLess: "Afficher moins",
-        listenArticle: "Écouter l'article",
-        stopListening: "Arrêter",
-        noResults: "Aucun résultat trouvé",
-        topBar: { app: "Application", game: "Jeu", auth: "Authentification", highScore: "Meilleur score" },
-        signupTitle: "S'inscrire",
-        signupMessage: "Vous êtes inscrit(e)!",
-        signinTitle: "Se connecter",
-        signinMessage: "Bon retour ! Vous êtes connecté(e).",
-        logoutMessage: "Vous êtes connecté(e)",
-        settingsText: "Vitesse de lecture:",
-        navChatbot: "Chatbot",
-        navAbout: "À propos de moi",
-        navVideos: "Vidéos",
-        wrongCredentials: "L'email ou le mot de passe est incorrect!",
-        topMessage: "Libérez la Palestine, Palestine dans nos cœurs",
-        languageLabel: "Choisir la langue:"
-      },
-      es: {
-        mainTitle: "Enciclopedia de la Civilización Egipcia",
-        mainSubtitle: "Egipto - Historia, Civilización y Cultura",
-        searchPlaceholder: "Busca la historia de Egipto...",
-        searchButton: "Buscar",
-        readMore: "Mostrar más",
-        readLess: "Mostrar menos",
-        listenArticle: "Escuchar el artículo",
-        stopListening: "Detener",
-        noResults: "No se encontraron resultados",
-        topBar: { app: "Aplicación", game: "Juego", auth: "Autenticación", highScore: "Mejor puntuación" },
-        signupTitle: "Registrarse",
-        signupMessage: "¡Te has registrado!",
-        signinTitle: "Iniciar sesión",
-        signinMessage: "¡Bienvenido de nuevo! Has iniciado sesión.",
-        logoutMessage: "Estás conectado",
-        settingsText: "Velocidad de lectura:",
-        navChatbot: "Chatbot",
-        navAbout: "Acerca de mí",
-        navVideos: "Videos",
-        wrongCredentials: "¡El correo electrónico o la contraseña es incorrecta!",
-        topMessage: "Palestina Libre, Palestina en el corazón",
-        languageLabel: "Elige idioma:"
-      }
-    };
-
-    // -------------------- Language Update Function --------------------
-    function updateLanguageTexts() {
-      const trans = translations[currentLanguage];
-      document.getElementById('main-title').textContent = trans.mainTitle;
-      document.getElementById('main-subtitle').textContent = trans.mainSubtitle;
-      document.getElementById('search-bar').placeholder = trans.searchPlaceholder;
-      document.getElementById('search-button').textContent = trans.searchButton;
-      document.getElementById('settingsText').textContent = trans.settingsText;
-      // Top bar buttons
-      document.getElementById('btnApp').textContent = trans.topBar.app;
-      document.getElementById('btnGame').textContent = trans.topBar.game;
-      document.getElementById('btnAuth').textContent = trans.topBar.auth;
-      // Auth forms
-      document.getElementById('signupTitle').textContent = trans.signupTitle;
-      document.getElementById('signupMessage').textContent = trans.signupMessage;
-      document.getElementById('signinTitle').textContent = trans.signinTitle;
-      document.getElementById('signinMessage').textContent = trans.signinMessage;
-      document.getElementById('logoutMessage').textContent = trans.logoutMessage;
-      // Update high score text if element exists
-      const highScoreDisplay = document.getElementById('highScoreDisplay');
-      if(highScoreDisplay) {
-        highScoreDisplay.textContent = `${trans.topBar.highScore}: ${localStorage.getItem('highScore') || 0}`;
-      }
-      // If settings panel is open, update its text
-      const settingsPanel = document.getElementById('settingsPanel');
-      if(settingsPanel.style.display !== 'none') {
-        settingsPanel.querySelector('p').textContent = trans.settingsText;
-      }
-      // Update top message and language selector label
-      document.querySelector('#top-message span').textContent = trans.topMessage;
-      document.getElementById('language-label').textContent = trans.languageLabel;
-    }
-
-    // -------------------- Check Login State on Load --------------------
-    function checkLoginState() {
-      const storedName = localStorage.getItem('userName');
-      const storedEmail = localStorage.getItem('userEmail');
-      if(storedName && storedEmail) {
-        document.getElementById('signupForm').style.display = 'none';
-        document.getElementById('signinForm').style.display = 'none';
-        document.getElementById('logoutOption').style.display = 'block';
-      } else {
-        document.getElementById('signupForm').style.display = 'block';
-        document.getElementById('signinForm').style.display = 'none';
-        document.getElementById('logoutOption').style.display = 'none';
-      }
-    }
-
-    // -------------------- Theme Toggle --------------------
+    let currentArticleTitle = 'الحضارة المصرية القديمة';
+    let currentFullArticleLoaded = false;
+    let currentViewMode = 'summary';
     let isDarkTheme = false;
-    function toggleTheme() {
-      const htmlEl = document.documentElement;
-      const themeBtn = document.getElementById("themeToggle");
-      isDarkTheme = !isDarkTheme;
-      if(isDarkTheme) {
-        htmlEl.classList.add("dark-theme");
-        themeBtn.textContent = "☀️";
-      } else {
-        htmlEl.classList.remove("dark-theme");
-        themeBtn.textContent = "🌙";
-      }
-    }
-
-    // -------------------- Settings Panel for Reader Speed, User Info & Navigation --------------------
-    function toggleSettingsPanel() {
-      const panel = document.getElementById('settingsPanel');
-      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-      if(panel.style.display === 'block') {
-        const userInfo = document.getElementById('userInfo');
-        const storedName = localStorage.getItem('userName');
-        const storedEmail = localStorage.getItem('userEmail');
-        if(storedName && storedEmail) {
-          userInfo.innerHTML = `<p>${storedName} - ${storedEmail}</p>`;
-        } else {
-          userInfo.innerHTML = '';
-        }
-      }
-    }
-    // Attach event listener for settings toggle
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('settingsToggle').addEventListener('click', function(e){
-        e.stopPropagation();
-        toggleSettingsPanel();
-      });
-      document.addEventListener('click', function(e){
-        const panel = document.getElementById('settingsPanel');
-        const toggle = document.getElementById('settingsToggle');
-        if(panel.style.display === 'block' && !panel.contains(e.target) && e.target !== toggle) {
-          panel.style.display = 'none';
-        }
-      });
-      // Other initialization functions
-      checkLoginState();
-      showSection("app");
-      window.speechSynthesis.getVoices();
-      fetchContent("الحضارة المصرية");
-      updateLanguageTexts();
-      const highScoreDisplay = document.getElementById('highScoreDisplay');
-      if(highScoreDisplay) {
-        highScoreDisplay.textContent = `${translations[currentLanguage].topBar.highScore}: ${localStorage.getItem('highScore') || 0}`;
-      }
-    });
-    document.querySelectorAll('.speed-option').forEach(btn => {
-      btn.addEventListener('click', function(e){
-        readerSpeed = parseFloat(this.getAttribute('data-speed'));
-        document.querySelectorAll('.speed-option').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        if(speechSynthesisInstance) {
-          speechSynthesisInstance.rate = readerSpeed;
-        }
-        document.getElementById('settingsPanel').style.display = 'none';
-        e.stopPropagation();
-      });
-    });
-
-    // -------------------- Voice Search using Speech Recognition --------------------
-    const voiceSearchBtn = document.getElementById('voiceSearchBtn');
-    let recognition;
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRecognition();
-      recognition.lang = currentLanguage === 'ar' ? 'ar-EG' : 'en-US';
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.onstart = () => {
-        voiceSearchBtn.classList.add("listening");
-      };
-      recognition.onend = () => {
-        voiceSearchBtn.classList.remove("listening");
-      };
-      recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById('search-bar').value = transcript;
-        fetchContent(transcript);
-      };
-    } else {
-      voiceSearchBtn.style.display = 'none';
-    }
-    voiceSearchBtn.addEventListener('pointerup', function(e){
-      e.stopPropagation();
-      if(recognition) {
-        recognition.lang = currentLanguage === 'ar' ? 'ar-EG' : (currentLanguage === 'de' ? 'de-DE' : (currentLanguage === 'fr' ? 'fr-FR' : (currentLanguage === 'es' ? 'es-ES' : 'en-US')));
-        recognition.start();
-      }
-    });
-
-    // -------------------- Game Control Variables (if applicable) --------------------
-    let gameActive = false;
-    let gameAnimationFrameId = null;
-    let enemyInterval = null;
-    let highScore = localStorage.getItem('highScore') || 0;
-
-    function updateHighScore() {
-      if(score > highScore) {
-        highScore = score;
-        localStorage.setItem('highScore', highScore);
-        const trans = translations[currentLanguage];
-        document.getElementById('highScoreDisplay').textContent = `${trans.topBar.highScore}: ${highScore}`;
-      }
-    }
-
-    function toggleGamePause() {
-      if (gameActive) {
-        pauseGame();
-        document.getElementById("toggleGameBtn").textContent = currentLanguage === 'en' ? "Start Game" : "تشغيل اللعبة";
-      } else {
-        startGame();
-        document.getElementById("toggleGameBtn").textContent = currentLanguage === 'en' ? "Pause Game" : "إيقاف اللعبة";
-      }
-    }
-    function startGame() {
-      if (!gameActive) {
-        gameActive = true;
-        enemyInterval = setInterval(createEnemy, 2000);
-        gameLoop();
-      }
-    }
-    function pauseGame() {
-      if (gameActive) {
-        cancelAnimationFrame(gameAnimationFrameId);
-        clearInterval(enemyInterval);
-        gameActive = false;
-      }
-    }
-
-    // -------------------- Language Change and UI Update --------------------
-    function changeLanguage() {
-      const languageSelect = document.getElementById("language");
-      currentLanguage = languageSelect.value;
-      updateLanguageTexts();
-      if(recognition) {
-        recognition.lang = currentLanguage === 'ar' ? 'ar-EG' : (currentLanguage === 'de' ? 'de-DE' : (currentLanguage === 'fr' ? 'fr-FR' : (currentLanguage === 'es' ? 'es-ES' : 'en-US')));
-      }
-      fetchContent("الحضارة المصرية");
-    }
-
-    // -------------------- Section Navigation --------------------
-    function showSection(sectionId) {
-      const currentActive = document.querySelector('.section.active');
-      if (currentActive && currentActive.id === 'game' && sectionId !== 'game') {
-        pauseGame();
-      }
-      document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-      document.getElementById(sectionId).classList.add('active');
-      if (sectionId === 'game' && !gameActive) {
-        startGame();
-        document.getElementById("toggleGameBtn").textContent = currentLanguage === 'en' ? "Pause Game" : "إيقاف اللعبة";
-      }
-    }
-
-    // -------------------- Auth Functions with User Data Storage --------------------
-    function showSignup() {
-      document.getElementById('signupForm').style.display = 'block';
-      document.getElementById('signinForm').style.display = 'none';
-      document.getElementById('logoutOption').style.display = 'none';
-    }
-    function showSignin() {
-      document.getElementById('signupForm').style.display = 'none';
-      document.getElementById('signinForm').style.display = 'block';
-      document.getElementById('logoutOption').style.display = 'none';
-    }
-    function signup() {
-      const firstName = document.getElementById('firstname').value;
-      const lastName = document.getElementById('lastname').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      if (password !== confirmPassword) {
-        alert(currentLanguage === 'en' ? "Passwords do not match!" : "كلمات المرور غير متطابقة!");
-        return;
-      }
-      const userName = firstName + " " + lastName;
-      localStorage.setItem('userName', userName);
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userPassword', password);
-      alert(translations[currentLanguage].signupMessage);
-      document.getElementById('signupForm').style.display = 'none';
-      document.getElementById('signinForm').style.display = 'none';
-      document.getElementById('logoutOption').style.display = 'block';
-    }
-    function signin() {
-      const email = document.getElementById('signinEmail').value;
-      const password = document.getElementById('signinPassword').value;
-      if (password.trim() === '') {
-        alert(currentLanguage === 'en' ? "Please enter your password!" : "الرجاء إدخال كلمة المرور!");
-        return;
-      }
-      const storedEmail = localStorage.getItem('userEmail');
-      const storedPassword = localStorage.getItem('userPassword');
-      if(email === storedEmail && password === storedPassword) {
-        alert(translations[currentLanguage].signinMessage);
-        document.getElementById('signupForm').style.display = 'none';
-        document.getElementById('signinForm').style.display = 'none';
-        document.getElementById('logoutOption').style.display = 'block';
-      } else {
-        alert(translations[currentLanguage].wrongCredentials);
-      }
-    }
-    function logout() {
-      alert(currentLanguage === 'en' ? "Logged out!" : "لقد تم تسجيل الخروج!");
-      document.getElementById('logoutOption').style.display = 'none';
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userPassword');
-      document.getElementById('userInfo').innerHTML = "";
-      showSignin();
-    }
-
-    // -------------------- Wikipedia & YouTube Integration --------------------
-    function fetchContent(query = null) {
-      const searchQuery = query || document.getElementById("search-bar").value.trim() || "الحضارة المصرية";
-      const wikiApiUrl = `https://${currentLanguage}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchQuery)}&format=json&origin=*`;
-      fetch(wikiApiUrl)
-        .then(response => response.json())
-        .then(data => {
-          searchResults = data.query.search;
-          displayContent();
-          fetchYouTubeVideo(searchQuery);
-        })
-        .catch(error => {
-          console.error("Error fetching data:", error);
-        });
-    }
-    function displayContent() {
-      if (searchResults.length === 0) {
-        document.getElementById("content-section").innerHTML = `<p>${translations[currentLanguage].noResults}</p>`;
-        return;
-      }
-      const result = searchResults[0];
-      fetchPageContent(result.title);
-    }
-    function fetchPageContent(title) {
-      currentArticleTitle = title;
-      const wikiApiUrl = `https://${currentLanguage}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
-      fetch(wikiApiUrl)
-        .then(response => response.json())
-        .then(data => {
-          currentArticleExtract = data.extract;
-          document.getElementById("content-section").innerHTML = `
-            <h2>${data.title}</h2>
-            <p>${data.extract}</p>
-            ${data.thumbnail ? `<img src="${data.thumbnail.source}" alt="${data.title}">` : ''}
-            <div id="fullArticleContainer"></div>
-            <button id="readMoreBtn" class="old-style-button" onclick="toggleFullArticle('${data.title}')">${translations[currentLanguage].readMore}</button>
-            <button id="speechBtn" class="old-style-button" onclick="toggleSpeech('${data.extract.replace(/'/g, "\\'")}')">${translations[currentLanguage].listenArticle}</button>
-            <div id="youtube-video"></div>
-          `;
-          fullArticleDisplayed = false;
-          interceptArticleLinks();
-        })
-        .catch(error => {
-          console.error("Error fetching page content:", error);
-        });
-    }
-    async function toggleFullArticle(title) {
-      const container = document.getElementById("fullArticleContainer");
-      const btn = document.getElementById("readMoreBtn");
-      if (fullArticleDisplayed) {
-        container.innerHTML = "";
-        btn.textContent = translations[currentLanguage].readMore;
-        fullArticleDisplayed = false;
-      } else {
-        const wikiApiUrl = `https://${currentLanguage}.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(title)}&format=json&origin=*`;
-        try {
-          const response = await fetch(wikiApiUrl);
-          const data = await response.json();
-          let fullContentHtml = data.parse.text['*'];
-          fullContentHtml = fullContentHtml.replace(/src="\/\/(.*?)"/g, 'src="https://$1"');
-          fullContentHtml = fullContentHtml.replace(/data-src="\/\/(.*?)"/g, 'data-src="https://$1"');
-          container.innerHTML = `<div class="full-content">${fullContentHtml}</div>`;
-          const audioTags = container.querySelectorAll('audio');
-          audioTags.forEach(audio => audio.setAttribute('controls', true));
-          const videoTags = container.querySelectorAll('video');
-          videoTags.forEach(video => video.setAttribute('controls', true));
-          const imgTags = container.querySelectorAll('img');
-          imgTags.forEach(img => {
-            img.style.maxWidth = "100%";
-            img.style.height = "auto";
-            img.style.display = "block";
-            if(img.hasAttribute('data-src')){
-              img.src = img.getAttribute('data-src');
-            }
-          });
-          btn.textContent = translations[currentLanguage].readLess;
-          fullArticleDisplayed = true;
-          interceptArticleLinks();
-        } catch (error) {
-          console.error("Error fetching full page content:", error);
-        }
-      }
-    }
-    function interceptArticleLinks() {
-      const container = document.getElementById("fullArticleContainer");
-      if (!container) return;
-      container.querySelectorAll("a").forEach(link => {
-        link.style.color = "#007acc";
-        link.addEventListener("click", function(e) {
-          e.preventDefault();
-          const newTopic = this.innerText.trim();
-          if(newTopic) {
-            document.getElementById("search-bar").value = newTopic;
-            fetchContent(newTopic);
-            window.scrollTo(0, 0);
-          }
-        });
-      });
-    }
-    function toggleSpeech(text) {
-      const speechBtn = document.getElementById("speechBtn");
-      if (speechSynthesisInstance && speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-        speechSynthesisInstance = null;
-        speechBtn.textContent = translations[currentLanguage].listenArticle;
-        return;
-      }
-      let voices = window.speechSynthesis.getVoices();
-      let selectedVoice = voices.find(voice => voice.lang.startsWith(currentLanguage === 'ar' ? 'ar' : (currentLanguage === 'es' ? 'es' : 'en')));
-      speechSynthesisInstance = new SpeechSynthesisUtterance(text);
-      if (selectedVoice) {
-        speechSynthesisInstance.voice = selectedVoice;
-      }
-      speechSynthesisInstance.lang = currentLanguage === 'ar' ? 'ar-EG' : (currentLanguage === 'de' ? 'de-DE' : (currentLanguage === 'fr' ? 'fr-FR' : (currentLanguage === 'es' ? 'es-ES' : 'en-US')));
-      speechSynthesisInstance.rate = readerSpeed;
-      window.speechSynthesis.speak(speechSynthesisInstance);
-      speechBtn.textContent = translations[currentLanguage].stopListening;
-    }
-    function fetchYouTubeVideo(query) {
-      if(query.trim().toLowerCase() === "egypt") {
-        query = "Egypt history";
-      }
-      const youtubeApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${YOUTUBE_API_KEY}&type=video&maxResults=1`;
-      fetch(youtubeApiUrl)
-        .then(response => response.json())
-        .then(data => {
-          if (data.items && data.items.length > 0) {
-            const video = data.items[0];
-            displayYouTubeVideo(video);
+    let isReading = false;
+    let currentUtterance = null;
+    
+    // Toggle language and text direction
+    function toggleLanguage() {
+      if (currentLanguage === 'ar') {
+        document.body.classList.remove('rtl');
+        document.body.classList.add('ltr');
+        document.documentElement.setAttribute('lang', 'en');
+        document.documentElement.setAttribute('dir', 'ltr');
+        langToggle.innerHTML = '<i class="fas fa-language mr-1"></i> Change Language';
+        mobileLangToggle.innerHTML = '<i class="fas fa-language mr-1"></i> Change Language';
+        searchInput.placeholder = 'Search the encyclopedia...';
+        searchButton.innerHTML = '<i class="fas fa-search"></i>';
+        viewToggle.textContent = currentViewMode === 'summary' ? 'View Full Article' : 'View Summary';
+        currentLanguage = 'en';
+        
+        if (currentArticleTitle) {
+          if (currentViewMode === 'summary') {
+            searchWikipedia(currentArticleTitle, 'en');
           } else {
-            document.getElementById("youtube-video").innerHTML = `<p>${translations[currentLanguage].noResults}</p>`;
+            loadFullArticle(currentArticleTitle, 'en');
           }
-        })
-        .catch(error => {
-          console.error("Error fetching YouTube video:", error);
-        });
+        }
+      } else {
+        document.body.classList.remove('ltr');
+        document.body.classList.add('rtl');
+        document.documentElement.setAttribute('lang', 'ar');
+        document.documentElement.setAttribute('dir', 'rtl');
+        langToggle.innerHTML = '<i class="fas fa-language mr-1"></i> تغيير اللغة';
+        mobileLangToggle.innerHTML = '<i class="fas fa-language mr-1"></i> تغيير اللغة';
+        searchInput.placeholder = 'ابحث في الموسوعة...';
+        searchButton.innerHTML = '<i class="fas fa-search"></i>';
+        viewToggle.textContent = currentViewMode === 'summary' ? 'عرض المقال كاملاً' : 'عرض الملخص';
+        currentLanguage = 'ar';
+        
+        if (currentArticleTitle) {
+          if (currentViewMode === 'summary') {
+            searchWikipedia(currentArticleTitle, 'ar');
+          } else {
+            loadFullArticle(currentArticleTitle, 'ar');
+          }
+        }
+      }
     }
-    function displayYouTubeVideo(video) {
-      document.getElementById("youtube-video").innerHTML = `
-        <div class="video-player">
-          <iframe width="100%" height="315" src="https://www.youtube.com/embed/${video.id.videoId}" 
-          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen></iframe>
-          <p>${video.snippet.title}</p>
-        </div>
-      `;
+    
+    langToggle.addEventListener('click', toggleLanguage);
+    mobileLangToggle.addEventListener('click', toggleLanguage);
+    
+    // Font size controls
+    function setFontSize(size) {
+      document.querySelectorAll('.article-content').forEach(el => {
+        el.classList.remove('font-size-normal', 'font-size-large', 'font-size-larger');
+        el.classList.add(`font-size-${size}`);
+      });
     }
-    document.getElementById("search-bar").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        fetchContent();
+    
+    document.getElementById('font-normal').addEventListener('click', () => setFontSize('normal'));
+    document.getElementById('font-large').addEventListener('click', () => setFontSize('large'));
+    document.getElementById('font-larger').addEventListener('click', () => setFontSize('larger'));
+    document.getElementById('mobile-font-normal').addEventListener('click', () => setFontSize('normal'));
+    document.getElementById('mobile-font-large').addEventListener('click', () => setFontSize('large'));
+    document.getElementById('mobile-font-larger').addEventListener('click', () => setFontSize('larger'));
+    
+    // Font family controls
+    document.getElementById('font-scheherazade').addEventListener('click', () => {
+      document.querySelectorAll('.article-content').forEach(el => {
+        el.style.fontFamily = "'Scheherazade', serif";
+      });
+    });
+    
+    document.getElementById('font-amiri').addEventListener('click', () => {
+      document.querySelectorAll('.article-content').forEach(el => {
+        el.style.fontFamily = "'Amiri', serif";
+      });
+    });
+    
+    // Text-to-speech (listen to article)
+    function startReading() {
+      const text = articleSummary.innerText || articleSummary.textContent;
+      if ('speechSynthesis' in window) {
+        currentUtterance = new SpeechSynthesisUtterance(text);
+        currentUtterance.lang = currentLanguage === 'ar' ? 'ar-SA' : 'en-US';
+        speechSynthesis.speak(currentUtterance);
+        isReading = true;
+      } else {
+        alert(currentLanguage === 'ar' ? 'المتصفح لا يدعم قراءة النصوص.' : 'Your browser does not support speech synthesis.');
+      }
+    }
+    
+    function stopReading() {
+      speechSynthesis.cancel();
+      isReading = false;
+    }
+    
+    document.getElementById('listen-article').addEventListener('click', () => {
+      if (!isReading) {
+        startReading();
+      } else {
+        stopReading();
       }
     });
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.getVoices();
-    };
-    // -------------------- Keyboard Shortcuts --------------------
-    document.addEventListener("keydown", function(e) {
-      if(e.shiftKey && e.key.toLowerCase() === "m") {
-        // Toggle full article view
-        if(currentArticleTitle) toggleFullArticle(currentArticleTitle);
-      }
-      if(e.shiftKey && e.key.toLowerCase() === "l") {
-        // Toggle speech reading
-        if(currentArticleExtract) toggleSpeech(currentArticleExtract);
-      }
-      if(e.shiftKey && e.key.toLowerCase() === "s") {
-        // Toggle settings panel
+    
+    // Mobile menu toggle
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // Mobile theme switcher
+    mobileThemeSwitcher.addEventListener('click', () => {
+      themeSwitcher.click();
+      mobileMenu.classList.add('hidden');
+    });
+    
+    // Mobile reading options: trigger desktop reading options dropdown
+    // (if still used, otherwise already handled via separate items)
+    // mobileReadingOptions.addEventListener('click', () => {
+    //   readingOptionsButton.click();
+    //   mobileMenu.classList.add('hidden');
+    // });
+    
+    // New Mobile Button: Listen to article
+    mobileListenArticle.addEventListener('click', () => {
+      document.getElementById('listen-article').click();
+      mobileMenu.classList.add('hidden');
+    });
+    
+    // New Mobile Button: Set font to Amiri
+    mobileFontAmiri.addEventListener('click', () => {
+      document.getElementById('font-amiri').click();
+      mobileMenu.classList.add('hidden');
+    });
+    
+    // Settings panel toggle
+    function toggleSettingsPanel() {
+      settingsPanel.style.display = (settingsPanel.style.display === 'block') ? 'none' : 'block';
+    }
+    
+    settingsToggle.addEventListener('click', toggleSettingsPanel);
+    
+    // Also toggle settings panel when clicking on it (if already visible, clicking inside will close it)
+    settingsPanel.addEventListener('click', (e) => {
+      if (e.target === settingsPanel) {
         toggleSettingsPanel();
+      }
+    });
+    
+    // Close settings panel when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!settingsPanel.contains(e.target) && e.target !== settingsToggle) {
+        settingsPanel.style.display = 'none';
+      }
+    });
+    
+    // Toggle reading options dropdown on click and close when clicking outside
+    readingOptionsButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      readingOptionsDropdown.style.display = (readingOptionsDropdown.style.display === 'block') ? 'none' : 'block';
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (!readingOptionsDropdown.contains(e.target) && e.target !== readingOptionsButton) {
+        readingOptionsDropdown.style.display = 'none';
+      }
+    });
+    
+    // Theme switching
+    themeSwitcher.addEventListener('click', () => {
+      isDarkTheme = !isDarkTheme;
+      if (isDarkTheme) {
+        document.body.classList.add('dark-theme');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        document.body.classList.remove('dark-theme');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    });
+    
+    // Wikipedia API functions
+    async function searchWikipedia(query, lang = currentLanguage) {
+      resultsList.innerHTML = '<div class="loader"></div>';
+      searchResults.classList.remove('hidden');
+      articleContainer.classList.add('hidden');
+      try {
+        const searchUrl = `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*&srlimit=10`;
+        const response = await fetch(searchUrl);
+        const data = await response.json();
+        if (data.query.search.length === 0) {
+          resultsList.innerHTML = `<p>${lang === 'ar' ? 'لا توجد نتائج مطابقة للبحث' : 'No results found'}</p>`;
+          return;
+        }
+        resultsList.innerHTML = '';
+        data.query.search.forEach(result => {
+          const resultElement = document.createElement('div');
+          resultElement.className = 'search-result';
+          resultElement.innerHTML = `
+            <h3 class="font-bold">${result.title}</h3>
+            <p>${result.snippet.replace(/<\/?span[^>]*>/g, '')}</p>
+          `;
+          resultElement.addEventListener('click', () => {
+            fetchArticleSummary(result.title, lang);
+          });
+          resultsList.appendChild(resultElement);
+        });
+        searchResultsTitle.textContent = lang === 'ar' ? `نتائج البحث عن: ${query}` : `Search results for: ${query}`;
+      } catch (error) {
+        console.error('Search error:', error);
+        resultsList.innerHTML = `<p>${lang === 'ar' ? 'حدث خطأ في البحث' : 'Error during search'}</p>`;
+      }
+    }
+    
+    async function fetchArticleSummary(title, lang = currentLanguage) {
+      try {
+        articleContainer.classList.remove('hidden');
+        searchResults.classList.add('hidden');
+        articleSummary.innerHTML = '<div class="loader"></div>';
+        fullArticle.style.display = 'none';
+        articleSummary.style.display = 'block';
+        currentArticleTitle = title;
+        currentViewMode = 'summary';
+        const extractUrl = `https://${lang}.wikipedia.org/w/api.php?action=query&prop=extracts|pageimages&exintro&explaintext&titles=${encodeURIComponent(title)}&format=json&origin=*&pithumbsize=500`;
+        const response = await fetch(extractUrl);
+        const data = await response.json();
+        const pages = data.query.pages;
+        const pageId = Object.keys(pages)[0];
+        const page = pages[pageId];
+        articleTitle.textContent = page.title;
+        let summaryContent = '';
+        if (page.thumbnail && page.thumbnail.source) {
+          summaryContent += `
+            <div class="flex flex-col md:flex-row gap-6">
+              <div class="md:w-2/3">
+          `;
+        }
+        summaryContent += `<p class="mb-4">${page.extract}</p>`;
+        if (page.thumbnail && page.thumbnail.source) {
+          summaryContent += `
+              </div>
+              <div class="md:w-1/3">
+                <figure class="bg-white p-2 border border-gray-200 rounded">
+                  <img src="${page.thumbnail.source}" alt="${page.title}" class="w-full h-auto">
+                  <figcaption class="text-sm text-center py-2 bg-gray-50">${page.title}</figcaption>
+                </figure>
+              </div>
+            </div>
+          `;
+        }
+        articleSummary.innerHTML = summaryContent;
+        viewToggle.classList.remove('hidden');
+        viewToggle.textContent = lang === 'ar' ? 'عرض المقال كاملاً' : 'View Full Article';
+        currentFullArticleLoaded = false;
+      } catch (error) {
+        console.error('Error fetching article:', error);
+        articleSummary.innerHTML = `<p>${currentLanguage === 'ar' ? 'حدث خطأ في تحميل المقال' : 'Error loading article'}</p>`;
+      }
+    }
+    
+    async function loadFullArticle(title, lang = currentLanguage) {
+      try {
+        if (!currentFullArticleLoaded) {
+          fullArticleContent.innerHTML = '<div class="loader"></div>';
+          articleSummary.style.display = 'none';
+          fullArticle.style.display = 'block';
+          currentArticleTitle = title;
+          currentViewMode = 'full';
+          const parseUrl = `https://${lang}.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(title)}&prop=text&format=json&origin=*&disableeditsection=true`;
+          const response = await fetch(parseUrl);
+          const data = await response.json();
+          if (!data.parse || !data.parse.text) {
+            throw new Error('No article content found');
+          }
+          let content = data.parse.text['*'];
+          content = content.replace(/src="\/\//g, 'src="https://');
+          content = content.replace(/<span class="mw-editsection">.*?<\/span>/g, '');
+          content = content.replace(/href="\/wiki/g, `href="https://${lang}.wikipedia.org/wiki`);
+          fullArticleContent.innerHTML = `
+            <div class="mw-content-ltr">
+              ${content}
+            </div>
+          `;
+          viewToggle.textContent = lang === 'ar' ? 'عرض الملخص' : 'View Summary';
+          currentFullArticleLoaded = true;
+        } else {
+          articleSummary.style.display = 'block';
+          fullArticle.style.display = 'none';
+          viewToggle.textContent = currentLanguage === 'ar' ? 'عرض المقال كاملاً' : 'View Full Article';
+          currentViewMode = 'summary';
+        }
+      } catch (error) {
+        console.error('Error loading full article:', error);
+        fullArticleContent.innerHTML = `<p>${currentLanguage === 'ar' ? 'حدث خطأ في تحميل المقال الكامل' : 'Error loading full article'}</p>`;
+        currentFullArticleLoaded = false;
+      }
+    }
+    
+    // Search event listeners
+    searchButton.addEventListener('click', () => {
+      const query = searchInput.value.trim();
+      if (query) {
+        searchWikipedia(query);
+      }
+    });
+    
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+          searchWikipedia(query);
+        }
+      }
+    });
+    
+    // Voice search using SpeechRecognition API
+    voiceSearchButton.addEventListener('click', () => {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = currentLanguage === 'ar' ? 'ar-SA' : 'en-US';
+        recognition.start();
+        recognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          searchInput.value = transcript;
+          searchWikipedia(transcript);
+        }
+      } else {
+        alert(currentLanguage === 'ar' ? 'المتصفح لا يدعم البحث الصوتي.' : 'Your browser does not support voice search.');
+      }
+    });
+    
+    // Toggle between summary and full article on button click
+    viewToggle.addEventListener('click', () => {
+      if (currentViewMode === 'summary') {
+        loadFullArticle(currentArticleTitle);
+      } else {
+        articleSummary.style.display = 'block';
+        fullArticle.style.display = 'none';
+        viewToggle.textContent = currentLanguage === 'ar' ? 'عرض المقال كاملاً' : 'View Full Article';
+        currentViewMode = 'summary';
+      }
+    });
+    
+    // Keyboard shortcuts: Shift+S for settings, Shift+M for toggle view, Shift+L for reading toggle
+    document.addEventListener('keydown', (e) => {
+      if (e.shiftKey && e.key.toLowerCase() === 's') {
+        toggleSettingsPanel();
+      }
+      if (e.shiftKey && e.key.toLowerCase() === 'm') {
+        viewToggle.click();
+      }
+      if (e.shiftKey && e.key.toLowerCase() === 'l') {
+        if (!isReading) {
+          startReading();
+        } else {
+          stopReading();
+        }
+      }
+    });
+    
+    // Event delegation: clicking any blue word (wiki-link or toc-link) triggers a search.
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a.wiki-link, a.toc-link');
+      if (link) {
+        e.preventDefault();
+        const query = link.textContent.trim();
+        searchWikipedia(query);
       }
     });
   </script>
