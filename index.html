@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موسوعة الحضارة المصرية - الأم</title>
+  <title>الحضارة المصرية القديمة</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,22 +70,22 @@
       color: var(--gold);
     }
     
-    /* Settings Panel Styles */
+    /* Enhanced Settings Panel Styles */
     #settings-panel {
       position: fixed;
       top: 60px;
       right: 20px;
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      width: 220px;
       padding: 1rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       z-index: 100;
       display: none;
-      width: 200px;
+      background: linear-gradient(135deg, #ffffff, #f7f7f7);
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
     body.dark-theme #settings-panel {
-      background-color: #111;
+      background: linear-gradient(135deg, #1a1a1a, #111);
       border-color: #333;
     }
     #settings-panel button {
@@ -111,8 +111,35 @@
       cursor: pointer;
       color: var(--deep-blue);
       transition: color 0.3s ease;
+      margin: 0 5px;
     }
     body.dark-theme #settings-toggle {
+      color: var(--gold);
+    }
+    
+    /* Mobile Navigation Styles */
+    #mobile-nav {
+      display: none;
+    }
+    #mobile-nav.active {
+      display: block;
+    }
+    #mobile-nav ul {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    #mobile-nav a {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--deep-blue);
+    }
+    body.dark-theme #mobile-nav a {
+      background: #111;
+      border-color: #333;
       color: var(--gold);
     }
     
@@ -296,6 +323,7 @@
         <span class="gold-text ml-2">☥</span>
         <span>الحضارة المصرية القديمة</span>
       </h1>
+      <!-- Desktop Navigation -->
       <nav class="hidden md:block">
         <ul class="flex">
           <li><a href="#intro" class="nav-link">مقدمة</a></li>
@@ -307,24 +335,40 @@
           <li><a href="#gallery" class="nav-link">معرض الصور</a></li>
         </ul>
       </nav>
+      <!-- Hamburger & Settings -->
       <div class="flex items-center">
         <!-- Settings toggle icon -->
         <button id="settings-toggle" class="mr-2">
           <i class="fas fa-cog"></i>
         </button>
-        <button class="md:hidden text-2xl">
+        <!-- Hamburger Menu for Mobile -->
+        <button id="hamburger" class="md:hidden text-2xl">
           <i class="fas fa-bars"></i>
         </button>
       </div>
     </div>
   </header>
 
+  <!-- Mobile Navigation -->
+  <nav id="mobile-nav" class="md:hidden absolute top-16 left-0 w-full bg-white p-4">
+    <ul>
+      <li><a href="#intro" class="nav-link block" onclick="document.getElementById('mobile-nav').classList.add('hidden')">مقدمة</a></li>
+      <li><a href="#pyramids" class="nav-link block" onclick="document.getElementById('mobile-nav').classList.add('hidden')">الأهرامات</a></li>
+      <li><a href="#temples" class="nav-link block" onclick="document.getElementById('mobile-nav').classList.add('hidden')">المعابد</a></li>
+      <li><a href="#daily-life" class="nav-link block" onclick="document.getElementById('mobile-nav').classList.add('hidden')">الحياة اليومية</a></li>
+      <li><a href="#gods" class="nav-link block" onclick="document.getElementById('mobile-nav').classList.add('hidden')">الآلهة</a></li>
+      <li><a href="#timeline" class="nav-link block" onclick="document.getElementById('mobile-nav').classList.add('hidden')">التاريخ</a></li>
+      <li><a href="#gallery" class="nav-link block" onclick="document.getElementById('mobile-nav').classList.add('hidden')">معرض الصور</a></li>
+    </ul>
+  </nav>
+
   <!-- Settings Panel -->
   <div id="settings-panel">
     <!-- Five vertical buttons for other pages -->
     <button onclick="location.href='main.html'">الرئيسية</button>
-    <button onclick="location.href='game.html'">اللعبة</button>
+    <button onclick="location.href='fullpage.html'">الكاملة</button>
     <button onclick="location.href='AI.html'">الذكاء الأصطناعي</button>
+    <button onclick="location.href='game.html'">اللعبة</button>
     <button onclick="location.href='about me.html'">من أنا ؟</button>
     <button onclick="location.href='fullylearning.html'">منصة التعلم</button>
     <!-- Theme toggle button -->
@@ -762,26 +806,20 @@
         });
       }
       
-      // Mobile menu toggle
-      const menuButton = document.querySelector('button:not(#settings-toggle)');
-      const nav = document.querySelector('nav');
-      menuButton.addEventListener('click', () => {
-        nav.classList.toggle('hidden');
-        nav.classList.toggle('block');
+      // Hamburger menu for mobile navigation
+      const hamburger = document.getElementById('hamburger');
+      const mobileNav = document.getElementById('mobile-nav');
+      
+      hamburger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        mobileNav.classList.toggle('active');
       });
       
-      // Smooth scrolling for navigation links
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          if (!nav.classList.contains('hidden')) {
-            nav.classList.add('hidden');
-            nav.classList.remove('block');
-          }
-          document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-          });
-        });
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!mobileNav.contains(e.target) && e.target.id !== 'hamburger') {
+          mobileNav.classList.remove('active');
+        }
       });
       
       // Settings Panel Toggle
@@ -802,7 +840,7 @@
         toggleSettingsPanel();
       });
       
-      // Close panel when clicking outside
+      // Close settings panel when clicking outside
       document.addEventListener('click', function(e) {
         if (!settingsPanel.contains(e.target) && e.target !== settingsToggle) {
           settingsPanel.style.display = 'none';
